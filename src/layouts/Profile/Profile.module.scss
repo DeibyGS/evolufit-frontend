@@ -1,0 +1,115 @@
+@use "../../styles/mixins" as *;
+
+.profileContainer {
+  @include section-container;
+  .header { @include section-header; }
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 2rem;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  @include card-glass;
+  min-height: 450px; 
+  display: flex;
+  flex-direction: column;
+
+  .cardHeader {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 2rem;
+    padding-bottom: 0.8rem;
+    
+    h3 { 
+      @include label-standard; // Mismo estilo que labels pero con color naranja
+      color: #FFA500; 
+      font-size: 1.1rem; 
+      margin: 0;
+    }
+  }
+}
+
+.infoList {
+  @include flex-center(column, 1.8rem);
+  align-items: flex-start;
+}
+
+.infoItem {
+  label { @include label-standard; margin-bottom: 0.4rem; display: block; }
+  p {
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 500;
+  }
+}
+
+/* ACCIONES Y FORMULARIO */
+.changePasswordBtn {
+  @include btn-primary-gradient;
+  padding: 0.9rem;
+}
+
+.passForm {
+  @include flex-center(column, 1.2rem);
+  align-items: stretch; // Para que los inputs ocupen todo el ancho
+  padding: 1.2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius);
+  animation: slideDown 0.3s ease;
+
+  .inputGroup {
+    @include input-group-layout(0.5rem);
+  }
+}
+
+.formBtns {
+  @include flex-center(row, 1rem);
+  .saveBtn { @include btn-primary-gradient; flex: 2; }
+  .cancelBtn { @include btn-secondary; flex: 1; }
+}
+
+/* ZONA DE PELIGRO */
+.dangerZone {
+  margin-top: auto; 
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 77, 77, 0.15);
+  
+  h4 { 
+    color: #ff4d4d; 
+    margin-bottom: 0.5rem; 
+    font-size: 1rem; 
+    font-family: var(--secondary-font-family);
+  }
+  
+  p { 
+    font-size: 0.85rem; 
+    color: var(--tertiary-color-text); 
+    margin-bottom: 1.5rem; 
+  }
+}
+
+.deleteBtn {
+  @include btn-secondary;
+  border-color: rgba(255, 77, 77, 0.3);
+  color: #ff4d4d;
+  width: 100%;
+
+  &:hover {
+    background: #ff4d4d;
+    color: white;
+    border-color: #ff4d4d;
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

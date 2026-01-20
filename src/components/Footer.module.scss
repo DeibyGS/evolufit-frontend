@@ -1,0 +1,95 @@
+@use "../styles/mixins" as *;
+
+.footer {
+  background: #050505;
+  padding: 4rem 0 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+
+  &__container {
+    width: 90%;
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+  }
+
+  &__brand {
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      span { color: #FFA500; }
+    }
+    .tagline {
+      margin-top: 1rem;
+      color: #888;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+  }
+
+  &__links {
+    h4 { color: #fff; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+    ul {
+      list-style: none;
+      padding: 0;
+      li {
+        margin-bottom: 0.8rem;
+        a {
+          color: #888;
+          text-decoration: none;
+          transition: color 0.3s;
+          &:hover { color: #FFA500; }
+        }
+      }
+    }
+  }
+
+  &__academic {
+    h4 { color: #fff; margin-bottom: 1.5rem; }
+    p { color: #777; font-size: 0.9rem; line-height: 1.5; }
+    strong { color: #bbb; }
+    
+    .practiceBadge {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      background: rgba(255, 165, 0, 0.1);
+      color: #FFA500;
+      padding: 4px 12px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 165, 0, 0.2);
+    }
+  }
+
+  &__bottom {
+    width: 90%;
+    max-width: 1300px;
+    margin: 3rem auto 0;
+    
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 165, 0, 0.3) 50%, transparent 100%);
+      margin-bottom: 2rem;
+    }
+
+    .bottomContent {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      color: #555;
+      font-size: 0.85rem;
+
+      .author strong {
+        // Tu degradado amarillo para el autor
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+  }
+}

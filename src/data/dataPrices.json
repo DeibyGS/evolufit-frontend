@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Plan Básico",
+    "price": 19.99,
+    "description": "Perfecto para principiantes que desean comenzar a construir hábitos saludables con herramientas esenciales.",
+    "features": [
+      "Acceso a entrenamientos básicos",
+      "Soporte de la comunidad",
+      "Funciones de seguimiento estándar",
+      "Soporte técnico prioritario medio"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Plan Pro",
+    "price": 49.99,
+    "description": "Ideal para quienes buscan llevar su viaje fitness al siguiente nivel con guía personalizada.",
+    "features": [
+      "Todas las funciones del Plan Básico",
+      "Planes de entrenamiento personalizados",
+      "Guía de nutrición",
+      "Funciones de seguimiento avanzadas"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Plan Elite",
+    "price": 99.99,
+    "description": "Diseñado para personas que desean el máximo apoyo, contenido exclusivo y coaching de élite.",
+    "features": [
+      "Todas las funciones del Plan Pro",
+      "Sesiones de coaching uno a uno",
+      "Contenido y rutinas exclusivas",
+      "Soporte prioritario 24/7"
+    ]
+  }
+]

@@ -1,0 +1,222 @@
+@use "../../styles/mixins" as *;
+
+.dashboardContainer {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+  background: #0a0a0a;
+  
+  // Responsive basado en tus medidas (Tablet y Mobile < 1024px)
+  @media (max-width: 1023px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* BOTÓN HAMBURGUESA DINÁMICO */
+.mobileToggle {
+  display: none;
+
+  @media (max-width: 1023px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 1.2rem;
+    right: 1.2rem;
+    z-index: 2001;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+
+    span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      background: #000;
+      position: relative;
+      transition: 0.3s;
+
+      &::before, &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: #000;
+        transition: 0.3s;
+      }
+      &::before { top: -8px; left: 0; }
+      &::after { bottom: -8px; left: 0; }
+    }
+
+    .iconOpen {
+      background: transparent;
+      &::before { transform: rotate(45deg); top: 0; }
+      &::after { transform: rotate(-45deg); bottom: 0; }
+    }
+  }
+}
+
+/* SIDEBAR */
+.sidebar {
+  background: #0f0f0f;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 1.5rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 100;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (max-width: 1023px) {
+    position: fixed;
+    left: 0;
+    width: 280px;
+    transform: translateX(-100%);
+    background: #0a0a0a;
+    z-index: 2000;
+
+    &.sidebarOpen {
+      transform: translateX(0);
+      box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
+    }
+  }
+}
+
+.logoSection {
+  margin-bottom: 3.5rem;
+  padding: 0 1rem;
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    span { color: #FFA500; }
+  }
+
+  .welcomeWrapper {
+    margin-top: 1.8rem;
+    p {
+      @include label-standard;
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 0.2rem;
+    }
+
+    .userName {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: capitalize;
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(255, 165, 0, 0.25));
+    }
+  }
+}
+
+.navMenu {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  
+  a {
+    @include nav-link-base;
+    text-decoration: none;
+    
+    &.active {
+      background: rgba(255, 165, 0, 0.1);
+      color: #FFA500;
+      border-left: 3px solid #FFA500;
+    }
+  }
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.2) 0%, transparent 100%);
+  margin: 1.5rem 1rem;
+}
+
+/* BOTÓN CERRAR SESIÓN (ESTILO SHIMMER/AUTH) */
+.logoutBtn {
+  @include btn-primary-gradient;
+  position: relative;
+  overflow: hidden;
+  margin-top: 2rem;
+  padding: 0.9rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    );
+    transition: all 0.6s;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 165, 0, 0.3);
+    &::before { left: 150%; }
+  }
+
+  &:active { transform: scale(0.98); }
+  
+  animation: pulseGlow 3s infinite;
+}
+
+/* CONTENIDO PRINCIPAL */
+.mainContent {
+  padding: 2.5rem;
+  background: radial-gradient(circle at top right, rgba(255, 165, 0, 0.03), transparent 50%);
+  overflow-y: auto;
+
+  @media (max-width: 767px) {
+    padding: 1.5rem;
+    padding-top: 5rem;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1999;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}

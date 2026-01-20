@@ -1,0 +1,108 @@
+@use "../styles/mixins" as *;
+
+.sectionContact {
+  position: relative;
+  width: 100%;
+  height: 400px; // Altura fija para el banner de contacto
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background-color: #000;
+
+  &__overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      // Degradado que oscurece la imagen para que el texto resalte
+      background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+    }
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.2); // Estilo dramático para el TFG
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 2rem;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    p {
+      color: #FFA500;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-size: 1rem;
+    }
+
+    h3 {
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .phoneNumber {
+      @include text-gradient-orange; // Tu mixin de degradado
+      font-size: 3.5rem;
+      font-weight: 900;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+      display: inline-block;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+/* ============================================================
+   RESPONSIVE CON TUS HOOKS
+   ============================================================ */
+
+.containerDesktop {
+  height: 450px;
+}
+
+.containerTablet {
+  height: 350px;
+  .sectionContact__info {
+    h3 { font-size: 2rem; }
+    .phoneNumber { font-size: 2.8rem; }
+  }
+}
+
+.containerMobile {
+  height: 300px;
+  .sectionContact__info {
+    align-items: center;
+    text-align: center;
+    
+    p { font-size: 0.8rem; }
+    h3 { font-size: 1.5rem; }
+    .phoneNumber { 
+      font-size: 2rem; 
+      // En móvil el degradado a veces necesita un width definido si es inline-block
+      width: 100%;
+    }
+  }
+}

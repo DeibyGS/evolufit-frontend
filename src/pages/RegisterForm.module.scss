@@ -1,0 +1,104 @@
+@use '../styles/mixins.scss' as *;
+
+.registerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--max-padding);
+  min-height: calc(100vh - 150px);
+  background-image: url(Hero.png);
+}
+
+.registerForm {
+  background-color: var(--primary-color-bg);
+  padding: var(--max-padding);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+  h2 {
+    font-family: var(--secondary-font-family);
+    color: var(--primary-color-text);
+    text-align: center;
+    margin-bottom: var(--max-margin);
+    font-size: 1.8rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--min-gap);
+  }
+
+  .inputGroup {
+    margin-bottom: var(--min-gap);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    label {
+      font-family: var(--primary-font-family);
+      color: var(--tertiary-color-text);
+      font-size: 0.85rem;
+    }
+
+    input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+      padding: 0.8rem;
+      color: var(--primary-color-text);
+      font-family: var(--primary-font-family);
+      transition: var(--transition);
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color-text);
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  .termsGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: var(--max-margin) 0;
+    
+    input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: #FFA500; // Ahora el check será naranja como el logo
+      transform: scale(1.2);
+    }
+
+    label {
+      font-family: var(--primary-font-family);
+      color: var(--tertiary-color-text);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+  }
+
+  .submitButton {
+    @include btn-primary-gradient;
+    
+  }
+
+  .footerLinks {
+    margin-top: var(--max-margin);
+    text-align: center;
+    font-family: var(--primary-font-family);
+    color: var(--tertiary-color-text);
+    font-size: 0.9rem;
+
+    .loginLink {
+      color: var(--primary-color-text);
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 0.5rem;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}

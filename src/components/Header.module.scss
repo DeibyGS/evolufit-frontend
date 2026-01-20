@@ -1,0 +1,188 @@
+@use "../styles/mixins" as *;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 767px) {
+    height: 70px;
+  }
+}
+
+.headerContainer {
+  width: 90%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LOGO */
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  z-index: 2005;
+  -webkit-tap-highlight-color: transparent;
+
+  .title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    span { @include text-gradient-orange; } 
+
+    @media (max-width: 767px) { font-size: 1.5rem; }
+  }
+  .logoImg { 
+    height: 35px; 
+    filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.2));
+  }
+}
+
+/* NAVEGACIÓN */
+.nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    
+    &:hover { 
+      color: #FFA500; 
+      transform: translateY(-2px);
+    }
+
+    &:focus { outline: none; }
+  }
+
+  @media (max-width: 1023px) {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100vh;
+    background: #0d0d0d;
+    flex-direction: column;
+    padding: 8rem 2.5rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 1px solid rgba(255, 165, 0, 0.15);
+    z-index: 2001;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+
+    &.navActive { right: 0; }
+
+    a {
+      font-size: 1.2rem;
+      padding: 1.2rem 0;
+      width: 100%;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .authWrapper { 
+      width: 100%; 
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+/* BOTÓN HAMBURGUESA (Dashboard Style sin borde morado) */
+.mobileToggle {
+  display: none;
+
+  @media (max-width: 1023px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2005;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+    
+    /* Eliminación de bordes de enfoque y destellos */
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:focus, &:active {
+      outline: none;
+      border: none;
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+
+    span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #000;
+      position: relative;
+      transition: 0.3s;
+
+      &::before, &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: #000;
+        transition: 0.3s;
+      }
+      &::before { top: -7px; left: 0; }
+      &::after { bottom: -7px; left: 0; }
+    }
+
+    /* Clase que se activa al abrir el menú */
+    .iconOpen {
+      background: transparent;
+      &::before { transform: rotate(45deg); top: 0; }
+      &::after { transform: rotate(-45deg); bottom: 0; }
+    }
+  }
+}
+
+/* OVERLAY */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 1500;
+
+  &.overlayVisible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

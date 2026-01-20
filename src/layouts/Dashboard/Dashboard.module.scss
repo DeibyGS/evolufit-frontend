@@ -1,0 +1,176 @@
+@use "../../styles/mixins" as *;
+
+.dashboardContainer {
+  @include section-container;
+  
+  .header {
+    @include section-header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    .welcome h2 span { color: #FFA500; }
+  }
+}
+
+/* FILTRO DE FECHAS PREMIUM */
+.dateFilterContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  position: relative;
+
+  .dateInputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input[type="date"] {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+
+      &::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        opacity: 0.6;
+        &:hover { opacity: 1; }
+      }
+    }
+
+    .separator {
+      color: #666;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  }
+
+  .clearBtn {
+    background: #ff4500;
+    color: #fff;
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 2px 10px rgba(255, 69, 0, 0.4);
+
+    &:hover {
+      transform: scale(1.2) rotate(90deg);
+      background: #fff;
+      color: #ff4500;
+    }
+  }
+}
+
+.reportActions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btnDownload {
+  @include btn-secondary;
+  padding: 0.6rem 1.2rem;
+  font-weight: 700;
+  border-color: #FFA500;
+  color: #FFA500;
+
+  &:hover {
+    background: #FFA500;
+    color: #000;
+  }
+}
+
+/* KPIs */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.kpiCard {
+  @include card-glass;
+  padding: 1.5rem;
+  text-align: center;
+
+  .label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  h4 { 
+    font-size: 2rem; 
+    margin-top: 0.5rem; 
+    font-weight: 800;
+    small { font-size: 1rem; color: #666; }
+  }
+
+  &.highlight {
+    border-bottom: 3px solid #FFA500;
+    h4 { color: #FFA500; }
+  }
+}
+
+/* FILTROS MÚSCULO */
+.muscleFilters {
+  display: flex;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  
+  &::-webkit-scrollbar { height: 4px; }
+  &::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+  button {
+    @include btn-secondary;
+    white-space: nowrap;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.85rem;
+
+    &.active {
+      background: rgba(255, 165, 0, 0.1);
+      border-color: #FFA500;
+      color: #FFA500;
+    }
+  }
+}
+
+/* GRÁFICAS */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.chartCard {
+  @include card-glass;
+  padding: 1.5rem;
+  
+  h3 { font-size: 1.1rem; margin-bottom: 1.5rem; color: #eee; }
+
+  &.fullWidth { grid-column: 1 / -1; }
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  h3 span { color: #FFA500; }
+}

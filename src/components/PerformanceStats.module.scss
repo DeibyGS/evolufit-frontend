@@ -1,0 +1,69 @@
+@use "../styles/mixins" as *;
+
+.performanceStats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 1.5rem;
+  padding: 0 2rem;
+
+  &__statCard {
+    @include card-glass;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    min-width: 180px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      border-color: #FFA500;
+    }
+
+    p {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #FFA500;
+      margin: 0;
+    }
+
+    span {
+      font-size: 0.75rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  }
+}
+
+/* RESPONSIVE STATS */
+.containerDesktop {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.containerTablet {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.containerMobile {
+  display: grid;
+  grid-template-columns: 1fr 1fr; // 2x2 en móvil para no ocupar tanto alto
+  gap: 1rem;
+  padding: 0 1rem;
+
+  .performanceStats__statCard {
+    min-width: 0;
+    padding: 1rem;
+    p { font-size: 1.5rem; }
+    span { font-size: 0.65rem; }
+  }
+}

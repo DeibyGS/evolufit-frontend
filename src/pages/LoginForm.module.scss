@@ -1,0 +1,111 @@
+@use '../styles/mixins.scss' as *;
+
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 200px); // Ajusta según tu header/footer
+  padding: var(--max-padding);
+  background-image: url(Hero.png);
+}
+
+.loginForm {
+  background-color: var(--primary-color-bg);
+  padding: var(--max-padding);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.1); // Un borde sutil para que no se pierda
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: transform var(--transition);
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  h2 {
+    font-family: var(--secondary-font-family); // Poppins
+    color: var(--primary-color-text);
+    text-align: center;
+    margin-bottom: var(--max-margin);
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .inputGroup {
+    margin-bottom: var(--max-gap);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-family: var(--primary-font-family); // Roboto
+      color: var(--tertiary-color-text);
+      font-size: 0.9rem;
+      padding-left: 0.5rem;
+    }
+
+    input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+      padding: 1rem;
+      color: var(--primary-color-text);
+      font-family: var(--primary-font-family);
+      transition: var(--transition);
+
+      &::placeholder {
+        color: var(--tertiary-color-text);
+        opacity: 0.5;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color-text);
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  .forgotPassword {
+    text-align: right;
+    margin-top: -0.5rem;
+    margin-bottom: var(--max-margin);
+
+    a {
+      color: var(--tertiary-color-text);
+      font-size: 0.85rem;
+      text-decoration: none;
+      font-family: var(--primary-font-family);
+      transition: var(--transition);
+
+      &:hover {
+        color: var(--primary-color-text);
+      }
+    }
+  }
+
+  .submitButton {
+    @include btn-primary-gradient;
+    
+  }
+
+  .footerLinks {
+    margin-top: var(--max-margin);
+    text-align: center;
+    font-family: var(--primary-font-family);
+    color: var(--tertiary-color-text);
+    font-size: 0.9rem;
+
+    .registerLink {
+      color: var(--primary-color-text);
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 0.5rem;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  } 
+}

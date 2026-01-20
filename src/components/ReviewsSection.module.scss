@@ -1,0 +1,191 @@
+@use "../styles/mixins" as *;
+
+.sectionReviews {
+  @include section-container;
+  padding: 8rem 0;
+  overflow: hidden;
+  width: 100%;
+
+  .header {
+    text-align: center;
+    margin-bottom: 5rem;
+    padding: 0 2rem;
+
+    // Ajustado para coincidir exactamente con PlanCard
+    h2 {
+      @include section-header;
+      font-size: 3rem; // Igual que en PlanCard
+      
+      span { 
+        color: #FFA500; // Color sólido o gradiente según prefieras
+        // Si prefieres el gradiente de PlanCard: @include text-gradient-orange; 
+      }
+
+      @media (max-width: 767px) { 
+        font-size: 2.2rem; 
+      }
+    }
+
+    p { 
+      color: var(--tertiary-color-text); // Usando tu variable de PlanCard
+      margin-top: 1rem; 
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.sliderWrapper {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+
+  /* Estilos específicos de Slick Slider */
+  :global(.slick-list) { 
+    overflow: visible; 
+    padding: 2rem 0 !important;
+  }
+
+  :global(.slick-slide) {
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.2;
+    transform: scale(0.8);
+
+    &[class*="slick-center"] {
+      opacity: 1;
+      transform: scale(1.05);
+      z-index: 10;
+    }
+  }
+
+  :global(.slick-dots) {
+    bottom: -60px;
+    li button:before { 
+      color: #555; 
+      font-size: 12px; 
+    }
+    li[class*="slick-active"] button:before { 
+      color: #FFA500; 
+      opacity: 1; 
+    }
+  }
+}
+
+.cardContainer {
+  padding: 0 1.5rem;
+}
+
+.reviewCard {
+  @include card-glass; // Mismo mixin que en PlanCard
+  padding: 3.5rem 2.5rem;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 4px solid rgba(255, 165, 0, 0.3); // Acento naranja inferior
+  
+  .stars { 
+    color: #FFA500; 
+    font-size: 1.2rem; 
+    margin-bottom: 2rem; 
+    letter-spacing: 4px; 
+  }
+
+  .reviewText { 
+    color: #eee; 
+    font-style: italic; 
+    font-size: 1.1rem; 
+    line-height: 1.7;
+    flex-grow: 1;
+
+    .quoteMark { 
+      color: #FFA500; 
+      font-size: 2.5rem; 
+      margin-right: 8px;
+      font-family: serif;
+      line-height: 0;
+      vertical-align: middle;
+    }
+  }
+}
+
+.authorInfo {
+  margin-top: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+
+  .avatar {
+    width: 50px; 
+    height: 50px;
+    background: linear-gradient(135deg, #FFA500, #FFD700);
+    border-radius: 50%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-weight: 900; 
+    color: #000; 
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .details {
+    .name { 
+      color: #fff; 
+      font-size: 1.1rem; 
+      display: block; 
+      font-weight: 600;
+    }
+    .role { 
+      color: #999; 
+      font-size: 0.8rem; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+/* ============================================================
+   RESPONSIVE (HOOKS)
+   ============================================================ */
+
+.containerDesktop {
+  // Configuración estándar
+}
+
+.containerTablet {
+  padding: 6rem 0;
+  
+  .sliderWrapper :global(.slick-slide) {
+    opacity: 0.4;
+    transform: scale(0.9);
+    &[class*="slick-center"] { transform: scale(1); }
+  }
+}
+
+.containerMobile {
+  padding: 4rem 0;
+  
+  .header {
+    margin-bottom: 3.5rem;
+    h2 { font-size: 2.2rem; }
+  }
+
+  .sliderWrapper {
+    :global(.slick-list) { overflow: hidden; }
+    :global(.slick-slide) {
+      opacity: 1;
+      transform: scale(1);
+      padding: 0 1rem;
+    }
+  }
+
+  .reviewCard {
+    padding: 2.5rem 1.8rem;
+    min-height: 320px;
+    .reviewText { font-size: 1rem; }
+  }
+}

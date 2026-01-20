@@ -1,0 +1,200 @@
+@use "../styles/mixins" as *;
+
+.sectionPlans {
+  @include section-container;
+  padding: 8rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 767px) {
+    padding: 4rem 1.5rem;
+  }
+}
+
+.plansHeader {
+  text-align: center;
+  margin-bottom: 5rem;
+  
+  h2 { 
+    @include section-header; 
+    font-size: 3rem;
+    span { color: #FFA500; }
+
+    @media (max-width: 767px) { font-size: 2.2rem; }
+  }
+  
+  p { 
+    color: var(--tertiary-color-text); 
+    margin-top: 1rem; 
+    max-width: 600px;
+    font-size: 1.1rem;
+  }
+}
+
+.cardsGrid {
+  display: grid;
+  width: 100%;
+  max-width: 1300px;
+  gap: 2.5rem;
+  align-items: stretch; // Hace que todas las cards tengan la misma altura
+
+  /* DESKTOP: >= 1024px */
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* TABLET: 768px - 1023px */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  /* MOBILE: < 768px */
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+    max-width: 450px;
+    gap: 4rem; // Espacio extra para que el "Popular Badge" no choque
+  }
+}
+
+.planCard {
+  @include card-glass;
+  padding: 3.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+
+  &:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 165, 0, 0.5);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+
+    @media (max-width: 767px) {
+      transform: translateY(-5px);
+    }
+  }
+
+  .cardHeader {
+    text-align: center;
+    h3 {
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+  }
+
+  .priceContainer {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    
+    &::before {
+      content: '$';
+      font-size: 1.5rem;
+      color: #FFA500;
+      font-weight: 800;
+      margin-right: 4px;
+    }
+  }
+
+  .planPrice {
+    font-size: 4rem;
+    font-weight: 900;
+    @include text-gradient-orange; 
+    line-height: 1;
+  }
+
+  .currency {
+    color: var(--tertiary-color-text);
+    font-size: 0.9rem;
+    margin-left: 5px;
+  }
+
+  .planDescription {
+    color: #999;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    min-height: 50px;
+  }
+
+  .featuresList {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin-bottom: 3rem;
+    flex-grow: 1;
+
+    li {
+      padding: 0.8rem 0;
+      color: #ddd;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .checkIcon {
+        color: #FFA500;
+        font-weight: 900;
+      }
+    }
+  }
+
+  .btnPlan {
+    @include btn-secondary;
+    width: 100%;
+    padding: 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    
+    &:hover {
+      @include btn-primary-gradient;
+      color: #000;
+      border-color: transparent;
+    }
+  }
+}
+
+/* PLAN RECOMENDADO */
+.recommended {
+  border: 2px solid #FFA500;
+  background: rgba(255, 165, 0, 0.05);
+
+  /* Solo escalamos en Desktop para evitar problemas de overflow en móvil */
+  @media (min-width: 1024px) {
+    transform: scale(1.06);
+    z-index: 2;
+    &:hover { transform: scale(1.09) translateY(-10px); }
+  }
+
+  .popularBadge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000;
+    padding: 6px 22px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4);
+  }
+
+  .btnPlan {
+    @include btn-primary-gradient;
+    color: #000;
+    border: none;
+  }
+}

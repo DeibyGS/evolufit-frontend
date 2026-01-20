@@ -1,0 +1,293 @@
+@use "../../styles/mixins" as *;
+
+.routinesContainer {
+  @include section-container;
+  max-width: 100% !important;
+
+  .header { @include section-header; }
+}
+
+/* =========================
+   FORMULARIO DE INICIO
+========================= */
+.startSection {
+  @include flex-center;
+  padding: 3rem 0;
+  
+  .startBtn { 
+    @include btn-primary-gradient; 
+    padding: 1rem 2.5rem; 
+    border-radius: 50px; 
+    width: auto; 
+  }
+}
+
+.routineHeaderInput {
+  margin-bottom: 2.5rem;
+  @include flex-center;
+
+  .routineNameInput {
+    @include input-standard;
+    width: 100%; 
+    max-width: 600px;
+    background: transparent; 
+    border: none;
+    border-bottom: 2px solid rgba(255, 165, 0, 0.2);
+    font-size: 2rem; 
+    text-align: center; 
+    border-radius: 0;
+    
+    &:focus { 
+      border-bottom-color: #FFA500; 
+      box-shadow: none; 
+      background: transparent;
+    }
+  }
+}
+
+.muscleSelector {
+  @include flex-center(row, 1rem);
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+
+  button {
+    @include chip-button;
+    &.activeGroup { @include chip-button(true); }
+  }
+}
+
+.selectionGrid {
+  display: grid; 
+  grid-template-columns: 2fr 1fr; 
+  gap: 1.5rem; 
+  margin-bottom: 2.5rem;
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+.inputGroup {
+  @include input-group-layout;
+  
+  .fullWidthSelect {
+    @include input-standard;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFA500' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat; 
+    background-position: right 1rem center; 
+    background-size: 1.1em;
+  }
+}
+
+/* =========================
+   HISTORIAL DE SESIONES
+========================= */
+.historySection {
+  width: 100%;
+  max-width: 1200px;
+  margin: 4rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+  h3 { 
+    font-size: 1.8rem; 
+    margin-bottom: 2.5rem; 
+    span { color: #FFA500; } 
+  }
+}
+
+.historyList { 
+  @include flex-center(column, 1.5rem);
+  align-items: stretch;
+}
+
+.historyCard {
+  @include card-glass;
+  border-left: 4px solid #333;
+  padding: 3rem;
+  transition: all 0.3s ease;
+
+  &:hover { 
+    border-left-color: #FFA500; 
+    transform: translateX(5px);
+  }
+
+  .deleteBtn {
+    position: absolute; top: 20px; right: 20px; 
+    background: none; border: none; color: #444; 
+    cursor: pointer; font-size: 1.2rem;
+    &:hover { color: #ff4d4d; }
+  }
+
+  .cardHeader {
+    @include flex-center(row, 1.5rem);
+    justify-content: flex-start;
+    margin-bottom: 2rem; 
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    .dateBadge { @include badge-style; }
+
+    .routineTitle {
+      font-size: 1.3rem; 
+      color: #FFA500; 
+      text-transform: uppercase; 
+      letter-spacing: 1.5px;
+      font-family: var(--secondary-font-family);
+    }
+  }
+}
+
+/* DETALLE DE EJERCICIOS */
+.exerciseDetailItem {
+  @include flex-center(row, 2rem);
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.02); 
+  padding: 1.2rem 2rem; 
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+
+  .exName {
+    @include flex-center(column, 4px);
+    align-items: flex-start;
+    span { @include label-standard; font-size: 0.7rem; }
+    strong { color: #fff; font-size: 1.1rem; }
+  }
+
+  .seriesGrid {
+    @include flex-center(row, 0.8rem);
+    flex-wrap: wrap; 
+    justify-content: flex-end;
+    flex: 1;
+
+    .setTag {
+      @include badge-style(rgba(255, 165, 0, 0.05), #ccc);
+      border: 1px solid rgba(255, 165, 0, 0.15);
+      @include flex-center(row, 8px);
+      white-space: nowrap;
+
+      small { color: #FFA500; font-weight: 800; font-size: 0.7rem; }
+      strong { color: #fff; }
+    }
+  }
+
+  @media (max-width: 900px) {
+    flex-direction: column; 
+    align-items: flex-start;
+    .seriesGrid { justify-content: flex-start; width: 100%; }
+  }
+}
+
+.noHistory { @include card-dashed(auto); padding: 4rem; }
+
+/* =========================
+   CARGAR MÁS Y RESUMEN
+========================= */
+.loadMoreWrapper {
+  @include flex-center(column, 0.8rem);
+  margin-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.loadMoreBtn {
+  @include chip-button;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  &:hover { background: #FFA500; color: #000; }
+}
+
+.loadMoreInfo { @include label-standard; color: #666; font-size: 0.85rem; }
+
+.sessionSummary {
+  @include card-glass;
+  margin-top: 3rem; 
+  padding: 2.5rem;
+  background: rgba(255, 165, 0, 0.02);
+  
+  h4 { color: #fff; margin-bottom: 1.5rem; text-align: center; font-size: 1.4rem; }
+  
+  .summaryActions {
+    @include flex-center(row, 1rem);
+    max-width: 600px; 
+    margin: 0 auto;
+    @media (max-width: 600px) { flex-direction: column; }
+    
+    .finishBtn { @include btn-primary-gradient; flex: 1; }
+    .previewBtn { @include btn-secondary; flex: 1; padding: 1rem; }
+  }
+}
+
+/* =========================
+   CONFIGURACIÓN DE SERIES (SETS)
+========================= */
+.setsConfig {
+  @include card-glass;
+  background: rgba(255, 165, 0, 0.02);
+  border: 1px solid rgba(255, 165, 0, 0.1);
+  padding: 2rem;
+  margin-top: 1rem;
+  animation: slideDown 0.3s ease;
+
+  .tableLabels {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+    
+    span { 
+      @include label-standard;
+      font-size: 0.7rem;
+      color: #FFA500;
+    }
+  }
+
+  .setRow {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 0.8rem;
+
+    .setIndex {
+      @include flex-center;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-weight: 700;
+      height: 40px;
+      width: 40px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    input {
+      @include input-standard;
+      text-align: center;
+      padding: 0.6rem;
+      
+      &::placeholder { color: rgba(255,255,255,0.1); }
+    }
+  }
+
+  .exerciseActions {
+    @include flex-center(row, 1rem);
+    margin-top: 2rem;
+    
+    .addExerciseBtn {
+      @include btn-primary-gradient;
+      flex: 2;
+      padding: 0.8rem;
+    }
+
+    .clearBtn {
+      @include btn-secondary;
+      flex: 1;
+      padding: 0.8rem;
+    }
+  }
+}
+
+/* Animación para que aparezca suavemente */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

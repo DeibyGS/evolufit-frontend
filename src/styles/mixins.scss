@@ -1,0 +1,364 @@
+@mixin btn-primary-gradient($width: 100%) {
+  width: $width;
+  padding: var(--min-padding); // Usa tu variable de padding
+  background: linear-gradient(135deg, #FFA500 0%, #FFC500 100%);
+  color: #000;
+  border: none;
+  border-radius: var(--radius); // Usa tu radio de 1.2rem
+  font-family: var(--secondary-font-family); // Poppins
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition); // Usa tu transición de 0.25s
+  box-shadow: 0 4px 15px rgba(255, 165, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
+    letter-spacing: 1px;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Contenedor tipo "Card" (Seguridad, Datos Personales, Configuración de Series)
+@mixin card-glass {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+
+// Estilo de los Inputs y Selects (el "grosor" de la calculadora)
+@mixin input-standard {
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: #FFA500;
+    outline: none;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+// Botones secundarios (como el de "Limpiar" o "Cancelar")
+@mixin btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--tertiary-color-text);
+  padding: 0.8rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+}
+
+// Mixin para el contenedor principal de cada sección
+@mixin section-container {
+  animation: fadeIn 0.5s ease;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 80vh; // Para que el footer no suba si hay poco contenido
+}
+
+// Mixin para el encabezado (Título y Subtítulo)
+@mixin section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-top: 1.5rem;
+
+  h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #fff;
+    
+    span {
+      color: #FFA500; // Tu naranja corporativo
+    }
+  }
+
+  p {
+    color: var(--tertiary-color-text);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// Layout base para todas las calculadoras Fitness
+@mixin calculator-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 3rem;
+  align-items: start;
+  @media (max-width: 1000px) { grid-template-columns: 1fr; }
+}
+
+// Estilo para las tarjetas de resultado (IMC, TDEE, RM, etc)
+@mixin result-card-style {
+  @include card-glass;
+  border-left: 4px solid #FFA500;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+
+  span {
+    font-size: 0.75rem;
+    color: var(--tertiary-color-text);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 2.2rem;
+    color: #fff;
+    margin-top: 0.8rem;
+    small { font-size: 1rem; color: #888; margin-left: 4px; }
+  }
+}
+
+// Estilo base para las filas del historial
+@mixin history-card-base {
+  @include card-glass;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2.5rem;
+  border-left: 4px solid #333;
+  transition: all 0.3s ease;
+  
+
+  .deleteBtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #444;
+    cursor: pointer;
+    font-size: 1rem;
+    &:hover { color: #ff4d4d; }
+  }
+
+  .dateBadge {
+    background: rgba(255, 255, 255, 0.05);
+    color: #888;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    min-width: 110px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .dataGroup {
+    display: flex;
+    gap: 4rem;
+    flex: 1;
+    margin-left: 2rem;
+    justify-content: center;
+    margin: 0 40px;
+
+    .dataItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      small { color: #666; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.5px; }
+      strong { color: #fff; font-size: 1.1rem; white-space: nowrap; &.orange { color: #FFA500; } }
+    }
+  }
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    .dataGroup { gap: 1.5rem; justify-content: space-between; width: 100%; margin-left: 0; }
+  }
+}
+
+
+@mixin text-gradient-orange {
+  background: linear-gradient(90deg, #FFA500 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block; // Importante para que el degradado se aplique correctamente al área del texto
+}
+
+//para etiquetas de fornmulario
+@mixin label-standard {
+  color: var(--tertiary-color-text);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+//para grupos de entrda
+@mixin input-group-layout($gap: 0.6rem) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  
+  label { @include label-standard; }
+  input, select { @include input-standard; width: 100%; }
+}
+
+//para flex center utilidad
+@mixin flex-center($direction: row, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+  gap: $gap;
+}
+
+//para estados vacios o dashboard sin datos
+@mixin card-dashed($height: auto) {
+  @include card-glass;
+  @include flex-center(column, 1rem);
+  height: $height;
+  color: #555;
+  border: 2px dashed rgba(255, 165, 0, 0.1);
+  text-align: center;
+}
+
+//para insignias y badges
+@mixin badge-style($bg: rgba(255, 255, 255, 0.05), $color: #888) {
+  background: $bg;
+  color: $color;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+// Para avatares o iniciales de usuario
+@mixin avatar-base($size: 45px, $radius: 12px) {
+  width: $size;
+  height: $size;
+  background: linear-gradient(135deg, #333 0%, #222 100%);
+  border-radius: $radius;
+  @include flex-center;
+  font-weight: bold;
+  color: #FFA500;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+  text-transform: uppercase;
+}
+
+// Para las filas de tablas con hover
+@mixin table-row-base($columns: 1fr) {
+  display: grid;
+  grid-template-columns: $columns;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.02);
+    transform: scale(1.005);
+  }
+}
+
+//btn de filtrado tipo chip
+@mixin chip-button($active: false) {
+  @include btn-secondary;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.8rem;
+  border-radius: 50px; // Estilo píldora
+
+  @if $active {
+    border-color: #FFA500;
+    color: #FFA500;
+    background: rgba(255, 165, 0, 0.05);
+  }
+}
+
+//estilo seleccionado del dashboard
+@mixin nav-link-style {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1.5rem;
+  color: var(--tertiary-color-text);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+  }
+
+  &.active {
+    background: rgba(255, 165, 0, 0.1);
+    color: #FFA500;
+    font-weight: 700;
+    // Opcional: una barrita lateral naranja
+    border-left: 3px solid #FFA500;
+  }
+}
+
+@mixin nav-link-base {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  color: var(--tertiary-color-text);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: #fff;
+    transform: translateX(5px);
+  }
+
+  &.active {
+    background: rgba(255, 165, 0, 0.08);
+    color: #FFA500;
+    font-weight: 700;
+    border-left: 3px solid #FFA500;
+
+    span, i { 
+    filter: drop-shadow(0 0 5px rgba(255, 165, 0, 0.6));
+    transform: scale(1.2);
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+  }
+
+}

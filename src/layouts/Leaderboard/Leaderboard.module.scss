@@ -1,0 +1,91 @@
+@use "../../styles/mixins" as *;
+
+.leaderboardContainer {
+  @include section-container;
+  .header { @include section-header; }
+}
+
+.tableCard {
+  @include card-glass;
+  padding: 0; // Sobrescribimos el padding del mixin para que la cabecera llegue al borde
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1fr; 
+  padding: 1.2rem 3rem;
+  background: rgba(255, 165, 0, 0.08);
+  color: #FFA500;
+  @include label-standard; // Reutilizamos el estilo de etiquetas de formulario
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.row {
+  @include table-row-base(1.5fr 1.5fr 1fr);
+  padding: 1.8rem 3rem;
+
+  &:last-child { border-bottom: none; }
+
+  &.isMe {
+    background: rgba(255, 165, 0, 0.04);
+    border-left: 5px solid #FFA500;
+  }
+}
+
+.exerciseInfo {
+  @include flex-center(column, 0.3rem);
+  align-items: flex-start; // Ajuste del mixin flex para alinear a la izquierda
+  
+  strong { 
+    font-size: 1.3rem; 
+    color: #fff; 
+  }
+  small { @include label-standard; font-size: 0.75rem; }
+}
+
+.userInfo {
+  @include flex-center(row, 1.2rem);
+  justify-content: flex-start;
+
+  span { 
+    font-size: 1.1rem; 
+    font-weight: 500;
+    color: #e0e0e0;
+    text-transform: capitalize;
+  }
+
+  .avatar { @include avatar-base; }
+}
+
+.weightInfo {
+  text-align: right;
+  
+  span { 
+    font-size: 1.8rem; 
+    font-weight: 900; 
+    color: #fff; 
+    b { font-size: 0.9rem; color: #888; margin-left: 5px; } 
+  }
+  
+  p { 
+    @include label-standard;
+    color: #FFA500; 
+    margin-top: 0.3rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .tableHeader { display: none; }
+  .row {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    
+    .exerciseInfo { align-items: center; }
+    .userInfo { justify-content: center; }
+    .weightInfo { text-align: center; }
+  }
+}
