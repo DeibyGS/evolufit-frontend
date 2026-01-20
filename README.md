@@ -1,40 +1,42 @@
 # 🏋️‍♂️ EvolutFit - Frontend Client
 
-**EvolutFit** es una plataforma de alto rendimiento para la gestión de entrenamiento y salud, desarrollada con el stack moderno de **React 19** y **Vite**. El proyecto destaca por una arquitectura modular que separa la lógica de negocio, el contenido estático y una arquitectura de estilos robusta, ofreciendo una experiencia de usuario rápida, segura y altamente personalizada.
+**EvolutFit** es una plataforma de alto rendimiento para la gestión integral de entrenamiento y salud. Desarrollada con el stack de vanguardia **React 19** y **Vite**, la aplicación ofrece una experiencia tipo _Single Page Application (SPA)_ centrada en la visualización de datos, la gamificación comunitaria y una interfaz de usuario premium basada en **Glassmorphism**.
 
 ---
 
 ## ⚡ Core Highlights
 
-- **Visualización Pro:** Dashboards interactivos para el seguimiento de carga, repeticiones y volumen mediante Recharts.
-- **Arquitectura de Layouts:** Contenedor centralizado para usuarios autenticados que gestiona el corazón de la aplicación.
-- **Sistema de Estilos Senior:** Arquitectura SASS modular basada en variables, mixins y utilidades globales.
-- **Reporting:** Generación dinámica de documentos PDF para rutinas y métricas de salud con jsPDF.
-- **UX Adaptativa:** Hooks personalizados para el manejo de responsividad y animaciones de rendimiento.
+- **Visualización de Datos:** Dashboards interactivos que renderizan el progreso del peso e IMC en tiempo real mediante `Recharts`.
+- **Arquitectura de Layouts Protegidos:** Sistema de rutas privadas gestionadas mediante un `DashboardLayout` centralizado y componentes de guarda de seguridad.
+- **Gamificación Pro:** Sistema de logros basado en volumen de carga acumulado y un "Hall of Fame" (Leaderboard) dinámico para fomentar la competitividad.
+- **Sistema de Estilos Senior:** Arquitectura **SASS (SCSS)** modular con un motor de mixins robusto para componentes escalables y coherencia visual total.
+- **Reporting & Exportación:** Capacidad de generar documentos PDF dinámicos de rutinas y métricas utilizando `jsPDF` y `html2canvas`.
+- **UX Adaptativa:** Hooks personalizados para el manejo de responsividad y animaciones de rendimiento que garantizan 60fps.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
 ### Core & Build
-* **React 19:** Última versión para una gestión eficiente del DOM y Hooks avanzados.
-* **Vite:** Herramienta de construcción de próxima generación para un desarrollo ultra rápido.
-* **React Router Dom v7:** Manejo de navegación compleja y lógica de enrutamiento.
+
+- **React 19:** Última versión para una gestión eficiente del DOM y soporte de transiciones.
+- **Vite:** Build tool de alto rendimiento con Hot Module Replacement (HMR) ultra rápido.
+- **React Router Dom v7:** Gestión de navegación compleja, sub-rutas y layouts anidados.
 
 ### Estado y Datos
-* **Zustand:** Gestión de estado global (authStore) ligera y desacoplada del UI.
-* **Recharts:** Visualización de datos mediante gráficas dinámicas de rendimiento.
+
+- **Zustand:** Gestión de estado global (Auth, User Info) atómica, ligera y reactiva.
+- **Recharts:** Visualización de datos mediante gráficas dinámicas de rendimiento.
 
 ### Estilos y UI
-* **SASS (SCSS):** Arquitectura de estilos modular y escalable.
-* **Slick Carousel:** Sliders responsivos para la navegación de ejercicios y reviews.
-* **Sonner & SweetAlert2:** Feedback visual profesional y modales interactivos.
+
+- **SASS (SCSS) Modules:** Encapsulamiento de estilos para evitar colisiones y facilitar el mantenimiento.
+- **Sistema de Mixins:** Librería propia para Flexbox, Grids responsivos, Glassmorphism y botones degradados.
+- **Sonner & SweetAlert2:** Feedback visual profesional y modales interactivos.
 
 ---
 
 ## 📂 Arquitectura de Directorios
-
-
 
 ```text
 src/
@@ -76,38 +78,65 @@ src/
 ## ⚙️ Instalación y Configuración
 
 ### Clonar el repositorio
+
 ```bash
 git clone https://github.com/DeibyGS/evolufit-frontend.git
 cd evolufit-frontend
 ```
 
 ## ⚙️ Instalar Dependencias
+
 ```bash
 npm install
 ```
 
 ## ⚙️ Lanzar en Desarrollo
+
 ```bash
 npm run dev
 ```
+
 ## 🚀 Scripts Disponibles
 
-| Comando         | Descripción                                                    |
-|-----------------|---------------------------------------------------------------|
-| npm run dev      | Inicia el servidor de desarrollo con HMR.                     |
-| npm run build    | Compila y optimiza el proyecto para producción en `/dist`.    |
-| npm run lint     | Ejecuta ESLint para asegurar la calidad del código.           |
-| npm run preview  | Previsualiza localmente la versión de producción.             |
+| Comando         | Descripción                                                |
+| --------------- | ---------------------------------------------------------- |
+| npm run dev     | Inicia el servidor de desarrollo con HMR.                  |
+| npm run build   | Compila y optimiza el proyecto para producción en `/dist`. |
+| npm run lint    | Ejecuta ESLint para asegurar la calidad del código.        |
+| npm run preview | Previsualiza localmente la versión de producción.          |
 
+## 🤝 Lineamientos de Desarrollo (Senior Guidelines)
 
-## 🤝 Contribución
+Como arquitecto de este proyecto, se deben seguir estas pautas estrictas para mantener la calidad y escalabilidad del código:
 
-Como arquitecto de este proyecto, sigo estas pautas estrictas para mantener la calidad y escalabilidad del código:
-
-* **Estilos:** Usa siempre las variables de `styles/variables.scss` para mantener la consistencia visual y los mixins de `styles/mixing.scss` para la estructura de los layouts. No se deben hardcodear valores hexadecimales o espaciados fuera de estos archivos.
-* **Layout:** Las funcionalidades del **"Core"** (gestión de entrenamiento, métricas y perfil) deben residir obligatoriamente en `src/layout/LayoutPrincipal/` para mantener la integridad de la experiencia autenticada.
-* **Estado:** El acceso a la información del usuario, tokens o estados de sesión debe realizarse siempre a través del `authStore` de **Zustand**. Evita el paso de props innecesarios si la información ya reside en el store global.
+- **Abstracción de Estilos:** Prohibido el uso de valores "hardcoded". Emplea siempre los tokens de `src/styles/variables.scss` y los mixins de `src/styles/mixins.scss` para cualquier valor de espaciado, color, radio o transición.
+- **Modularidad de Layout:** Las funcionalidades del núcleo autenticado (Dashboard) deben residir obligatoriamente en `src/layouts/`. Esto garantiza que compartan el contexto del Sidebar y el Navbar sin duplicar código.
+- **Estado Global:** El acceso a la información del usuario, tokens de sesión o estados de carga globales debe realizarse siempre a través del `authStore` de **Zustand**. Se prohíbe el _prop-drilling_ innecesario para datos que ya residen en el store.
+- **Consistencia de Datos:** Al añadir nuevos ejercicios o rutinas, asegúrate de que el `id` y el `group` muscular coincidan exactamente con la lógica definida en `src/data/exercises.js`. Esto es crítico para no romper los filtros de búsqueda y las analíticas del **Leaderboard**.
 
 ---
 
+## 🤝 Directrices de Contribución & Arquitectura
 
+Como arquitecto de **EvolutFit**, he establecido los siguientes pilares técnicos para garantizar que el código sea mantenible, escalable y de alto rendimiento. Se espera que cualquier contribución respete estas normas:
+
+### 🎨 Design System & Estilos (SASS)
+
+- **Zero Hardcoding Policy:** Está estrictamente prohibido el uso de valores hexadecimales, unidades `px` o `rem` arbitrarias directamente en los archivos `.module.scss`.
+- **Tokens de Diseño:** Se deben utilizar exclusivamente las variables de `src/styles/variables.scss` para colores, tipografías, espaciados y radios.
+- **Lógica de Layout:** Para estructuras repetitivas (centrado, grids de calculadoras, efectos glassmorphism), utiliza siempre los `@mixins` definidos en `src/styles/mixins.scss`.
+
+### 🏗️ Estructura y Modularidad
+
+- **Arquitectura de Layouts:** Las vistas que componen la experiencia del usuario autenticado (Dashboard, Perfil, Historial) deben implementarse dentro de `src/layouts/DashboardLayout/`. Esto asegura la persistencia del Sidebar y la integridad de las rutas protegidas.
+- **Componentes Atómicos:** Los elementos de UI reutilizables (botones, inputs, cards) deben ser agnósticos a la lógica de negocio y residir en `src/components/`.
+
+### 🔐 Gestión de Estado & Datos
+
+- **Single Source of Truth:** La gestión de la sesión, el perfil del usuario y los tokens JWT se centraliza en el `authStore` de **Zustand**.
+- **Prop-Drilling:** Se prohíbe pasar información del usuario a través de múltiples niveles de componentes si dicha información ya está disponible en el store global.
+- **Integridad del Modelo:** Al expandir la base de datos de ejercicios (`src/data/exercises.js`), es imperativo respetar la estructura de `id` y `group` para evitar inconsistencias en el sistema de filtrado del Leaderboard.
+
+### 🧪 Calidad de Código
+
+- Antes de realizar un commit, asegúrate de ejecutar `npm run lint` para cumplir con los estándares de estilo definidos por **ESLint**.
