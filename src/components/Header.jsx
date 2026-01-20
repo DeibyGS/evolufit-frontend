@@ -4,63 +4,87 @@ import { HeaderAuthButton } from './HeaderAuthButton.jsx';
 import { useMediasQuerys } from '../hooks/useMediasQuerys.jsx';
 import styles from './Header.module.scss';
 
+/**
+ * HEADER COMPONENT
+ * Gestiona la navegación principal, el scroll inteligente entre rutas
+ * y el estado del menú colapsable en dispositivos móviles.
+ */
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isDesktop } = useMediasQuerys();
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Handlers para el estado del menú UI
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
-  // Lógica de Scroll mejorada: 
-  // Ahora detecta si ya estás en la Home para hacer scroll directo o si debe navegar primero
+  /**
+   * Lógica de Navegación Híbrida:
+   * Si el usuario está en Home, realiza un Smooth Scroll.
+   * Si está fuera, navega a Home incluyendo el Hash en la URL.
+   */
   const handleScrollNav = (e, targetId) => {
     e.preventDefault();
     closeMenu();
 
     if (location.pathname === "/") {
-      // Si ya estás en Home, haz scroll suave
       const el = document.getElementById(targetId);
       if (el) el.scrollIntoView({ behavior: "smooth" });
     } else {
-      // Si estás en otra ruta (ej. Login), navega a Home con el hash
+      // Redirección con hash para que el useEffect posterior maneje el scroll
       navigate(`/#${targetId}`);
     }
   };
 
+  /**
+   * Observer de Localización:
+   * Detecta cambios en el hash de la URL para disparar el scroll tras la navegación.
+   */
   useEffect(() => {
-    // Si la URL cambia y tiene un hash, hacemos scroll (útil al venir de otra página)
     if (location.hash) {
       const id = location.hash.replace("#", "");
-      setTimeout(() => {
+      // El timeout garantiza que el DOM de la Home esté montado antes de intentar el scroll
+      const timeoutId = setTimeout(() => {
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 150); // Un pelín más de tiempo para asegurar que el DOM cargó
+      }, 150); 
+      
+      return () => clearTimeout(timeoutId); // Clean-up para evitar fugas de memoria
     }
   }, [location]);
 
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
-        {/* LOGO */}
-        <div className={styles.logoSection} onClick={() => { navigate('/'); window.scrollTo({top: 0, behavior: 'smooth'}); }}>
+        
+        {/* SECCIÓN LOGO: Acceso directo al top de la página */}
+        <div 
+          className={styles.logoSection} 
+          onClick={() => { 
+            navigate('/'); 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+          }}
+        >
           <h1 className={styles.title}>Evolut<span>Fit</span></h1>
           <img className={styles.logoImg} src="diagrama.png" alt='Logo EvolutFit' />
         </div>
 
-        {/* OVERLAY MOBILE: Se renderiza siempre para la transición CSS o condicionalmente */}
-        <div className={`${styles.overlay} ${isMenuOpen ? styles.overlayVisible : ''}`} onClick={closeMenu}></div>
+        {/* OVERLAY: Fondo oscurecido para enfoque táctil en móvil */}
+        <div 
+          className={`${styles.overlay} ${isMenuOpen ? styles.overlayVisible : ''}`} 
+          onClick={closeMenu}
+        ></div>
 
-        {/* NAVEGACIÓN */}
+        {/* NAVEGACIÓN PRINCIPAL */}
         <nav className={`${styles.nav} ${isMenuOpen ? styles.navActive : ''}`}>
           <NavLink 
             to="/" 
-            className={({ isActive }) => isActive && location.hash === "" ? styles.activeLink : ""}
+            className={({ isActive }) => (isActive && location.hash === "" ? styles.activeLink : "")}
             onClick={(e) => {
               if(location.pathname === "/") {
                 e.preventDefault();
-                window.scrollTo({top: 0, behavior: 'smooth'});
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }
               closeMenu();
             }}
@@ -78,12 +102,12 @@ export const Header = () => {
           </div>
         </nav>
 
-        {/* BOTÓN HAMBURGUESA */}
+        {/* MENÚ HAMBURGUESA: Solo visible en breakpoints no-desktop */}
         {!isDesktop && (
           <button 
             className={styles.mobileToggle} 
             onClick={toggleMenu} 
-            aria-label="Abrir menú"
+            aria-label="Alternar menú de navegación"
             aria-expanded={isMenuOpen}
           >
             <span className={isMenuOpen ? styles.iconOpen : ''}></span>

@@ -1,3 +1,9 @@
+/**
+ * PERFORMANCE STATS STYLES
+ * Arquitectura híbrida: Flexbox para escritorio y Grid para móviles.
+ * Implementa micro-interacciones y efectos de cristalizado (Glassmorphism).
+ */
+
 @use "../styles/mixins" as *;
 
 .performanceStats {
@@ -9,18 +15,18 @@
   padding: 0 2rem;
 
   &__statCard {
-    @include card-glass;
+    @include card-glass; // Mixin centralizado para efectos de transparencia y desenfoque
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1.5rem;
     min-width: 180px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 
     &:hover {
       transform: translateY(-5px);
-      border-color: #FFA500;
+      border-color: #FFA500; // Resalte con el color de acento de la marca
     }
 
     p {
@@ -28,6 +34,7 @@
       font-weight: 800;
       color: #FFA500;
       margin: 0;
+      line-height: 1;
     }
 
     span {
@@ -41,29 +48,42 @@
   }
 }
 
-/* RESPONSIVE STATS */
+/* ============================================================
+   RESPONSIVE ESTRATÉGICO
+   ============================================================ */
+
+// Vista Escritorio: Alineación horizontal fluida
 .containerDesktop {
   max-width: 1200px;
   margin: 0 auto;
 }
 
+// Vista Tablet: Cambio a cuadrícula 2x2 para optimizar el espacio vertical
 .containerTablet {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   max-width: 800px;
   margin: 0 auto;
 }
 
+// Vista Móvil: Compactación de elementos
 .containerMobile {
   display: grid;
-  grid-template-columns: 1fr 1fr; // 2x2 en móvil para no ocupar tanto alto
+  grid-template-columns: repeat(2, 1fr); // Mantiene 2x2 para evitar scrolls infinitos
   gap: 1rem;
   padding: 0 1rem;
+  margin: 1.5rem auto 1.5rem;
 
   .performanceStats__statCard {
-    min-width: 0;
+    min-width: 0; // Permite que el card se encoja por debajo del min-width original
     padding: 1rem;
-    p { font-size: 1.5rem; }
-    span { font-size: 0.65rem; }
+
+    p { 
+      font-size: 1.5rem; 
+    }
+    
+    span { 
+      font-size: 0.65rem; 
+    }
   }
 }

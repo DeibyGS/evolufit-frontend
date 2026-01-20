@@ -4,101 +4,114 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--max-padding);
-  min-height: calc(100vh - 150px);
-  background-image: url(Hero.png);
+  
+  // ESPACIADO ESTRATÉGICO
+  // 1. Añadimos un padding superior generoso para empujar el contenido debajo del header
+  padding: 8rem var(--max-padding) 4rem; 
+  
+  // 2. min-height debe ser al menos 100vh para que el fondo cubra todo
+  min-height: 100vh; 
+  
+  // CONFIGURACIÓN DE FONDO
+  background-image: linear-gradient(rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.8)), url('/Hero.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; // Efecto parallax sutil
 }
 
 .registerForm {
-  background-color: var(--primary-color-bg);
-  padding: var(--max-padding);
-  border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  @include card-glass; // Usamos tu mixin corporativo para el efecto cristal
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background-color: rgba(17, 17, 17, 0.9); // Reforzamos el fondo oscuro
+  padding: 2.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  animation: slideUp 0.5s ease-out;
 
   h2 {
     font-family: var(--secondary-font-family);
-    color: var(--primary-color-text);
+    color: #fff;
     text-align: center;
-    margin-bottom: var(--max-margin);
-    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 800;
+
+    // Detalle estético con tu naranja
+    &::after {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 3px;
+      background: #FFA500;
+      margin: 0.6rem auto;
+      border-radius: 2px;
+    }
   }
 
   .row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--min-gap);
+    gap: 1.5rem;
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr; // En móvil se apilan
+      gap: 0;
+    }
   }
 
   .inputGroup {
-    margin-bottom: var(--min-gap);
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-
-    label {
-      font-family: var(--primary-font-family);
-      color: var(--tertiary-color-text);
-      font-size: 0.85rem;
-    }
-
-    input {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius);
-      padding: 0.8rem;
-      color: var(--primary-color-text);
-      font-family: var(--primary-font-family);
-      transition: var(--transition);
-
-      &:focus {
-        outline: none;
-        border-color: var(--primary-color-text);
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
+    @include input-group-layout; // Usamos tu mixin para labels e inputs
+    margin-bottom: 1.2rem;
   }
 
   .termsGroup {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin: var(--max-margin) 0;
+    @include flex-center(row, 0.8rem);
+    justify-content: flex-start;
+    margin: 1.5rem 0;
     
     input[type="checkbox"] {
       cursor: pointer;
-      accent-color: #FFA500; // Ahora el check será naranja como el logo
-      transform: scale(1.2);
+      accent-color: #FFA500;
+      width: 18px;
+      height: 18px;
     }
 
     label {
-      font-family: var(--primary-font-family);
-      color: var(--tertiary-color-text);
-      font-size: 0.85rem;
+      @include label-standard;
+      text-transform: none; // Permitimos minúsculas para los términos
       cursor: pointer;
     }
   }
 
   .submitButton {
     @include btn-primary-gradient;
-    
+    margin-top: 0.5rem;
   }
 
   .footerLinks {
-    margin-top: var(--max-margin);
+    margin-top: 2rem;
     text-align: center;
     font-family: var(--primary-font-family);
     color: var(--tertiary-color-text);
     font-size: 0.9rem;
 
     .loginLink {
-      color: var(--primary-color-text);
-      font-weight: 600;
+      color: #FFA500; // Color de tu logo para el enlace
+      font-weight: 700;
       text-decoration: none;
       margin-left: 0.5rem;
-      &:hover { text-decoration: underline; }
+      transition: var(--transition);
+
+      &:hover {
+        text-decoration: underline;
+        filter: brightness(1.2);
+      }
     }
   }
+}
+
+// Animación de entrada
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }

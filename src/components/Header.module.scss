@@ -1,3 +1,9 @@
+/**
+ * HEADER & NAVIGATION STYLES
+ * Arquitectura de navegación fija con efectos de desenfoque (blur)
+ * y sistema de menú lateral (Off-canvas) para dispositivos móviles.
+ */
+
 @use "../styles/mixins" as *;
 
 .header {
@@ -5,9 +11,9 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 2000;
+  z-index: 2000; // Capa superior absoluta para evitar solapamientos con modales
   background: rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px); // Efecto Glassmorphism
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   height: 80px;
   display: flex;
@@ -28,30 +34,39 @@
   align-items: center;
 }
 
-/* LOGO */
+/* ============================================================
+   LOGO SECTION
+   ============================================================ */
 .logoSection {
   display: flex;
   align-items: center;
   gap: 0.8rem;
   cursor: pointer;
   z-index: 2005;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent; // Elimina el destello azul en móviles
 
   .title {
     font-size: 1.8rem;
     font-weight: 800;
     color: #fff;
-    span { @include text-gradient-orange; } 
+    span { 
+      @include text-gradient-orange; // Branding dinámico desde mixins
+    } 
 
-    @media (max-width: 767px) { font-size: 1.5rem; }
+    @media (max-width: 767px) { 
+      font-size: 1.5rem; 
+    }
   }
+
   .logoImg { 
     height: 35px; 
     filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.2));
   }
 }
 
-/* NAVEGACIÓN */
+/* ============================================================
+   NAVIGATION (DESKTOP & MOBILE)
+   ============================================================ */
 .nav {
   display: flex;
   gap: 2rem;
@@ -68,16 +83,17 @@
     
     &:hover { 
       color: #FFA500; 
-      transform: translateY(-2px);
+      transform: translateY(-2px); // Micro-interacción de elevación
     }
 
     &:focus { outline: none; }
   }
 
+  /* Comportamiento Menú Lateral (Tablet / Mobile) */
   @media (max-width: 1023px) {
     position: fixed;
     top: 0;
-    right: -100%;
+    right: -100%; // Oculto por defecto a la derecha
     width: 300px;
     height: 100vh;
     background: #0d0d0d;
@@ -85,12 +101,15 @@
     padding: 8rem 2.5rem;
     justify-content: flex-start;
     align-items: flex-start;
+    // Transición fluida con aceleración personalizada
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-left: 1px solid rgba(255, 165, 0, 0.15);
     z-index: 2001;
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
 
-    &.navActive { right: 0; }
+    &.navActive { 
+      right: 0; // Entrada del menú
+    }
 
     a {
       font-size: 1.2rem;
@@ -108,7 +127,9 @@
   }
 }
 
-/* BOTÓN HAMBURGUESA (Dashboard Style sin borde morado) */
+/* ============================================================
+   MOBILE TOGGLE (HAMBURGER BUTTON)
+   ============================================================ */
 .mobileToggle {
   display: none;
 
@@ -125,7 +146,6 @@
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
     
-    /* Eliminación de bordes de enfoque y destellos */
     outline: none;
     -webkit-tap-highlight-color: transparent;
 
@@ -158,16 +178,24 @@
       &::after { bottom: -7px; left: 0; }
     }
 
-    /* Clase que se activa al abrir el menú */
+    /* Lógica de transformación de icono de 3 líneas a X */
     .iconOpen {
       background: transparent;
-      &::before { transform: rotate(45deg); top: 0; }
-      &::after { transform: rotate(-45deg); bottom: 0; }
+      &::before { 
+        transform: rotate(45deg); 
+        top: 0; 
+      }
+      &::after { 
+        transform: rotate(-45deg); 
+        bottom: 0; 
+      }
     }
   }
 }
 
-/* OVERLAY */
+/* ============================================================
+   OVERLAY (BACKGROUND BLUR ON ACTIVE MENU)
+   ============================================================ */
 .overlay {
   position: fixed;
   top: 0;
@@ -179,7 +207,7 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease;
-  z-index: 1500;
+  z-index: 1500; // Por debajo del Nav pero sobre el contenido de la página
 
   &.overlayVisible {
     opacity: 1;

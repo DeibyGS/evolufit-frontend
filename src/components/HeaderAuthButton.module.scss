@@ -1,54 +1,74 @@
+/**
+ * AUTH BUTTON STYLES
+ * Implementa un CTA dinámico con efectos de brillo (shimmer) y pulso.
+ * Diseñado para maximizar la tasa de conversión y el feedback visual.
+ */
+
 @use "../styles/mixins" as *;
 
 .authButton {
-  @include btn-primary-gradient; // Usamos tu mixin base
+  @include btn-primary-gradient; // Inyección de lógica de marca desde mixins
+  
   position: relative;
-  overflow: hidden; // Crucial para que el brillo no se salga del botón
+  overflow: hidden; // Contenedor crítico para el recorte del efecto de brillo
   padding: 0.8rem 1.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  // Efecto de brillo (shimmer)
+  /**
+   * EFECTO SHIMMER (Brillo metálico)
+   * Crea un barrido de luz diagonal al hacer hover.
+   */
   &::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%; // Empieza fuera a la izquierda
-    width: 50%;
+    left: -100%; // Punto de inicio fuera del área visible
+    width: 60%;
     height: 100%;
     background: linear-gradient(
       120deg,
       transparent,
-      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0.4), // Reflejo de luz blanca semi-transparente
       transparent
     );
-    transition: all 0.6s;
+    // Evita interferencia con eventos de puntero
+    pointer-events: none;
   }
 
   &:hover {
     transform: scale(1.05) translateY(-2px);
-    box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3);
+    box-shadow: 0 10px 25px rgba(255, 165, 0, 0.4);
     
     &::before {
-      left: 150%; // Cruza todo el botón al hacer hover
-      transition: all 0.6s;
+      left: 150%; // Desplazamiento completo a través del botón
+      transition: all 0.7s ease-in-out;
     }
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.98); // Feedback táctil de presión
   }
 
-  // Animación automática cada cierto tiempo para atraer la vista
+  /**
+   * ANIMACIÓN DE PULSO
+   * Atrae la atención del usuario de forma sutil y constante.
+   */
   animation: pulseGlow 3s infinite;
 }
 
 @keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+  0% { 
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); 
+  }
+  70% { 
+    box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); // Expansión del halo de luz
+  }
+  100% { 
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); 
+  }
 }

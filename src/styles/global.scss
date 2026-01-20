@@ -1,16 +1,24 @@
+/**
+ * GLOBAL LAYOUT & ROOT STYLES - EVOLUTFIT
+ * Define la estructura base de la aplicación y la jerarquía del DOM principal.
+ */
+
 html {
+  /* Soporte nativo para temas claro/oscuro del sistema operativo */
   color-scheme: light dark;
-  
 }
 
 body {
+  /* Tipografía base (Roboto) definida en :root */
   font-family: var(--primary-font-family);
   line-height: 1.5;
   font-weight: 400;
 
+  /* Colores globales del modo oscuro */
   color: var(--primary-color-text);
   background-color: var(--primary-color-bg);
 
+  /* Optimizaciones de renderizado de texto para máxima nitidez */
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -19,31 +27,39 @@ body {
   padding: 0;
 }
 
+/* Forzamos que toda la cadena de contenedores ocupe el alto total de la ventana */
 html,
 body,
 #root {
   height: 100%;
 }
 
+/* Configuración del contenedor principal de React */
 #root {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh; /* Asegura que el footer siempre baje al final */
 }
 
+/* El componente principal donde se renderiza el contenido dinámico */
 main {
-  flex: 1;
+  flex: 1;           /* Expande el main para ocupar el espacio sobrante */
   margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2rem;         /* Separación uniforme entre componentes dentro de la vista */
 }
 
-/* Personalización de la barra de progreso o detalles de Sonner */
+// 
+
+/**
+ * CUSTOM NOTIFICATIONS (SONNER)
+ * Personalización estética de las notificaciones de éxito para alinearlas con el branding.
+ */
 [data-sonner-toast] {
   &[data-type="success"] {
-    // Esto añade una pequeña línea brillante con tu degradado arriba
+    /* Añade una línea decorativa superior con el degradado naranja de EvolutFit */
     &::before {
       content: '';
       position: absolute;

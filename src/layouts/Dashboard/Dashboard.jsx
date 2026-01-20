@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   PieChart, Pie, Cell, XAxis, YAxis, Tooltip, 
   ResponsiveContainer, Legend, AreaChart, Area, 
@@ -10,8 +10,14 @@ import { MUSCLE_GROUPS } from '../../data/exercises';
 import { useAuthStore } from '../../store/authStore';
 import styles from './Dashboard.module.scss';
 
+// Paleta de colores sincronizada con el branding (Naranjas y Dorados)
 const COLORS = ['#FFA500', '#FF8C00', '#FF4500', '#FFD700', '#DAA520', '#B8860B'];
 
+/**
+ * DASHBOARD COMPONENT
+ * Centraliza la analítica de entrenamientos, permitiendo filtrar por fechas
+ * y visualizar la progresión de volumen y carga por grupo muscular.
+ */
 export const Dashboard = () => {
   const { token, user } = useAuthStore();
   const [workouts, setWorkouts] = useState([]);
@@ -19,6 +25,7 @@ export const Dashboard = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
+  // Efecto de carga inicial: Sincronizado con el estado de autenticación
   useEffect(() => { 
     if (token) fetchWorkouts(); 
   }, [token]);
@@ -35,6 +42,11 @@ export const Dashboard = () => {
     }
   };
 
+  /**
+   * MEMO: Filtrado de Workouts
+   * Optimizamos el filtrado por fechas para evitar procesar el array completo 
+   * si los filtros no han cambiado.
+   */
   const filteredWorkouts = useMemo(() => {
     return workouts.filter(w => {
       if (!startDate && !endDate) return true;
@@ -52,9 +64,13 @@ export const Dashboard = () => {
         if (workoutDate > end) return false;
       }
       return true;
-    }).reverse();
+    }).reverse(); // Mostramos cronológicamente de izquierda a derecha
   }, [workouts, startDate, endDate]);
 
+  /**
+   * MEMO: Estadísticas KPI (Volumen, Reps, Series)
+   * Realiza el cálculo del volumen de carga (peso * reps) para el grupo seleccionado.
+   */
   const groupStats = useMemo(() => {
     return filteredWorkouts.reduce((acc, w) => {
       w.exercises.forEach(ex => {
@@ -70,6 +86,10 @@ export const Dashboard = () => {
     }, { series: 0, reps: 0, volumen: 0 });
   }, [filteredWorkouts, selectedGroup]);
 
+  /**
+   * MEMO: Datos para PieChart
+   * Distribución porcentual del volumen de entrenamiento por grupo muscular.
+   */
   const pieData = useMemo(() => {
     const counts = {};
     filteredWorkouts.forEach(w => {
@@ -80,6 +100,10 @@ export const Dashboard = () => {
     return Object.keys(counts).map(key => ({ name: key, value: counts[key] }));
   }, [filteredWorkouts]);
 
+  /**
+   * MEMO: Datos de Evolución Temporal
+   * Prepara los datos para los gráficos lineales y de área.
+   */
   const evolutionData = useMemo(() => {
     return filteredWorkouts.map(w => {
       let v = 0, r = 0, s = 0;
@@ -101,6 +125,7 @@ export const Dashboard = () => {
     }).filter(d => d.volumen > 0 || d.series > 0);
   }, [filteredWorkouts, selectedGroup]);
 
+  // Lógica de exportación: Genera PDF con tabla de progreso detallada
   const downloadSessionsPDF = () => {
     const doc = new jsPDF();
     doc.text(`Reporte de Evolución: ${user?.name || 'Usuario'}`, 14, 20);
@@ -108,7 +133,15 @@ export const Dashboard = () => {
     filteredWorkouts.forEach(w => {
       w.exercises.forEach(ex => {
         ex.sets.forEach((s, i) => {
-          tableRows.push([new Date(w.createdAt).toLocaleDateString(), ex.muscleGroup, ex.exerciseName, i+1, s.weight, s.reps, s.weight*s.reps]);
+          tableRows.push([
+            new Date(w.createdAt).toLocaleDateString(), 
+            ex.muscleGroup, 
+            ex.exerciseName, 
+            i+1, 
+            s.weight, 
+            s.reps, 
+            s.weight * s.reps
+          ]);
         });
       });
     });
@@ -118,11 +151,12 @@ export const Dashboard = () => {
         startY: 30,
         headStyles: { fillColor: [255, 165, 0] } 
     });
-    doc.save(`Workout_Report_${selectedGroup}.pdf`);
+    doc.save(`EvolutFit_Report_${selectedGroup}.pdf`);
   };
 
   return (
     <div className={styles.dashboardContainer}>
+      {/* HEADER DE CONTROL */}
       <header className={styles.header}>
         <div className={styles.welcome}>
           <h2>Dashboard <span>Evolutivo</span></h2>
@@ -137,15 +171,14 @@ export const Dashboard = () => {
               <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </div>
             {(startDate || endDate) && (
-              <button className={styles.clearBtn} onClick={() => {setStartDate(''); setEndDate('');}}>
-                ✕
-              </button>
+              <button className={styles.clearBtn} onClick={() => {setStartDate(''); setEndDate('');}}>✕</button>
             )}
           </div>
           <button onClick={downloadSessionsPDF} className={styles.btnDownload}>📄 PDF</button>
         </div>
       </header>
 
+      {/* MÉTRICAS KPI (Tarjetas superiores) */}
       <div className={styles.kpiGrid}>
         <div className={`${styles.kpiCard} ${styles.highlight}`}>
           <span className={styles.label}>Volumen {selectedGroup}</span>
@@ -161,6 +194,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
+      {/* SELECTOR DE GRUPO MUSCULAR */}
       <nav className={styles.muscleFilters}>
         {MUSCLE_GROUPS.map(group => (
           <button 
@@ -173,6 +207,7 @@ export const Dashboard = () => {
         ))}
       </nav>
 
+      {/* GRID DE GRÁFICOS */}
       <div className={styles.chartsGrid}>
         <div className={styles.chartCard}>
           <h3>Esfuerzo por Grupo</h3>
@@ -204,6 +239,7 @@ export const Dashboard = () => {
           </ResponsiveContainer>
         </div>
 
+        {/* GRÁFICO COMBINADO: Progresión detallada */}
         <div className={`${styles.chartCard} ${styles.fullWidth}`}>
           <div className={styles.chartHeader}>
             <h3>Métricas Combinadas: <span>{selectedGroup}</span></h3>

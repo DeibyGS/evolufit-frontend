@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import styles from './ForgotPassword.module.scss';
 
+/**
+ * FORGOT PASSWORD COMPONENT
+ * Maneja la lógica de recuperación de credenciales.
+ * NOTA TÉCNICA: Esta funcionalidad se encuentra actualmente en fase de construcción 
+ * (Frontend-Ready / Backend-Pending).
+ */
 export const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [isSent, setIsSent] = useState(false);
@@ -10,11 +16,15 @@ export const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Aquí iría tu llamada al backend
+    // NOTA DE DESARROLLO: Función en construcción. 
+    // Actualmente solo simula el flujo de éxito en el cliente.
     try {
-      // Simulación de fetch
-      console.log('Enviando recuperación a:', email);
-      toast.success('Si el correo existe, recibirás instrucciones pronto');
+      console.log('Simulando recuperación para:', email);
+      
+      // Aviso informativo sobre el estado del desarrollo
+      toast.info('Función en desarrollo: El sistema de recuperación se habilitará próximamente.');
+      
+      // Simulamos la transición de estado para pruebas de UI/UX
       setIsSent(true);
     } catch (error) {
       toast.error('Hubo un problema. Inténtalo más tarde.');
@@ -24,6 +34,9 @@ export const ForgotPassword = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formCard}>
+        {/* Badge informativo de funcionalidad en desarrollo */}
+        <div className={styles.wipBadge}>Funcionalidad en Construcción</div>
+
         <h2>Recuperar Contraseña</h2>
         
         {!isSent ? (
@@ -50,8 +63,8 @@ export const ForgotPassword = () => {
           </>
         ) : (
           <div className={styles.successState}>
-            <p>✅ Hemos enviado un correo a <strong>{email}</strong></p>
-            <p>Revisa tu bandeja de entrada (y la carpeta de spam).</p>
+            <p>✅ Flujo de prueba completado para: <strong>{email}</strong></p>
+            <p>El envío real de correos electrónicos estará disponible en la próxima actualización.</p>
           </div>
         )}
 

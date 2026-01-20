@@ -4,10 +4,9 @@ import { useAuthStore } from '../store/authStore';
 import styles from './LoginForm.module.scss';
 import { toast } from 'sonner';
 
-// Nota: He quitado la importación de RegisterForm aquí para evitar confusiones de renderizado
 export const LoginForm = () => {
   const navigate = useNavigate();
-  const { login, } = useAuthStore(); 
+  const { login } = useAuthStore(); 
 
   const [formData, setFormData] = useState({
     email: '',
@@ -23,37 +22,24 @@ export const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Datos enviados:', formData);
-    try{
+    try {
       const response = await fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
       const data = await response.json();
       
-      if(response.ok){
-        console.log('Inicio de sesión exitoso:', data);
+      if (response.ok) {
         toast.success(`¡Bienvenido de nuevo, ${data.user.name}!`);
-        localStorage.setItem('token', data.token);
         login(data.user, data.token);
-
         navigate('/dashboard');  
-      }else{
-        console.error('Error en el inicio de sesión:', data);
-        toast.error(data.message || 'Error en el inicio de sesión');
+      } else {
+        toast.error(data.message || 'Credenciales incorrectas');
       }
+    } catch (error) {
+      toast.error('Error de red: No se pudo conectar con el servidor');
     }
-    catch(error){
-      console.error('Error de red:', error);
-      alert('Error de red: ' + error.message);
-    }
-    
   };
 
   return (
@@ -70,7 +56,6 @@ export const LoginForm = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="ejemplo@correo.com"
-            autoComplete="email"
             required
           />
         </div>
@@ -84,23 +69,20 @@ export const LoginForm = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="********"
-            autoComplete="current-password"
             required
           />
         </div>
 
         <div className={styles.forgotPassword}>
-          {/* Asegúrate de tener esta ruta creada en tu main.jsx o cámbiala por '#' */}
           <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
         </div>
 
         <button type="submit" className={styles.submitButton}>
-          Iniciar Sesión
+          Entrar
         </button>
 
         <div className={styles.footerLinks}>
           <span>¿No tienes cuenta? </span>
-          {/* He añadido el texto "Crear cuenta" dentro del Link */}
           <Link to="/register" className={styles.registerLink}>
             Crear cuenta
           </Link>

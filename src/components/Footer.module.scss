@@ -1,3 +1,9 @@
+/**
+ * FOOTER STYLES
+ * Arquitectura basada en CSS Grid para una responsividad fluida sin JS.
+ * Incluye efectos de degradado y tipografía optimizada para legibilidad.
+ */
+
 @use "../styles/mixins" as *;
 
 .footer {
@@ -9,6 +15,7 @@
     width: 90%;
     max-width: 1300px;
     margin: 0 auto;
+    // La clave de la responsividad: auto-fit ajusta las columnas según el espacio disponible
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 3rem;
@@ -19,8 +26,11 @@
       font-size: 1.8rem;
       font-weight: 800;
       color: #fff;
-      span { color: #FFA500; }
+      span { 
+        color: #FFA500; // Color de acento corporativo
+      }
     }
+
     .tagline {
       margin-top: 1rem;
       color: #888;
@@ -30,27 +40,50 @@
   }
 
   &__links {
-    h4 { color: #fff; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+    h4 { 
+      color: #fff; 
+      margin-bottom: 1.5rem; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+    }
+
     ul {
       list-style: none;
       padding: 0;
+
       li {
         margin-bottom: 0.8rem;
+
         a {
           color: #888;
           text-decoration: none;
-          transition: color 0.3s;
-          &:hover { color: #FFA500; }
+          transition: color 0.3s ease;
+
+          &:hover { 
+            color: #FFA500; 
+          }
         }
       }
     }
   }
 
   &__academic {
-    h4 { color: #fff; margin-bottom: 1.5rem; }
-    p { color: #777; font-size: 0.9rem; line-height: 1.5; }
-    strong { color: #bbb; }
+    h4 { 
+      color: #fff; 
+      margin-bottom: 1.5rem; 
+    }
+
+    p { 
+      color: #777; 
+      font-size: 0.9rem; 
+      line-height: 1.5; 
+    }
+
+    strong { 
+      color: #bbb; 
+    }
     
+    // Badge informativo con opacidad para un look moderno
     .practiceBadge {
       display: inline-block;
       margin-top: 1rem;
@@ -68,6 +101,7 @@
     max-width: 1300px;
     margin: 3rem auto 0;
     
+    // Divisor con degradado para suavizar la transición visual
     .divider {
       height: 1px;
       background: linear-gradient(90deg, transparent 0%, rgba(255, 165, 0, 0.3) 50%, transparent 100%);
@@ -78,18 +112,26 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: wrap; // Asegura que en móvil los elementos se apilen verticalmente
       gap: 1rem;
       color: #555;
       font-size: 0.85rem;
 
-      .author strong {
-        // Tu degradado amarillo para el autor
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+      .author {
+        strong {
+          // Implementación de clipping para texto degradado (Branding del autor)
+          background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          display: inline-block;
+        }
       }
     }
   }
 }
+
+/* Nota de Senior Dev: 
+   El uso de auto-fit en el grid __container ya maneja la mayoría del responsive.
+   El flex-wrap en bottomContent asegura que el copyright y el autor no se colapsen.
+*/

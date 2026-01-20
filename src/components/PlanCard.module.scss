@@ -1,3 +1,9 @@
+/**
+ * PRICING PLANS STYLES
+ * Arquitectura de tarjetas comparativas con enfoque en conversión (CTA).
+ * Incluye lógica de revelado por scroll (Intersection Observer).
+ */
+
 @use "../styles/mixins" as *;
 
 .sectionPlans {
@@ -6,6 +12,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: transparent;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* LÓGICA DE REVELADO (Observer) */
+  &.hidden {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  &.reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   @media (max-width: 767px) {
     padding: 4rem 1.5rem;
@@ -29,15 +48,20 @@
     margin-top: 1rem; 
     max-width: 600px;
     font-size: 1.1rem;
+    line-height: 1.6;
   }
 }
 
+/* ============================================================
+   GRID DE TARJETAS
+   ============================================================ */
 .cardsGrid {
   display: grid;
   width: 100%;
   max-width: 1300px;
   gap: 2.5rem;
-  align-items: stretch; // Hace que todas las cards tengan la misma altura
+  // Crucial: Estira las cards para que todas midan lo mismo verticalmente
+  align-items: stretch; 
 
   /* DESKTOP: >= 1024px */
   @media (min-width: 1024px) {
@@ -54,7 +78,7 @@
   @media (max-width: 767px) {
     grid-template-columns: 1fr;
     max-width: 450px;
-    gap: 4rem; // Espacio extra para que el "Popular Badge" no choque
+    gap: 4rem; // Espacio extra para el Popular Badge
   }
 }
 
@@ -63,6 +87,7 @@
   padding: 3.5rem 2.5rem;
   display: flex;
   flex-direction: column;
+  // Transición con "Back" effect para un look más orgánico
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -95,7 +120,7 @@
     margin-bottom: 1.5rem;
     
     &::before {
-      content: '$';
+      content: '€';
       font-size: 1.5rem;
       color: #FFA500;
       font-weight: 800;
@@ -130,7 +155,7 @@
     padding: 0;
     width: 100%;
     margin-bottom: 3rem;
-    flex-grow: 1;
+    flex-grow: 1; // Empuja el botón hacia el final de la card automáticamente
 
     li {
       padding: 0.8rem 0;
@@ -155,6 +180,7 @@
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
+    transition: all 0.3s ease;
     
     &:hover {
       @include btn-primary-gradient;
@@ -164,16 +190,20 @@
   }
 }
 
-/* PLAN RECOMENDADO */
+/* ============================================================
+   ESTADO: RECOMENDADO / MÁS POPULAR
+   ============================================================ */
 .recommended {
   border: 2px solid #FFA500;
-  background: rgba(255, 165, 0, 0.05);
+  background: rgba(255, 165, 0, 0.08);
 
   /* Solo escalamos en Desktop para evitar problemas de overflow en móvil */
   @media (min-width: 1024px) {
     transform: scale(1.06);
     z-index: 2;
-    &:hover { transform: scale(1.09) translateY(-10px); }
+    &:hover { 
+      transform: scale(1.09) translateY(-10px); 
+    }
   }
 
   .popularBadge {

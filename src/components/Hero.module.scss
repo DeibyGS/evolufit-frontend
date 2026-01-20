@@ -1,3 +1,9 @@
+/**
+ * HERO COMPONENT STYLES
+ * Estructura de capas (Z-index layering) para impacto visual máximo.
+ * Capa 1: Media (Img + Overlay) | Capa 2: Texto/Contenido | Capa 3: Stats
+ */
+
 @use "../styles/mixins" as *;
 
 .hero {
@@ -10,6 +16,7 @@
   overflow: hidden;
   background: #000;
 
+  // CAPA 1: Multimedia y filtrado visual
   &__imageWrapper {
     position: absolute;
     inset: 0;
@@ -19,12 +26,13 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.7; // Para que el texto sea legible
+      opacity: 0.7; // Control de luminancia base
     }
 
     .hero__overlay {
       position: absolute;
       inset: 0;
+      // Degradado vertical para "fundir" la imagen con el resto de la página
       background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0.4) 0%,
@@ -33,6 +41,7 @@
     }
   }
 
+  // CAPA 2: Contenedor de contenido central
   &__main {
     position: relative;
     z-index: 2;
@@ -54,11 +63,12 @@
       font-family: var(--secondary-font-family);
 
       span {
-        // Tu degradado amarillo/naranja
+        // Implementación de clipping para texto degradado corporativo
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        display: inline-block;
       }
     }
 
@@ -76,6 +86,7 @@
     gap: 1.5rem;
   }
 
+  // CAPA 3: Estadísticas flotantes
   &__stats {
     position: absolute;
     bottom: 2rem;
@@ -86,25 +97,36 @@
   }
 }
 
-/* RESPONSIVE SEGÚN TUS MEDIDAS */
+/* ============================================================
+   RESPONSIVE DESIGN (Basado en Clases Dinámicas de React)
+   ============================================================ */
 
-// Tablet (768px - 1023px)
+// Ajustes para Tablet (Breakpoints intermedios)
 .containerTablet {
   .hero__content {
-    .hero__title { font-size: 3.5rem; }
-    .hero__description { font-size: 1.1rem; }
+    .hero__title { 
+      font-size: 3.5rem; 
+    }
+    .hero__description { 
+      font-size: 1.1rem; 
+    }
   }
 }
 
-// Mobile (< 768px)
+// Ajustes para Mobile (Reestructuración de flujo)
 .containerMobile {
   justify-content: flex-start;
   padding-top: 120px;
 
   .hero__content {
     text-align: center;
-    .hero__title { font-size: 2.5rem; }
-    .hero__description { font-size: 1rem; margin: 1.5rem 0; }
+    .hero__title { 
+      font-size: 2.5rem; 
+    }
+    .hero__description { 
+      font-size: 1rem; 
+      margin: 1.5rem 0; 
+    }
   }
 
   .hero__actions {
@@ -112,6 +134,7 @@
   }
 
   .hero__stats {
+    // Cambio de absolute a relative para permitir scroll natural en pantallas pequeñas
     bottom: 1rem;
     position: relative;
     transform: none;
@@ -120,6 +143,7 @@
   }
 }
 
+// Botón de exploración con mixin global
 .btnExplore {
   @include btn-primary-gradient;
   padding: 1rem 2rem;

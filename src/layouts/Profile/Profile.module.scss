@@ -1,21 +1,30 @@
+/**
+ * PROFILE STYLES - EVOLUTFIT
+ * Arquitectura de gestión de cuenta con enfoque en seguridad y UX.
+ * Implementa Grid para separar información de seguridad y Mixins para consistencia.
+ */
+
 @use "../../styles/mixins" as *;
 
 .profileContainer {
-  @include section-container;
-  .header { @include section-header; }
+  @include section-container; // Contenedor base con animación fade-in
+  .header { @include section-header; } // Títulos centrados
 }
 
+/* REJILLA DE CONTENIDO (2 Columnas en Desktop) */
 .contentGrid {
   display: grid;
   grid-template-columns: 1fr 1fr; 
   gap: 2rem;
   align-items: start;
 
+  // Responsive: Colapsa a una columna en tablets y móviles
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
   }
 }
 
+/* TARJETAS DE INFORMACIÓN (Glassmorphism) */
 .card {
   @include card-glass;
   min-height: 450px; 
@@ -28,21 +37,26 @@
     padding-bottom: 0.8rem;
     
     h3 { 
-      @include label-standard; // Mismo estilo que labels pero con color naranja
-      color: #FFA500; 
+      @include label-standard; // Estilo base de etiqueta corporativa
+      color: #FFA500; // Naranja acento para el título de la card
       font-size: 1.1rem; 
       margin: 0;
     }
   }
 }
 
+/* LISTADO DE DATOS PERSONALES */
 .infoList {
   @include flex-center(column, 1.8rem);
   align-items: flex-start;
 }
 
 .infoItem {
-  label { @include label-standard; margin-bottom: 0.4rem; display: block; }
+  label { 
+    @include label-standard; 
+    margin-bottom: 0.4rem; 
+    display: block; 
+  }
   p {
     font-size: 1.1rem;
     color: #fff;
@@ -50,66 +64,88 @@
   }
 }
 
-/* ACCIONES Y FORMULARIO */
+/* SECCIÓN DE ACCIONES Y FORMULARIO DINÁMICO */
 .changePasswordBtn {
-  @include btn-primary-gradient;
+  @include btn-primary-gradient; // Botón llamativo para invocar el formulario
   padding: 0.9rem;
 }
 
 .passForm {
   @include flex-center(column, 1.2rem);
-  align-items: stretch; // Para que los inputs ocupen todo el ancho
-  padding: 1.2rem;
-  background: rgba(0, 0, 0, 0.2);
+  align-items: stretch; // Fuerza a los inputs a ocupar el ancho completo del contenedor
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2); // Fondo oscuro contrastado para el formulario
   border-radius: var(--radius);
-  animation: slideDown 0.3s ease;
+  animation: slideDown 0.3s ease; // Animación de despliegue suave
 
   .inputGroup {
-    @include input-group-layout(0.5rem);
+    @include input-group-layout(0.5rem); // Grupo de label + input con gap
   }
 }
 
+/* BOTONES DEL FORMULARIO */
 .formBtns {
   @include flex-center(row, 1rem);
-  .saveBtn { @include btn-primary-gradient; flex: 2; }
-  .cancelBtn { @include btn-secondary; flex: 1; }
+  margin-top: 0.5rem;
+  
+  .saveBtn { 
+    @include btn-primary-gradient; 
+    flex: 2; // El botón de acción principal es más ancho
+  }
+  .cancelBtn { 
+    @include btn-secondary; 
+    flex: 1; 
+  }
 }
 
-/* ZONA DE PELIGRO */
+/* ZONA DE PELIGRO (DANGER ZONE) */
 .dangerZone {
-  margin-top: auto; 
+  margin-top: auto; // Empuja esta sección al final de la tarjeta
   padding-top: 2rem;
-  border-top: 1px solid rgba(255, 77, 77, 0.15);
+  border-top: 1px solid rgba(255, 77, 77, 0.15); // Separador con tono rojizo sutil
   
   h4 { 
-    color: #ff4d4d; 
+    color: #ff4d4d; // Rojo de advertencia
     margin-bottom: 0.5rem; 
     font-size: 1rem; 
     font-family: var(--secondary-font-family);
+    font-weight: 700;
+    text-transform: uppercase;
   }
   
   p { 
     font-size: 0.85rem; 
     color: var(--tertiary-color-text); 
     margin-bottom: 1.5rem; 
+    line-height: 1.4;
   }
 }
 
+/* BOTÓN DE ELIMINACIÓN DE CUENTA */
 .deleteBtn {
   @include btn-secondary;
-  border-color: rgba(255, 77, 77, 0.3);
+  border-color: rgba(255, 77, 77, 0.3); // Borde rojo tenue
   color: #ff4d4d;
   width: 100%;
+  font-weight: 700;
 
   &:hover {
-    background: #ff4d4d;
+    background: #ff4d4d; // Al hacer hover se vuelve rojo sólido
     color: white;
     border-color: #ff4d4d;
     box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+    transform: translateY(-2px);
   }
 }
 
+/* ANIMACIONES */
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
 }

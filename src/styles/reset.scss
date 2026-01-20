@@ -1,3 +1,10 @@
+/**
+ * GLOBAL RESET & BASE STYLES - EVOLUTFIT
+ * Este archivo establece una base uniforme para todos los navegadores.
+ * Previene errores de layout y mejora la accesibilidad.
+ */
+
+/* 1. RESET BOX MODEL: Asegura que el padding y el border no sumen ancho al elemento */
 *,
 *::before,
 *::after {
@@ -6,17 +13,22 @@
   box-sizing: border-box;
 }
 
+/* 2. SCROLL FLUIDO: Mejora la UX al navegar por anclas (ej: de "Planes" a "Contacto") */
 html:focus-within {
   scroll-behavior: smooth;
 }
 
+/* 3. BODY CONFIG: Optimización de renderizado de fuentes y prevención de scroll horizontal */
 body {
   min-height: 100vh;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  text-rendering: optimizeLegibility; /* Mejora el dibujo de las letras */
+  -webkit-font-smoothing: antialiased; /* Suaviza fuentes en navegadores basados en Webkit */
+  overflow-x: hidden; /* Evita que elementos mal posicionados creen barras laterales */
+  background-color: var(--primary-color-bg);
+  color: var(--primary-color-text);
 }
 
+/* 4. MULTIMEDIA: Evita que imágenes o vídeos se desborden de sus contenedores */
 img,
 picture,
 video,
@@ -26,6 +38,7 @@ svg {
   max-width: 100%;
 }
 
+/* 5. FORM ELEMENTS: Heredan la tipografía definida en el :root (Roboto/Poppins) */
 button,
 input,
 textarea,
@@ -33,18 +46,21 @@ select {
   font: inherit;
 }
 
+/* 6. LINKS: Eliminamos el azul y subrayado por defecto para control total en los componentes */
 a {
   color: inherit;
   text-decoration: none;
 }
 
+/* 7. LISTAS: Limpiamos los puntos (bullets) de las listas para usarlas como contenedores */
 ul,
 ol {
   list-style: none;
 }
 
+/* 8. ACCESIBILIDAD (FOCUS): Marca claramente dónde está el cursor al navegar con el teclado */
 :focus {
-  outline: 2px solid var(--color-primary, #4f46e5);
+  /* He ajustado el color a tu naranja #FFA500 para mantener el branding */
+  outline: 2px solid var(--accent-color, #FFA500); 
   outline-offset: 2px;
-
 }

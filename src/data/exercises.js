@@ -1,3 +1,16 @@
+/**
+ * DATABASE: EXERCISES & MUSCLE GROUPS - EVOLUTFIT
+ * Este archivo centraliza el catálogo de ejercicios disponibles en la plataforma.
+ * Se utiliza para:
+ * 1. Poblar los selects en la creación de rutinas.
+ * 2. Filtrar el Hall of Fame por grupo muscular.
+ * 3. Calcular estadísticas en el Dashboard.
+ */
+
+/**
+ * Listado de grupos musculares soportados.
+ * Se recomienda usar este array para generar filtros dinámicos en la UI.
+ */
 const MUSCLE_GROUPS = [
   "Pecho",
   "Espalda",
@@ -9,8 +22,14 @@ const MUSCLE_GROUPS = [
   "Abdomen",
 ];
 
+/**
+ * Catálogo maestro de ejercicios.
+ * @property {string} id - Identificador único (prefijo por grupo + índice).
+ * @property {string} name - Nombre descriptivo del ejercicio.
+ * @property {string} group - Grupo muscular principal asociado.
+ */
 const EXERCISES_DB = [
-  // PECHO
+  // --- PECHO ---
   { id: "p1", name: "Press de Banca Plano", group: "Pecho" },
   { id: "p2", name: "Press Inclinado con Mancuernas", group: "Pecho" },
   { id: "p3", name: "Aperturas en Peck Deck", group: "Pecho" },
@@ -20,7 +39,7 @@ const EXERCISES_DB = [
   { id: "p7", name: "Flexiones de Brazos", group: "Pecho" },
   { id: "p8", name: "Press de Banca en Máquina", group: "Pecho" },
 
-  // ESPALDA
+  // --- ESPALDA ---
   { id: "e1", name: "Dominadas Lastradas", group: "Espalda" },
   { id: "e2", name: "Jalón al Pecho", group: "Espalda" },
   { id: "e3", name: "Remo con Barra", group: "Espalda" },
@@ -30,7 +49,7 @@ const EXERCISES_DB = [
   { id: "e7", name: "Remo T con Apoyo", group: "Espalda" },
   { id: "e8", name: "Hiperextensiones", group: "Espalda" },
 
-  // DELTOIDES (Hombro)
+  // --- DELTOIDES (Hombro) ---
   { id: "h1", name: "Press Militar con Barra", group: "Deltoides" },
   { id: "h2", name: "Elevaciones Laterales con Mancuerna", group: "Deltoides" },
   { id: "h3", name: "Press Arnold", group: "Deltoides" },
@@ -40,7 +59,7 @@ const EXERCISES_DB = [
   { id: "h7", name: "Remo al Cuello en Polea", group: "Deltoides" },
   { id: "h8", name: "Press de Hombro en Máquina", group: "Deltoides" },
 
-  // BÍCEPS
+  // --- BÍCEPS ---
   { id: "b1", name: "Curl con Barra Z", group: "Bíceps" },
   { id: "b2", name: "Curl Alterno con Mancuernas", group: "Bíceps" },
   { id: "b3", name: "Curl Martillo", group: "Bíceps" },
@@ -50,7 +69,7 @@ const EXERCISES_DB = [
   { id: "b7", name: "Curl tipo Spider", group: "Bíceps" },
   { id: "b8", name: "Chin-ups (Bíceps)", group: "Bíceps" },
 
-  // TRÍCEPS
+  // --- TRÍCEPS ---
   { id: "t1", name: "Extensiones en Polea Alta", group: "Tríceps" },
   { id: "t2", name: "Press Francés con Barra Z", group: "Tríceps" },
   { id: "t3", name: "Fondos entre Bancos", group: "Tríceps" },
@@ -60,7 +79,7 @@ const EXERCISES_DB = [
   { id: "t7", name: "Extensiones tras nuca con cuerda", group: "Tríceps" },
   { id: "t8", name: "Flexiones Diamante", group: "Tríceps" },
 
-  // CUÁDRICEPS
+  // --- CUÁDRICEPS ---
   { id: "c1", name: "Sentadilla Libre con Barra", group: "Cuádriceps" },
   { id: "c2", name: "Prensa de Piernas 45°", group: "Cuádriceps" },
   { id: "c3", name: "Extensiones de Cuádriceps", group: "Cuádriceps" },
@@ -70,7 +89,7 @@ const EXERCISES_DB = [
   { id: "c7", name: "Sentadilla Frontal", group: "Cuádriceps" },
   { id: "c8", name: "Step Up con Peso", group: "Cuádriceps" },
 
-  // ISQUIOTIBIALES
+  // --- ISQUIOTIBIALES ---
   { id: "i1", name: "Peso Muerto Rumano", group: "Isquiotibiales" },
   { id: "i2", name: "Curl Femoral Tumbado", group: "Isquiotibiales" },
   { id: "i3", name: "Curl Femoral Sentado", group: "Isquiotibiales" },
@@ -84,7 +103,7 @@ const EXERCISES_DB = [
   },
   { id: "i8", name: "Hip Thrust", group: "Isquiotibiales" },
 
-  // ABDOMEN
+  // --- ABDOMEN ---
   { id: "a1", name: "Crunch Abdominal en Máquina", group: "Abdomen" },
   { id: "a2", name: "Elevación de Piernas Colgado", group: "Abdomen" },
   { id: "a3", name: "Plancha Abdominal", group: "Abdomen" },

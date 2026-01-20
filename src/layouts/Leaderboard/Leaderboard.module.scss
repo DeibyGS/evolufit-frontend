@@ -1,52 +1,67 @@
+/**
+ * LEADERBOARD STYLES - HALL OF FAME
+ * Sistema de visualización de rankings basado en una tabla responsiva con efectos Glassmorphism.
+ * Utiliza variables y mixins corporativos para mantener la consistencia de EvolutFit.
+ */
+
 @use "../../styles/mixins" as *;
 
 .leaderboardContainer {
-  @include section-container;
-  .header { @include section-header; }
+  @include section-container; // Estructura base de sección con animación de entrada
+  .header { @include section-header; } // Centrado y espaciado de títulos
 }
 
+/* CONTENEDOR TIPO TARJETA CRISTAL */
 .tableCard {
   @include card-glass;
-  padding: 0; // Sobrescribimos el padding del mixin para que la cabecera llegue al borde
-  overflow: hidden;
+  padding: 0; // Sobrescribimos el padding del mixin para que el color de la cabecera toque los bordes
+  overflow: hidden; // Asegura que los bordes redondeados corten el fondo de la cabecera
 }
 
+/* CABECERA DE LA TABLA (DESKTOP) */
 .tableHeader {
   display: grid;
-  grid-template-columns: 1.5fr 1.5fr 1fr; 
+  grid-template-columns: 1.5fr 1.5fr 1fr; // Sincronizado con el ancho de las filas
   padding: 1.2rem 3rem;
-  background: rgba(255, 165, 0, 0.08);
-  color: #FFA500;
-  @include label-standard; // Reutilizamos el estilo de etiquetas de formulario
+  background: rgba(255, 165, 0, 0.08); // Tinte naranja muy sutil
+  color: #FFA500; // Naranja corporativo
+  @include label-standard; // Tipografía técnica de etiquetas
   font-weight: 700;
   letter-spacing: 1.5px;
 }
 
+/* FILAS DE USUARIO / RÉCORD */
 .row {
-  @include table-row-base(1.5fr 1.5fr 1fr);
+  @include table-row-base(1.5fr 1.5fr 1fr); // Layout de rejilla para alinear columnas
   padding: 1.8rem 3rem;
 
   &:last-child { border-bottom: none; }
 
+  // ESTADO ESPECIAL: Resaltado cuando el registro pertenece al usuario logueado
   &.isMe {
     background: rgba(255, 165, 0, 0.04);
-    border-left: 5px solid #FFA500;
+    border-left: 5px solid #FFA500; // Indicador lateral naranja
   }
 }
 
+/* COLUMNA 1: INFO DEL EJERCICIO */
 .exerciseInfo {
-  @include flex-center(column, 0.3rem);
-  align-items: flex-start; // Ajuste del mixin flex para alinear a la izquierda
+  @include flex-center(column, 0.3rem); // Apilado vertical con gap pequeño
+  align-items: flex-start; 
   
   strong { 
     font-size: 1.3rem; 
     color: #fff; 
   }
-  small { @include label-standard; font-size: 0.75rem; }
+  small { 
+    @include label-standard; 
+    font-size: 0.75rem; 
+  }
 }
 
+/* COLUMNA 2: IDENTIDAD DEL ATLETA */
 .userInfo {
-  @include flex-center(row, 1.2rem);
+  @include flex-center(row, 1.2rem); // Alineación horizontal con avatar
   justify-content: flex-start;
 
   span { 
@@ -56,9 +71,10 @@
     text-transform: capitalize;
   }
 
-  .avatar { @include avatar-base; }
+  .avatar { @include avatar-base; } // Círculo con iniciales basado en mixin
 }
 
+/* COLUMNA 3: VALOR DEL RÉCORD */
 .weightInfo {
   text-align: right;
   
@@ -66,7 +82,11 @@
     font-size: 1.8rem; 
     font-weight: 900; 
     color: #fff; 
-    b { font-size: 0.9rem; color: #888; margin-left: 5px; } 
+    b { 
+      font-size: 0.9rem; 
+      color: #888; 
+      margin-left: 5px; 
+    } 
   }
   
   p { 
@@ -76,14 +96,17 @@
   }
 }
 
+/* ADAPTACIÓN RESPONSIVA (Móvil y Tablet) */
 @media (max-width: 900px) {
-  .tableHeader { display: none; }
+  .tableHeader { display: none; } // Ocultamos la cabecera horizontal por falta de espacio
+  
   .row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; // Convertimos la fila en un stack vertical (estilo tarjeta)
     text-align: center;
     gap: 1.5rem;
     padding: 2rem;
     
+    // Centramos todos los elementos para un diseño vertical armónico
     .exerciseInfo { align-items: center; }
     .userInfo { justify-content: center; }
     .weightInfo { text-align: center; }

@@ -1,3 +1,8 @@
+/**
+ * CALCULATOR STYLES
+ * Arquitectura basada en Mixins para una consistencia total del Design System.
+ */
+
 @use "../../styles/mixins" as *;
 
 .calculatorContainer {
@@ -5,11 +10,19 @@
   .header { @include section-header; }
 }
 
-// Layout principal unificado
-.mainGrid { @include calculator-grid; }
+// Estructura de dos columnas (Formulario vs Resultados)
+.mainGrid { 
+  @include calculator-grid; 
+  margin-top: 2rem;
+}
 
-/* FORMULARIO */
-.formSide { @include card-glass; }
+/* ============================================================
+   FORMULARIO DE ENTRADA
+   ============================================================ */
+.formSide { 
+  @include card-glass;
+  padding: 2.5rem; // Aire extra para el formulario
+}
 
 .form {
   display: flex; 
@@ -20,18 +33,24 @@
     display: grid; 
     grid-template-columns: 1fr 1fr; 
     gap: 1.5rem; 
+
+    @media (max-width: 480px) { grid-template-columns: 1fr; }
   }
   
   .inputGroup {
-    @include input-group-layout; // Reemplaza label e input individuales
+    @include input-group-layout; 
     
     .fullWidthSelect {
       @include input-standard; 
-      width: 100%; appearance: none; cursor: pointer;
+      width: 100%; 
+      appearance: none; 
+      cursor: pointer;
+      // Icono de flecha naranja personalizado
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFA500' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       background-repeat: no-repeat; 
       background-position: right 1rem center; 
       background-size: 1.1em;
+      padding-right: 3rem;
       
       option { background: #111; color: #fff; }
     }
@@ -42,74 +61,142 @@
   display: grid; 
   grid-template-columns: 1fr 1fr; 
   gap: 1rem;
+  margin-bottom: 0.5rem;
 
   .radioLabel {
     @include btn-secondary;
-    @include flex-center; // Centrado simplificado
+    @include flex-center;
     padding: 0.8rem; 
     cursor: pointer;
+    transition: all var(--transition);
 
     input { display: none; }
+
     &.active { 
       border-color: #FFA500; 
       background: rgba(255, 165, 0, 0.1); 
-      color: #FFA500; 
+      color: #FFA500;
+      box-shadow: 0 0 15px rgba(255, 165, 0, 0.1);
     }
   }
 }
 
-/* BOTONES */
-.calcBtn, .saveBtnActive { @include btn-primary-gradient; margin-top: 1rem; }
-.clearBtn { @include btn-secondary; width: 100%; margin-top: 0.5rem; font-size: 0.8rem; }
+/* ============================================================
+   VISUALIZACIÓN DE RESULTADOS
+   ============================================================ */
+.calcBtn, .saveBtnActive { 
+  @include btn-primary-gradient; 
+  margin-top: 1rem; 
+  font-size: 0.9rem;
+}
 
-/* RESULTADOS */
+.cancelBtn { 
+  @include btn-secondary; 
+  width: 100%; 
+  margin-top: 0.5rem; 
+  font-size: 0.8rem; 
+}
+
 .resultsGrid {
   display: grid; 
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
   gap: 1.2rem;
 
-  .resultCard { @include result-card-style; }
+  .resultCard { 
+    @include result-card-style;
+    // Animación de entrada suave cuando aparecen los resultados
+    animation: slideUp 0.4s ease forwards;
+  }
 }
 
-.placeholder { @include card-dashed(350px); } // Uso de mixin de estado vacío
+.placeholder { 
+  @include card-dashed(350px);
+  p { max-width: 250px; line-height: 1.6; }
+}
 
-/* HISTORIAL CON MEDALLAS */
+/* ============================================================
+   HISTORIAL GAMIFICADO
+   ============================================================ */
 .historySection {
-  margin-top: 4rem; 
-  padding-top: 2rem; 
+  margin-top: 5rem; 
+  padding-top: 3rem; 
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 
   h3 { 
     font-size: 1.8rem; 
-    margin-bottom: 2rem; 
+    margin-bottom: 2.5rem; 
+    font-family: var(--secondary-font-family);
     span { color: #FFA500; } 
   }
 }
 
-.historyList { display: flex; flex-direction: column; gap: 1.2rem; }
+.historyList { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.5rem; 
+}
 
 .historyCard {
   @include history-card-base;
 
-  // Estilos de Ranking
-  &.gold { border-left-color: #ffd700; background: rgba(255, 215, 0, 0.05); transform: scale(1.02); }
-  &.silver { border-left-color: #c0c0c0; background: rgba(192, 192, 192, 0.05); }
-  &.bronze { border-left-color: #cd7f32; background: rgba(205, 127, 50, 0.05); }
-
-  .medalBadge {
-    @include badge-style(#888, #000); // Base del badge
-    position: absolute; 
-    top: -10px; 
-    right: 50px;
-    font-size: 0.7rem;
-    font-weight: 800;
+  // Modificadores de Ranking (Medallas)
+  &.gold { 
+    border-left-color: #ffd700; 
+    background: rgba(255, 215, 0, 0.03); 
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.05);
+  }
+  &.silver { 
+    border-left-color: #c0c0c0; 
+    background: rgba(192, 192, 192, 0.03); 
+  }
+  &.bronze { 
+    border-left-color: #cd7f32; 
+    background: rgba(205, 127, 50, 0.03); 
   }
 
-  &.gold .medalBadge { background: #ffd700; }
+  .medalBadge {
+    @include badge-style; 
+    position: absolute; 
+    top: -12px; 
+    right: 50px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+
+  &.gold .medalBadge { background: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
   &.silver .medalBadge { background: #c0c0c0; }
   &.bronze .medalBadge { background: #cd7f32; }
 
-  .dateBadge { @include badge-style; } // Reutilización de badge para la fecha
+  .dateBadge { 
+    @include badge-style; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .orange { color: #FFA500 !important; }
 }
 
-.noHistory { @include card-dashed; padding: 3rem; } // Uso de mixin de estado vacío
+.chartSection {
+  margin-top: 4rem;
+  
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    span { color: #FFA500; }
+  }
+
+  .chartWrapper {
+    @include card-glass;
+    padding: 2rem 1rem 1rem 0; // Padding ajustado para que el gráfico respire
+    height: 300px;
+  }
+}
+
+.noHistory { @include card-dashed(200px); }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
