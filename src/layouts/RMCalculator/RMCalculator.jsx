@@ -25,7 +25,7 @@ export const RMCalculator = () => {
 
   const fetchSavedRMs = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/rm', {
+      const response = await fetch(`${BASE_URL}/rm`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -85,7 +85,7 @@ export const RMCalculator = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/api/rm', {
+      const response = await fetch(`${BASE_URL}/rm`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(payload)

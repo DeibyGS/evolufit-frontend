@@ -31,12 +31,16 @@ import { Leaderboard } from "./layouts/Leaderboard/Leaderboard.jsx";
 import { Achievements } from "./layouts/Achievements/Achievements.jsx";
 import { SocialRoutines } from "./layouts/SocialRoutines/SocialRoutines.jsx";
 
+// Componente para scroll al top en navegación
+import { ScrollToTop } from "./components/ScrollToTop.jsx";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     {/* Configuración global de Toasts (Sonner) fuera del router para persistencia */}
     <ToastConfig/>
     
     <BrowserRouter basename="/">
+      <ScrollToTop/>
       <Routes>
         
         {/* 1. RUTAS PÚBLICAS: Ensuciertas dentro del componente App (Header/Footer común) */}
