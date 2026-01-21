@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import achievementsData from '../../data/achievements.json';
 import styles from './Achievements.module.scss';
 import { useAuthStore } from '../../store/authStore';
+import { BASE_URL } from '../../api/API';
 
 /**
  * COMPONENTE DE LOGROS (ACHIEVEMENTS)
@@ -14,7 +15,7 @@ export const Achievements = () => {
 
   const fetchTotalWeight = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/workouts/total-volume', {
+      const response = await fetch(`${BASE_URL}/workouts/total-volume`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

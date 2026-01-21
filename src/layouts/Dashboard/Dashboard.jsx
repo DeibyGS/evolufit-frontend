@@ -9,6 +9,7 @@ import autoTable from 'jspdf-autotable';
 import { MUSCLE_GROUPS } from '../../data/exercises';
 import { useAuthStore } from '../../store/authStore';
 import styles from './Dashboard.module.scss';
+import { BASE_URL } from '../../api/API';
 
 // Paleta de colores sincronizada con el branding (Naranjas y Dorados)
 const COLORS = ['#FFA500', '#FF8C00', '#FF4500', '#FFD700', '#DAA520', '#B8860B'];
@@ -32,7 +33,7 @@ export const Dashboard = () => {
 
   const fetchWorkouts = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/workouts/my-workouts', {
+      const res = await fetch(`${BASE_URL}/workouts/my-workouts`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();

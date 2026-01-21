@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Leaderboard.module.scss';
 import { useAuthStore } from '../../store/authStore';
+import { BASE_URL } from '../../api/API';
 
 /**
  * COMPONENTE LEADERBOARD (HALL OF FAME)
@@ -23,7 +24,7 @@ export const Leaderboard = () => {
    */
   const fetchLeaderboard = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/rm/leaderboard', {
+      const res = await fetch(`${BASE_URL}/rm/leaderboard`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();

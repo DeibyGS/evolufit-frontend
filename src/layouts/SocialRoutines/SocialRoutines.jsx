@@ -3,6 +3,7 @@ import { MUSCLE_GROUPS } from '../../data/exercises';
 import { useAuthStore } from '../../store/authStore';
 import { toast } from 'sonner';
 import styles from './SocialRoutines.module.scss';
+import { BASE_URL } from '../../api/API';
 
 export const SocialRoutines = () => {
   const { user, token } = useAuthStore();
@@ -26,7 +27,7 @@ export const SocialRoutines = () => {
     setLoading(true);
     try {
       const query = new URLSearchParams({ sort: sortBy, muscle: filterMuscle, search: search }).toString();
-      const response = await fetch(`http://localhost:8080/api/social?${query}`, {
+      const response = await fetch(`${BASE_URL}/social?${query}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -47,7 +48,7 @@ export const SocialRoutines = () => {
 
   const handleLike = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/social/${postId}/like`, {
+      const response = await fetch(`${BASE_URL}/social/${postId}/like`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -59,7 +60,7 @@ export const SocialRoutines = () => {
           : post
         ));
       }
-    } catch (error) { toast.error("Error en el like"); }
+    } catch (error) { toast.error("Error en el like" + error); }
   };
 
   const handlePublish = async () => {
@@ -67,7 +68,7 @@ export const SocialRoutines = () => {
       return toast.error("Completa todos los campos");
     }
     try {
-      const response = await fetch('http://localhost:8080/api/social', {
+      const response = await fetch(`${BASE_URL}/social`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ title: newPost.title, content: newPost.content, muscleGroups: newPost.tags })
@@ -78,7 +79,7 @@ export const SocialRoutines = () => {
         setNewPost({ title: '', content: '', tags: [] });
         fetchPosts();
       }
-    } catch (error) { toast.error("Error al publicar"); }
+    } catch (error) { toast.error("Error al publicar" + error); }
   };
 
   const toggleTag = (muscle) => {

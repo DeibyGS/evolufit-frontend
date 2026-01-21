@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './RegisterForm.module.scss';
 import { toast } from 'sonner';
+import { BASE_URL } from '../api/API';
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export const RegisterForm = () => {
     console.log('Usuario registrado:', formData);
 
     try{
-      const response = await fetch('http://localhost:8080/api/auth/register', {
+      const response = await fetch(`${BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

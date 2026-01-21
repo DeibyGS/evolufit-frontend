@@ -4,6 +4,7 @@ import styles from './Calculator.module.scss';
 import { toast } from 'sonner';
 import { useAuthStore } from '../../store/authStore';
 import Swal from 'sweetalert2';
+import { BASE_URL } from '../../api/API';
 
 /**
  * CALCULATOR COMPONENT - EVOLUTFIT
@@ -26,7 +27,7 @@ export const Calculator = () => {
 
   const fetchFullHistory = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/health', {
+      const res = await fetch(`${BASE_URL}/health`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
@@ -106,7 +107,7 @@ export const Calculator = () => {
     });
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:8080/api/health/${id}`, {
+        const res = await fetch(`${BASE_URL}/health/${id}`, {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -115,7 +116,7 @@ export const Calculator = () => {
           fetchFullHistory();
         }
       } catch (error) {
-        toast.error("Error al eliminar");
+        toast.error("Error al eliminar" + error.message);
       }
     }
   };

@@ -10,7 +10,7 @@ export const ToastConfig = () => {
     <Toaster 
       richColors 
       position="top-center" 
-      duration={4000}
+      duration={2500}
       toastOptions={{
         // ESTILO BASE: Basado en tus variables y mixin 'card-glass'
         style: {

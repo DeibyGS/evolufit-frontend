@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { EXERCISES_DB, MUSCLE_GROUPS } from '../../data/exercises';
 import { useAuthStore } from '../../store/authStore';
 import Swal from 'sweetalert2';
+import { BASE_URL } from '../../api/API';
 
 export const Routines = () => {
   const { token } = useAuthStore();
@@ -28,7 +29,7 @@ export const Routines = () => {
 
   const fetchHistory = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/workouts/my-workouts', {
+      const response = await fetch(`${BASE_URL}/workouts/my-workouts`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -100,7 +101,7 @@ export const Routines = () => {
       };
 
       try {
-        const response = await fetch('http://localhost:8080/api/workouts', {
+        const response = await fetch(`${BASE_URL}/workouts`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -135,7 +136,7 @@ export const Routines = () => {
 
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:8080/api/workouts/${id}`, {
+        const res = await fetch(`${BASE_URL}/workouts/${id}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });

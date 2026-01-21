@@ -4,6 +4,7 @@ import { EXERCISES_DB, MUSCLE_GROUPS } from '../../data/exercises';
 import { useAuthStore } from '../../store/authStore';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
+import { BASE_URL } from '../../api/API';
 
 export const RMCalculator = () => {
   const { token } = useAuthStore();
@@ -115,7 +116,7 @@ export const RMCalculator = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:8080/api/rm/${id}`, {
+        const response = await fetch(`${BASE_URL}/rm/${id}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -124,7 +125,7 @@ export const RMCalculator = () => {
           toast.success("Registro eliminado");
         }
       } catch (error) {
-        toast.error("Error al eliminar");
+        toast.error("Error al eliminar" + error.message);
       }
     }
   };

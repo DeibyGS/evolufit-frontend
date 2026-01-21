@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import styles from './Profile.module.scss';
 import Swal from 'sweetalert2';
+import { BASE_URL } from '../../api/API';
 
 /**
  * COMPONENTE PROFILE - EVOLUTFIT
@@ -40,7 +41,7 @@ export const Profile = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/users/${user.id}/change-password`, {
+      const response = await fetch(`${BASE_URL}/users/${user.id}/change-password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +84,7 @@ export const Profile = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:8080/api/users/${user.id}`, {
+        const response = await fetch(`${BASE_URL}/users/${user.id}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -94,7 +95,7 @@ export const Profile = () => {
           navigate('/'); // Redirección al Home
         }
       } catch (error) {
-        toast.error("Error al conectar con el servidor.");
+        toast.error("Error al conectar con el servidor." + error.message);
       }
     }
   };
