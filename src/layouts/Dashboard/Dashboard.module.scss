@@ -53,8 +53,8 @@
   transition: border-color 0.3s ease;
 
   // --- FIX ANCHO ---
-  box-sizing: border-box; // El padding cuenta dentro del ancho
-  max-width: 100%;        // Evita exceder al padre
+  box-sizing: border-box; 
+  max-width: 100%;       
   // -----------------
 
   &:focus-within {
@@ -81,12 +81,13 @@
     width: 100%;
     box-sizing: border-box;
 
-    // MÓVIL: Inputs uno encima del otro ocupando todo el ancho
+    // MÓVIL: Inputs uno encima del otro
     @media (max-width: 600px) {
       flex-direction: column;
       width: 100%;
       gap: 10px;
-      align-items: stretch; // Estira los inputs para ocupar el 100%
+      // CAMBIO: 'center' en lugar de 'stretch' para que no fuercen los bordes
+      align-items: center; 
     }
 
     input[type="date"] {
@@ -111,16 +112,24 @@
 
       // MÓVIL: Estilo "Botón" para facilitar el toque
       @media (max-width: 600px) {
-        width: 100%;
+        // CAMBIO: Reducido al 90% para evitar desbordamiento visual
+        width: 90%; 
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
-        padding: 0 10px;
-        text-align: left;
         
+        // CAMBIO: Padding derecho extra para que el texto no toque el icono
+        padding: 0 30px 0 10px; 
+        
+        // CAMBIO: Texto centrado
+        text-align: center; 
+        
+        // Aseguramos que el icono se mantenga a la derecha
+        position: relative;
+
         &::-webkit-calendar-picker-indicator {
             position: absolute;
-            right: 15px;
+            right: 10px;
             opacity: 0.8;
         }
       }
@@ -160,7 +169,8 @@
 
     // MÓVIL: Convertir la "X" en un botón de "Limpiar Filtros"
     @media (max-width: 600px) {
-       width: 100%;
+       // CAMBIO: También reducimos ancho al 90% para consistencia
+       width: 90%;
        border-radius: 8px;
        height: 35px;
        margin-top: 5px;
