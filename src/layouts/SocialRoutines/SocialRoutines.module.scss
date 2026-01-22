@@ -1,54 +1,70 @@
 @use "../../styles/mixins" as *;
 
+/* --- CONTENEDOR PRINCIPAL --- */
 .socialContainer {
   @include section-container;
-  padding: 1rem; // Un poco de espacio extra para los bordes en mobile
+  width: 100%;            
+  max-width: 100vw;       
+  overflow-x: hidden;     
+  box-sizing: border-box;
+  padding: 1rem;          
+  padding-bottom: 5rem;   
 
   .header {
     @include flex-center(row, 1rem);
     justify-content: space-between;
     margin-bottom: 2rem;
-    flex-wrap: wrap; // Permite que el botón baje si no hay espacio
+    flex-wrap: wrap; 
+    width: 100%;          
+    box-sizing: border-box;
 
     .titleSection {
       h2 { 
-        font-size: 1.8rem; // Reducido para pantallas pequeñas
+        font-size: clamp(1.5rem, 4vw, 1.8rem); 
         color: #fff; 
         span { color: #FFA500; } 
       }
-      p { color: var(--tertiary-color-text); font-size: 0.9rem; }
+      p { 
+        color: var(--tertiary-color-text); 
+        font-size: 0.9rem; 
+        max-width: 100%; 
+      }
     }
 
     .shareBtn { 
       @include btn-primary-gradient; 
-      width: 100%; // En mobile ocupa todo el ancho
+      width: 100%; 
       padding: 0.8rem 1.5rem; 
       border-radius: 50px; 
       font-size: 0.9rem;
       margin-top: 1rem;
+      white-space: nowrap; 
 
       @media (min-width: 768px) {
-        width: auto; // En desktop vuelve a su tamaño normal
+        width: auto; 
         margin-top: 0;
       }
     }
   }
 }
 
-/* BARRA DE FILTROS RESPONSIVE */
+/* --- BARRA DE FILTROS --- */
 .filterBar {
   @include card-glass;
   display: flex;
-  flex-direction: column; // Por defecto en columna para mobile
+  flex-direction: column; 
   gap: 1.2rem;
   padding: 1.2rem;
   margin-bottom: 2.5rem;
+  width: 100%;          
+  box-sizing: border-box;
 
   .searchBox {
     width: 100%;
     input { 
       @include input-standard; 
       width: 100%; 
+      box-sizing: border-box;
     }
   }
 
@@ -59,7 +75,9 @@
     
     select { 
       @include input-standard; 
-      flex: 1; // Se reparten el espacio 50/50
+      flex: 1; 
+      width: 100%; 
+      min-width: 0; 
       font-size: 0.85rem;
       cursor: pointer;
       appearance: none;
@@ -67,28 +85,32 @@
       background-repeat: no-repeat;
       background-position: right 0.5rem center;
       background-size: 0.8rem;
+      text-overflow: ellipsis; 
     }
   }
 
-  // En pantallas medianas/grandes, se alinean en fila
   @media (min-width: 768px) {
     flex-direction: row;
     padding: 1.5rem 2rem;
-
     .searchBox { flex: 2; }
     .selectors { flex: 1; }
   }
 }
 
-/* GRID DE RUTINAS */
+/* --- GRID DE RUTINAS --- */
 .postsGrid {
   display: grid;
-  // minmax(280px) evita que las cards se salgan en móviles pequeños
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  /* * Ajuste clave: Bajé el minmax a 260px. 
+   * En un iPhone Pro (aprox 390px ancho) - 2rem padding = ~358px disponibles.
+   * 280px estaba bien, pero si el padding cambia, peligra. 260px es más seguro.
+   */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
   
   @media (max-width: 480px) {
-    grid-template-columns: 1fr; // Columna única real
+    grid-template-columns: 1fr; 
     gap: 1rem;
   }
 }
@@ -100,8 +122,10 @@
   gap: 1.2rem;
   transition: all 0.3s ease;
   border-bottom: 3px solid transparent;
-  width: 100%; // Evita desbordamiento
+  width: 100%; 
+  max-width: 100%; 
   overflow: hidden;
+  box-sizing: border-box;
 
   &:hover { 
     transform: translateY(-5px); 
@@ -110,15 +134,17 @@
 
   .cardHeader {
     @include flex-center(row, 0.8rem);
+    width: 100%;
     
     .userBadge {
-      @include avatar-base(40px, 10px); // Ajustado a 40px para mobile
+      @include avatar-base(40px, 10px); 
       font-size: 0.8rem;
-      flex-shrink: 0; // Evita que se aplaste
+      flex-shrink: 0; 
     }
 
     .userInfo {
       flex: 1;
+      min-width: 0; // Permite al texto truncarse si es necesario
       strong { display: block; color: #fff; font-size: 0.95rem; }
       span { font-size: 0.75rem; color: #777; }
     }
@@ -126,6 +152,7 @@
     .likesCount { 
       @include badge-style(rgba(255, 165, 0, 0.1), #FFA500); 
       font-size: 0.8rem;
+      white-space: nowrap;
     }
   }
 
@@ -135,9 +162,9 @@
       color: #fff; 
       font-size: 1.2rem; 
       margin-bottom: 0.6rem; 
+      word-wrap: break-word; // Evita que palabras largas rompan el layout
     }
     
-    // Contenedor de texto con lógica de expansión
     .contentWrapper {
       max-height: 4.5em; 
       overflow: hidden;
@@ -151,6 +178,7 @@
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        word-break: break-word; // Seguridad extra
       }
 
       &.showFull {
@@ -187,6 +215,7 @@
       flex: 1;
       font-size: 0.8rem;
       padding: 0.6rem;
+      white-space: nowrap; 
     }
 
     .likeBtn { 
@@ -201,25 +230,33 @@
   }
 }
 
-/* MODAL / COMPARTIR (Optimizado para Mobile) */
+/* --- MODAL --- */
 .modalOverlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.9); backdrop-filter: blur(8px);
-  @include flex-center; z-index: 2000;
-  padding: 1rem; // Margen para que el modal no toque los bordes
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100vw;   
+  height: 100vh; 
+  background: rgba(0,0,0,0.9); 
+  backdrop-filter: blur(8px);
+  @include flex-center; 
+  z-index: 2000;
+  padding: 1rem; 
+  box-sizing: border-box; 
 }
 
 .modalContent {
   @include card-glass;
   width: 100%; 
   max-width: 600px;
-  max-height: 90vh; // No se sale de la pantalla hacia arriba/abajo
-  overflow-y: auto; // Scroll interno si es muy largo
+  max-height: 90vh; 
+  overflow-y: auto; 
   background: #111;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   padding: 1.5rem;
+  box-sizing: border-box;
 
   h3 { 
     font-size: 1.5rem; 
@@ -231,15 +268,21 @@
   .modalInput, .modalTextarea { 
     @include input-standard; 
     font-size: 0.9rem;
+    width: 100%;         
+    box-sizing: border-box; 
   }
   
-  textarea { min-height: 120px; }
+  textarea { 
+    min-height: 120px; 
+    resize: vertical;   
+  }
 
   .tagSelector {
     .tagChips {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
+      
       button { 
         @include chip-button; 
         font-size: 0.75rem;
@@ -251,7 +294,7 @@
 
   .modalActions {
     display: flex;
-    flex-direction: column; // Botones apilados en mobile
+    flex-direction: column; 
     gap: 1rem;
     margin-top: 1rem;
 
@@ -259,7 +302,7 @@
     .cancelBtn { @include btn-secondary; order: 2; }
 
     @media (min-width: 480px) {
-      flex-direction: row; // En tablets vuelve a horizontal
+      flex-direction: row; 
       .publishBtn { flex: 2; order: 1; }
       .cancelBtn { flex: 1; order: 2; }
     }

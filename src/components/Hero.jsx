@@ -34,7 +34,7 @@ export const Hero = () => {
       <div className={styles.hero__imageWrapper}>
         <img 
           className={styles.hero__imgHero} 
-          src="Hero.png" 
+          src="Hero2.png" 
           alt="Fondo EvolutFit - Transformación Fitness" 
         />
         {/* Overlay con degradado para asegurar el contraste del texto (A11y) */}

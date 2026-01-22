@@ -37,7 +37,10 @@
   }
 }
 
-/* FILTRO DE FECHAS RESPONSIVO */
+/* * FILTRO DE FECHAS RESPONSIVO (FIX MÓVIL)
+ * Se ha ajustado para que en pantallas pequeñas los inputs se apilen
+ * y tengan mayor área táctil.
+ */
 .dateFilterContainer {
   display: flex;
   align-items: center;
@@ -54,18 +57,30 @@
     border-color: rgba(255, 165, 0, 0.5);
   }
 
+  // MÓVIL: Contenedor vertical
   @media (max-width: 600px) {
     flex-direction: column;
+    align-items: center;
     border-radius: 15px;
     width: 100%;
     padding: 1rem;
-    gap: 0.5rem;
+    gap: 0.8rem;
+    height: auto;
   }
 
   .dateInputs {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+
+    // MÓVIL: Inputs uno encima del otro ocupando todo el ancho
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+      align-items: stretch;
+    }
 
     input[type="date"] {
       background: transparent;
@@ -75,11 +90,30 @@
       font-size: 0.85rem;
       outline: none;
       cursor: pointer;
+      min-height: 40px; // Altura mínima para el dedo
 
       &::-webkit-calendar-picker-indicator {
         filter: invert(1);
         opacity: 0.6;
+        cursor: pointer;
         &:hover { opacity: 1; }
+      }
+
+      // MÓVIL: Estilo "Botón" para facilitar el toque
+      @media (max-width: 600px) {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 0 10px;
+        text-align: left;
+        
+        // Posicionar icono a la derecha extrema
+        &::-webkit-calendar-picker-indicator {
+            position: absolute;
+            right: 15px;
+            opacity: 0.8;
+        }
       }
     }
 
@@ -87,6 +121,11 @@
       color: #666;
       font-size: 0.8rem;
       font-weight: 600;
+      
+      // Ocultamos el "a" en móvil para ahorrar espacio vertical
+      @media (max-width: 600px) {
+        display: none;
+      }
     }
   }
 
@@ -94,19 +133,36 @@
     background: #ff4500;
     color: #fff;
     border: none;
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     @include flex-center;
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 2px 10px rgba(255, 69, 0, 0.4);
+    flex-shrink: 0;
 
     &:hover {
       transform: scale(1.15) rotate(90deg);
       background: #fff;
       color: #ff4500;
+    }
+
+    // MÓVIL: Convertir la "X" en un botón de "Limpiar Filtros"
+    @media (max-width: 600px) {
+       width: 100%;
+       border-radius: 8px;
+       height: 35px;
+       margin-top: 5px;
+       background: rgba(255, 69, 0, 0.8);
+       
+       &::after {
+         content: " Limpiar Filtros";
+         font-size: 0.8rem;
+         font-weight: 600;
+         margin-left: 5px;
+       }
     }
   }
 }
@@ -143,7 +199,6 @@
 /* KPIs (Tarjetas de métricas con auto-ajuste) */
 .kpiGrid {
   display: grid;
-  // Cambiado a 140px para que quepan 2 por fila en móviles pequeños
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2.5rem;
@@ -157,23 +212,23 @@
 .kpiCard {
   @include card-glass;
   padding: 1.5rem;
-  display: flex;         // Asegura el uso de flexbox
-  flex-direction: column; // Fuerza el contenido uno debajo de otro
-  align-items: center;    // Centra horizontalmente
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   text-align: center;
 
   .label { 
-    display: block;       // Fuerza al span a ocupar todo el ancho
+    display: block;
     font-size: 0.75rem; 
     color: #888; 
     text-transform: uppercase; 
     letter-spacing: 1px;
-    margin-bottom: 0.5rem; // Espacio entre título y número
+    margin-bottom: 0.5rem;
   }
 
   h4 { 
-    margin: 0;            // Quita márgenes por defecto para control total
+    margin: 0;
     font-size: 2rem; 
     font-weight: 800;
     
@@ -184,12 +239,11 @@
     }
   }
 
-  // Estilo específico para la tarjeta resaltada
   &.highlight {
     border-bottom: 3px solid #FFA500;
     
     .label {
-      color: rgba(255, 165, 0, 0.8); // Un tono naranja suave para el título
+      color: rgba(255, 165, 0, 0.8);
     }
     
     h4 { 
@@ -245,7 +299,7 @@
   padding: 1.5rem;
   min-height: 350px;
   width: 100%;
-  overflow: hidden; // Evita que la gráfica se salga visualmente
+  overflow: hidden;
   
   h3 { 
     font-size: 1rem; 

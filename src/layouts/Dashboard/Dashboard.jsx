@@ -155,6 +155,22 @@ export const Dashboard = () => {
     doc.save(`EvolutFit_Report_${selectedGroup}.pdf`);
   };
 
+  /**
+   * CONFIGURACIÓN COMÚN DE TOOLTIPS
+   * Define el estilo visual para solucionar el problema de contraste.
+   */
+  const tooltipStyle = {
+    contentStyle: { 
+      backgroundColor: 'rgba(20, 20, 20, 0.95)', 
+      border: '1px solid rgba(255, 165, 0, 0.2)', 
+      borderRadius: '8px',
+      padding: '10px',
+      boxShadow: '0 4px 10px rgba(0,0,0,0.5)'
+    },
+    itemStyle: { color: '#fff', fontSize: '0.9rem' }, // Texto de valores en blanco
+    labelStyle: { color: '#ccc', marginBottom: '5px' } // Texto de etiquetas (fechas) en gris claro
+  };
+
   return (
     <div className={styles.dashboardContainer}>
       {/* HEADER DE CONTROL */}
@@ -214,11 +230,23 @@ export const Dashboard = () => {
           <h3>Esfuerzo por Grupo</h3>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
-              <Pie data={pieData} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value" stroke="none">
+              <Pie 
+                data={pieData} 
+                innerRadius={60} 
+                outerRadius={80} 
+                paddingAngle={5} 
+                dataKey="value" 
+                stroke="none"
+              >
                 {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '8px' }} />
-              <Legend verticalAlign="bottom" height={36}/>
+              {/* Tooltip con estilos corregidos */}
+              <Tooltip {...tooltipStyle} cursor={{ fill: 'transparent' }} />
+              <Legend 
+                verticalAlign="bottom" 
+                height={36} 
+                wrapperStyle={{ color: '#ccc', fontSize: '0.85rem' }} 
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -233,8 +261,9 @@ export const Dashboard = () => {
                   <stop offset="95%" stopColor="#FFA500" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <XAxis dataKey="fecha" stroke="#666" fontSize={11} axisLine={false} />
-              <Tooltip contentStyle={{ backgroundColor: '#111', border: '1px solid #333' }} />
+              <XAxis dataKey="fecha" stroke="#666" fontSize={11} axisLine={false} tickMargin={10} />
+              {/* Tooltip con estilos corregidos */}
+              <Tooltip {...tooltipStyle} />
               <Area type="monotone" dataKey="volumen" stroke="#FFA500" fill="url(#colorVol)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
@@ -248,11 +277,15 @@ export const Dashboard = () => {
           <ResponsiveContainer width="100%" height={320}>
             <LineChart data={evolutionData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-              <XAxis dataKey="fecha" stroke="#666" fontSize={11} axisLine={false} />
+              <XAxis dataKey="fecha" stroke="#666" fontSize={11} axisLine={false} tickMargin={10} />
               <YAxis yId="left" stroke="#666" fontSize={11} axisLine={false} />
               <YAxis yId="right" orientation="right" stroke="#666" fontSize={11} axisLine={false} />
-              <Tooltip contentStyle={{backgroundColor: '#111', border: '1px solid #333'}} />
-              <Legend />
+              
+              {/* Tooltip con estilos corregidos */}
+              <Tooltip {...tooltipStyle} />
+              
+              <Legend wrapperStyle={{ paddingTop: '10px', color: '#ccc' }} />
+              
               <Line yId="left" type="monotone" dataKey="volumen" stroke="#FFA500" strokeWidth={3} dot={{r: 4}} name="Volumen (kg)" />
               <Line yId="right" type="monotone" dataKey="repeticiones" stroke="#00C49F" strokeWidth={2} name="Reps" />
               <Line yId="right" type="monotone" dataKey="series" stroke="#FFBB28" strokeWidth={2} name="Series" />
