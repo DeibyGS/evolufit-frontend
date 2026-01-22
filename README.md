@@ -116,6 +116,18 @@ Como arquitecto de este proyecto, se deben seguir estas pautas estrictas para ma
 
 ---
 
+## 🚀 Despliegue del Backend
+
+El backend de **EvolutFit** se encuentra desplegado en la plataforma **Render**.
+
+- **Base URL de la API:** `https://evolufit-backend.onrender.com/api`
+- **Repositorio Backend:** [github.com/DeibyGS/evolufit-backend](https://github.com/DeibyGS/evolufit-backend)
+
+> **⚠️ Nota sobre el rendimiento (Cold Start):**
+> Al estar alojado en el plan gratuito de Render, el servidor entra en estado de suspensión tras 15 minutos de inactividad.
+>
+> Por este motivo, la **primera petición** que realices puede tardar entre **50 y 60 segundos** en responder mientras el servicio se reactiva. Las peticiones siguientes funcionarán a velocidad normal.
+
 ## 🤝 Directrices de Contribución & Arquitectura
 
 Como arquitecto de **EvolutFit**, he establecido los siguientes pilares técnicos para garantizar que el código sea mantenible, escalable y de alto rendimiento. Se espera que cualquier contribución respete estas normas:
