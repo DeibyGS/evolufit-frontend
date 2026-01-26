@@ -1,0 +1,78 @@
+@use "../styles/mixins" as *;
+
+.loaderOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--primary-color-bg); 
+  @include flex-center(column);
+  z-index: 9999;
+  // Efecto cristal sutil como en tus tarjetas
+  backdrop-filter: blur(12px);
+  background-image: radial-gradient(circle at center, rgba(255, 165, 0, 0.05) 0%, transparent 70%);
+}
+
+.loaderContent {
+  @include flex-center(column, 1.5rem);
+  text-align: center;
+  padding: var(--max-padding);
+
+  .spinner {
+    width: 70px;
+    height: 70px;
+    border: 3px solid rgba(255, 165, 0, 0.1);
+    border-top: 3px solid #FFA500; // Tu naranja corporativo
+    border-radius: 50%;
+    animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    @include flex-center;
+
+    .innerCircle {
+      width: 30px;
+      height: 30px;
+      border: 2px solid rgba(255, 165, 0, 0.4);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+  }
+
+  .logoLoader {
+    font-family: var(--secondary-font-family);
+    color: var(--primary-color-text);
+    letter-spacing: 5px;
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin: 0;
+    
+    span { 
+      @include text-gradient-orange; // Aplicamos tu mixin de gradiente naranja
+    }
+  }
+
+  .loadingText {
+    color: var(--tertiary-color-text);
+    font-family: var(--primary-font-family);
+    font-size: 1.1rem;
+    font-style: italic;
+    min-height: 1.6rem;
+  }
+
+  .serverNoticeBadge {
+    @include badge-style(rgba(255, 165, 0, 0.1), #FFA500);
+    border: 1px solid rgba(255, 165, 0, 0.2);
+    margin-top: 1rem;
+  }
+}
+
+// Keyframes para las animaciones
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.2; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+  100% { transform: scale(0.9); opacity: 0.2; }
+}
