@@ -3,6 +3,8 @@ import { Footer } from './components/Footer.jsx';
 import { Header } from './components/Header.jsx';
 import { Outlet } from 'react-router-dom';
 import { ToastConfig } from './components/ToastConfig.jsx';
+import { useServerWakeUp } from './components/useServerWakeUp.jsx';
+import { WAKEUP_URL } from './api/API.js';
 
 /**
  * COMPONENTE: App (Root Layout)
@@ -16,6 +18,8 @@ import { ToastConfig } from './components/ToastConfig.jsx';
  * - Estructura el DOM semánticamente mediante etiquetas <header>, <main> y <footer>.
  */
 export const App = () => {
+  // Despertar el servidor en Render al cargar la app
+    useServerWakeUp(WAKEUP_URL);
 
   return (
     <>

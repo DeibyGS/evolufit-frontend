@@ -19,8 +19,14 @@ const messages = [
   "Calentando el servidor...",
   "Ajustando el cinturón de fuerza...",
   "Cargando tus récords personales...",
-  "Evolucionando tu entrenamiento..."
+  "Evolucionando tu entrenamiento...",
+  "Activando el modo bestia...",
+  "Sincronizando tus músculos...",
+  "Calculando ganancias máximas...",
+  "Optimizando cada repetición...",
+  "Encendiendo la motivación..."
 ];
+
 
 export const FullPageLoader = () => {
   /** @state {number} msgIndex - Índice actual del mensaje mostrado */
@@ -58,7 +64,7 @@ export const FullPageLoader = () => {
         
         {/* Identidad visual con resaltado en el término FIT */}
         <h1 className={styles.logoLoader}>
-          EVOLUT<span>FIT</span>
+          Evolut<span>Fit</span>
         </h1>
         
         {/* Área de texto dinámico para feedback del sistema */}
