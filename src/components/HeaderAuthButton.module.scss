@@ -7,10 +7,10 @@
 @use "../styles/mixins" as *;
 
 .authButton {
-  @include btn-primary-gradient; // Inyección de lógica de marca desde mixins
+  @include btn-primary-gradient; 
   
   position: relative;
-  overflow: hidden; // Contenedor crítico para el recorte del efecto de brillo
+  overflow: hidden;
   padding: 0.8rem 1.8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -19,15 +19,12 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  /**
-   * EFECTO SHIMMER (Brillo metálico)
-   * Crea un barrido de luz diagonal al hacer hover.
-   */
+ 
   &::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%; // Punto de inicio fuera del área visible
+    left: -100%; 
     width: 60%;
     height: 100%;
     background: linear-gradient(
@@ -36,7 +33,6 @@
       rgba(255, 255, 255, 0.4), // Reflejo de luz blanca semi-transparente
       transparent
     );
-    // Evita interferencia con eventos de puntero
     pointer-events: none;
   }
 
@@ -45,19 +41,14 @@
     box-shadow: 0 10px 25px rgba(255, 165, 0, 0.4);
     
     &::before {
-      left: 150%; // Desplazamiento completo a través del botón
+      left: 150%; 
       transition: all 0.7s ease-in-out;
     }
   }
 
   &:active {
-    transform: scale(0.98); // Feedback táctil de presión
+    transform: scale(0.98); 
   }
-
-  /**
-   * ANIMACIÓN DE PULSO
-   * Atrae la atención del usuario de forma sutil y constante.
-   */
   animation: pulseGlow 3s infinite;
 }
 
@@ -66,7 +57,7 @@
     box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); 
   }
   70% { 
-    box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); // Expansión del halo de luz
+    box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); 
   }
   100% { 
     box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); 

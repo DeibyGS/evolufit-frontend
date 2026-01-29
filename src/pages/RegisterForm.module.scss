@@ -5,25 +5,20 @@
   justify-content: center;
   align-items: center;
   
-  // ESPACIADO ESTRATÉGICO
-  // 1. Añadimos un padding superior generoso para empujar el contenido debajo del header
   padding: 8rem var(--max-padding) 4rem; 
-  
-  // 2. min-height debe ser al menos 100vh para que el fondo cubra todo
   min-height: 100vh; 
   
-  // CONFIGURACIÓN DE FONDO
   background-image: linear-gradient(rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.8)), url('/Hero.png');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; // Efecto parallax sutil
+  background-attachment: fixed; 
 }
 
 .registerForm {
-  @include card-glass; // Usamos tu mixin corporativo para el efecto cristal
+  @include card-glass; 
   width: 100%;
   max-width: 500px;
-  background-color: rgba(17, 17, 17, 0.9); // Reforzamos el fondo oscuro
+  background-color: rgba(17, 17, 17, 0.9); 
   padding: 2.5rem;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   animation: slideUp 0.5s ease-out;
@@ -36,7 +31,6 @@
     font-size: 2rem;
     font-weight: 800;
 
-    // Detalle estético con tu naranja
     &::after {
       content: "";
       display: block;
@@ -54,13 +48,13 @@
     gap: 1.5rem;
 
     @media (max-width: 480px) {
-      grid-template-columns: 1fr; // En móvil se apilan
+      grid-template-columns: 1fr; 
       gap: 0;
     }
   }
 
   .inputGroup {
-    @include input-group-layout; // Usamos tu mixin para labels e inputs
+    @include input-group-layout; 
     margin-bottom: 1.2rem;
   }
 
@@ -78,7 +72,7 @@
 
     label {
       @include label-standard;
-      text-transform: none; // Permitimos minúsculas para los términos
+      text-transform: none; 
       cursor: pointer;
     }
   }
@@ -96,7 +90,7 @@
     font-size: 0.9rem;
 
     .loginLink {
-      color: #FFA500; // Color de tu logo para el enlace
+      color: #FFA500; 
       font-weight: 700;
       text-decoration: none;
       margin-left: 0.5rem;
@@ -110,7 +104,6 @@
   }
 }
 
-// Animación de entrada
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }

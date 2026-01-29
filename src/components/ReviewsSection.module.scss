@@ -11,14 +11,12 @@
     margin-bottom: 5rem;
     padding: 0 2rem;
 
-    // Ajustado para coincidir exactamente con PlanCard
     h2 {
       @include section-header;
-      font-size: 3rem; // Igual que en PlanCard
+      font-size: 3rem; 
       
       span { 
-        color: #FFA500; // Color sólido o gradiente según prefieras
-        // Si prefieres el gradiente de PlanCard: @include text-gradient-orange; 
+        color: #FFA500; 
       }
 
       @media (max-width: 767px) { 
@@ -27,7 +25,7 @@
     }
 
     p { 
-      color: var(--tertiary-color-text); // Usando tu variable de PlanCard
+      color: var(--tertiary-color-text); 
       margin-top: 1rem; 
       max-width: 600px;
       margin-left: auto;
@@ -42,7 +40,6 @@
   max-width: 1600px;
   margin: 0 auto;
 
-  /* Estilos específicos de Slick Slider */
   :global(.slick-list) { 
     overflow: visible; 
     padding: 2rem 0 !important;
@@ -78,14 +75,14 @@
 }
 
 .reviewCard {
-  @include card-glass; // Mismo mixin que en PlanCard
+  @include card-glass; 
   padding: 3.5rem 2.5rem;
   min-height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 4px solid rgba(255, 165, 0, 0.3); // Acento naranja inferior
+  border-bottom: 4px solid rgba(255, 165, 0, 0.3); 
   
   .stars { 
     color: #FFA500; 
@@ -146,14 +143,6 @@
       letter-spacing: 1px;
     }
   }
-}
-
-/* ============================================================
-   RESPONSIVE (HOOKS)
-   ============================================================ */
-
-.containerDesktop {
-  // Configuración estándar
 }
 
 .containerTablet {

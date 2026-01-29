@@ -11,9 +11,9 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 2000; // Capa superior absoluta para evitar solapamientos con modales
+  z-index: 2000; 
   background: rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(15px); // Efecto Glassmorphism
+  backdrop-filter: blur(15px); 
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   height: 80px;
   display: flex;
@@ -34,23 +34,20 @@
   align-items: center;
 }
 
-/* ============================================================
-   LOGO SECTION
-   ============================================================ */
 .logoSection {
   display: flex;
   align-items: center;
   gap: 0.8rem;
   cursor: pointer;
   z-index: 2005;
-  -webkit-tap-highlight-color: transparent; // Elimina el destello azul en móviles
+  -webkit-tap-highlight-color: transparent; 
 
   .title {
     font-size: 1.8rem;
     font-weight: 800;
     color: #fff;
     span { 
-      @include text-gradient-orange; // Branding dinámico desde mixins
+      @include text-gradient-orange; 
     } 
 
     @media (max-width: 767px) { 
@@ -64,9 +61,7 @@
   }
 }
 
-/* ============================================================
-   NAVIGATION (DESKTOP & MOBILE)
-   ============================================================ */
+
 .nav {
   display: flex;
   gap: 2rem;
@@ -83,17 +78,16 @@
     
     &:hover { 
       color: #FFA500; 
-      transform: translateY(-2px); // Micro-interacción de elevación
+      transform: translateY(-2px); 
     }
 
     &:focus { outline: none; }
   }
 
-  /* Comportamiento Menú Lateral (Tablet / Mobile) */
   @media (max-width: 1023px) {
     position: fixed;
     top: 0;
-    right: -100%; // Oculto por defecto a la derecha
+    right: -100%; 
     width: 300px;
     height: 100vh;
     background: #0d0d0d;
@@ -127,9 +121,7 @@
   }
 }
 
-/* ============================================================
-   MOBILE TOGGLE (HAMBURGER BUTTON)
-   ============================================================ */
+
 .mobileToggle {
   display: none;
 
@@ -178,7 +170,6 @@
       &::after { bottom: -7px; left: 0; }
     }
 
-    /* Lógica de transformación de icono de 3 líneas a X */
     .iconOpen {
       background: transparent;
       &::before { 
@@ -193,9 +184,6 @@
   }
 }
 
-/* ============================================================
-   OVERLAY (BACKGROUND BLUR ON ACTIVE MENU)
-   ============================================================ */
 .overlay {
   position: fixed;
   top: 0;

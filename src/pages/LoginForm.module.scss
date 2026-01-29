@@ -5,12 +5,10 @@
   justify-content: center;
   align-items: center;
   
-  // ESPACIADO PARA EVITAR EL HEADER
-  // Usamos 8rem arriba para dar aire suficiente bajo el menú de navegación
+  
   padding: 8rem var(--max-padding) 4rem; 
   min-height: 100vh;
   
-  // FONDO CON OVERLAY OSCURO PARA LEGIBILIDAD
   background-image: linear-gradient(rgba(10, 10, 10, 0.75), rgba(10, 10, 10, 0.75)), url('/Hero.png');
   background-size: cover;
   background-position: center;
@@ -18,7 +16,7 @@
 }
 
 .loginForm {
-  @include card-glass; // Mixin de cristal corporativo
+  @include card-glass; 
   width: 100%;
   max-width: 420px;
   background-color: rgba(17, 17, 17, 0.9);
@@ -46,7 +44,7 @@
   }
 
   .inputGroup {
-    @include input-group-layout; // Consistencia con el resto de la App
+    @include input-group-layout; 
     margin-bottom: 1.5rem;
   }
 

@@ -7,7 +7,6 @@
 @use "../styles/mixins" as *;
 
 .sectionContact {
-  // Configuración del contenedor principal
   position: relative;
   width: 100%;
   height: 400px; 
@@ -33,7 +32,6 @@
       left: 0; 
       width: 100%; 
       height: 100%;
-      // Capa de legibilidad: Oscurece la imagen de fondo para contraste del texto
       background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
     }
   }
@@ -42,13 +40,12 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    // Post-procesado de imagen para estética "Elite Fitness"
     filter: grayscale(100%) contrast(1.2); 
   }
 
   &__content {
     position: relative;
-    z-index: 2; // Asegura que el texto flote sobre el overlay
+    z-index: 2; 
     width: 100%;
     max-width: 1200px;
     padding: 0 2rem;
@@ -60,7 +57,7 @@
     gap: 0.5rem;
 
     p {
-      color: #FFA500; // Color corporativo (Accent)
+      color: #FFA500; 
       text-transform: uppercase;
       font-weight: 700;
       letter-spacing: 2px;
@@ -75,7 +72,7 @@
     }
 
     .phoneNumber {
-      @include text-gradient-orange; // Inyección de lógica compartida desde mixins
+      @include text-gradient-orange; 
       font-size: 3.5rem;
       font-weight: 900;
       text-decoration: none;
@@ -89,17 +86,10 @@
   }
 }
 
-/* ============================================================
-   ESTADOS RESPONSIVOS (Inyectados mediante Hooks de React)
-   Control de dimensiones según el viewport detectado por JS.
-   ============================================================ */
-
-// Estado para pantallas grandes (Escritorio)
 .containerDesktop {
   height: 450px;
 }
 
-// Ajustes para tablets y dispositivos medianos
 .containerTablet {
   height: 350px;
   
@@ -112,8 +102,6 @@
     }
   }
 }
-
-// Ajustes críticos para dispositivos móviles
 .containerMobile {
   height: 300px;
   
@@ -129,7 +117,7 @@
     }
     .phoneNumber { 
       font-size: 2rem; 
-      width: 100%; // Asegura el área de click y render del degradado en pantallas pequeñas
+      width: 100%; 
     }
   }
 }

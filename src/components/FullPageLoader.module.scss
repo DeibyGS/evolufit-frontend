@@ -9,7 +9,6 @@
   background-color: var(--primary-color-bg); 
   @include flex-center(column);
   z-index: 9999;
-  // Efecto cristal sutil como en tus tarjetas
   backdrop-filter: blur(12px);
   background-image: radial-gradient(circle at center, rgba(255, 165, 0, 0.05) 0%, transparent 70%);
 }
@@ -23,7 +22,7 @@
     width: 70px;
     height: 70px;
     border: 3px solid rgba(255, 165, 0, 0.1);
-    border-top: 3px solid #FFA500; // Tu naranja corporativo
+    border-top: 3px solid #FFA500; 
     border-radius: 50%;
     animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     @include flex-center;
@@ -46,7 +45,7 @@
     margin: 0;
     
     span { 
-      @include text-gradient-orange; // Aplicamos tu mixin de gradiente naranja
+      @include text-gradient-orange; 
     }
   }
 
@@ -65,7 +64,6 @@
   }
 }
 
-// Keyframes para las animaciones
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

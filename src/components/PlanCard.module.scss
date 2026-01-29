@@ -15,7 +15,6 @@
   background: transparent;
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-  /* LÓGICA DE REVELADO (Observer) */
   &.hidden {
     opacity: 0;
     transform: translateY(30px);
@@ -52,23 +51,18 @@
   }
 }
 
-/* ============================================================
-   GRID DE TARJETAS
-   ============================================================ */
+
 .cardsGrid {
   display: grid;
   width: 100%;
   max-width: 1300px;
   gap: 2.5rem;
-  // Crucial: Estira las cards para que todas midan lo mismo verticalmente
   align-items: stretch; 
 
-  /* DESKTOP: >= 1024px */
   @media (min-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  /* TABLET: 768px - 1023px */
   @media (min-width: 768px) and (max-width: 1023px) {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
@@ -78,7 +72,7 @@
   @media (max-width: 767px) {
     grid-template-columns: 1fr;
     max-width: 450px;
-    gap: 4rem; // Espacio extra para el Popular Badge
+    gap: 4rem;
   }
 }
 
@@ -87,7 +81,6 @@
   padding: 3.5rem 2.5rem;
   display: flex;
   flex-direction: column;
-  // Transición con "Back" effect para un look más orgánico
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -155,7 +148,7 @@
     padding: 0;
     width: 100%;
     margin-bottom: 3rem;
-    flex-grow: 1; // Empuja el botón hacia el final de la card automáticamente
+    flex-grow: 1; 
 
     li {
       padding: 0.8rem 0;
@@ -190,14 +183,11 @@
   }
 }
 
-/* ============================================================
-   ESTADO: RECOMENDADO / MÁS POPULAR
-   ============================================================ */
+
 .recommended {
   border: 2px solid #FFA500;
   background: rgba(255, 165, 0, 0.08);
 
-  /* Solo escalamos en Desktop para evitar problemas de overflow en móvil */
   @media (min-width: 1024px) {
     transform: scale(1.06);
     z-index: 2;

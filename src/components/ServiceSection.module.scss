@@ -10,12 +10,9 @@
   @include section-container;
   padding: 8rem 2rem;
   background: #0a0a0a;
-  // Curva de aceleración personalizada para un efecto de "revelado" premium
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-  /**
-   * ESTADOS DE VISIBILIDAD (Observer)
-   */
+
   &.hidden {
     opacity: 0;
     transform: translateY(40px);
@@ -26,7 +23,6 @@
     transform: translateY(0);
   }
 
-  // AJUSTE RESPONSIVE: Reducción de aire superior para pegar la sección a las Stats
   @media (max-width: 1023px) {
     padding: 3.5rem 1.5rem 6rem; 
   }
@@ -62,9 +58,7 @@
   }
 }
 
-/* ============================================================
-   GRID DE SERVICIOS
-   ============================================================ */
+
 .gridItems {
   display: grid;
   width: 100%;
@@ -82,7 +76,7 @@
 
   @media (max-width: 767px) {
     grid-template-columns: 1fr;
-    max-width: 400px; // Mantiene las tarjetas legibles y no demasiado estiradas
+    max-width: 400px; 
   }
 }
 
@@ -113,7 +107,6 @@
 
     img {
       height: 35px;
-      // Glow sutil para los iconos corporativos
       filter: drop-shadow(0 0 5px rgba(255, 165, 0, 0.4));
     }
   }
@@ -124,7 +117,6 @@
     margin-bottom: 1rem;
     font-family: var(--secondary-font-family);
     
-    // Aplicación de degradado al texto del encabezado de la card
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
