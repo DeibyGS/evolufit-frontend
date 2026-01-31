@@ -3,10 +3,10 @@
 .routinesContainer {
   @include section-container;
   width: 100%;
-  max-width: 100vw;       // Evita scroll horizontal fantasma
-  overflow-x: hidden;     // Corta cualquier desbordamiento
-  padding: 1rem;          // Padding base seguro
-  box-sizing: border-box; // El padding no suma al ancho
+  max-width: 100vw;       
+  overflow-x: hidden;     
+  padding: 1rem;          
+  box-sizing: border-box; 
 
   .header { 
     @include section-header; 
@@ -14,9 +14,7 @@
   }
 }
 
-/* =========================
-   FORMULARIO DE INICIO
-========================= */
+
 .startSection {
   @include flex-center;
   padding: 3rem 0;
@@ -27,7 +25,7 @@
     padding: 1rem 2.5rem; 
     border-radius: 50px; 
     width: auto; 
-    max-width: 100%; // Seguridad
+    max-width: 100%; 
   }
 }
 
@@ -43,7 +41,7 @@
     background: transparent; 
     border: none;
     border-bottom: 2px solid rgba(255, 165, 0, 0.2);
-    font-size: clamp(1.5rem, 5vw, 2rem); // Fuente adaptable
+    font-size: clamp(1.5rem, 5vw, 2rem);
     text-align: center; 
     border-radius: 0;
     
@@ -92,9 +90,7 @@
   }
 }
 
-/* =========================
-   HISTORIAL DE SESIONES
-========================= */
+
 .historySection {
   width: 100%;
   max-width: 1200px;
@@ -121,9 +117,8 @@
   padding: 3rem;
   transition: all 0.3s ease;
   width: 100%;
-  box-sizing: border-box; // Mantiene el ancho bajo control
+  box-sizing: border-box; 
 
-  // --- FIX RESPONSIVE: Menos padding en móvil para ganar espacio ---
   @media (max-width: 600px) {
     padding: 1.5rem; 
   }
@@ -143,7 +138,7 @@
   .cardHeader {
     @include flex-center(row, 1.5rem);
     justify-content: flex-start;
-    flex-wrap: wrap; // Permite que el título baje si no cabe
+    flex-wrap: wrap; 
     margin-bottom: 2rem; 
     padding-bottom: 1.2rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -157,12 +152,11 @@
       text-transform: uppercase; 
       letter-spacing: 1.5px;
       font-family: var(--secondary-font-family);
-      word-break: break-word; // Evita desbordamiento de títulos largos
+      word-break: break-word; 
     }
   }
 }
 
-/* DETALLE DE EJERCICIOS */
 .exerciseDetailList {
   width: 100%;
   display: flex;
@@ -180,23 +174,21 @@
   width: 100%;
   box-sizing: border-box;
 
-  // --- FIX RESPONSIVE: Stack vertical en móvil ---
   @media (max-width: 600px) {
     flex-direction: column; 
     align-items: flex-start;
-    padding: 1rem; // Menos padding interno
+    padding: 1rem; 
     gap: 1rem;
   }
 
   .exName {
     @include flex-center(column, 4px);
     align-items: flex-start;
-    max-width: 100%; // Asegura que no crezca infinitamente
+    max-width: 100%;
     
     span { 
       @include label-standard; 
       font-size: 0.7rem; 
-      // --- FIX TEXTO: Permite romper palabras largas como DELTOIDES ---
       word-break: break-word; 
       white-space: normal;
     }
@@ -213,7 +205,6 @@
     justify-content: flex-end;
     flex: 1;
 
-    // En móvil, que ocupen todo el ancho y empiecen desde la izquierda
     @media (max-width: 600px) {
       justify-content: flex-start;
       width: 100%;
@@ -233,9 +224,7 @@
 
 .noHistory { @include card-dashed(auto); padding: 4rem; width: 100%; }
 
-/* =========================
-   CARGAR MÁS Y RESUMEN
-========================= */
+
 .loadMoreWrapper {
   @include flex-center(column, 0.8rem);
   margin-top: 2rem;
@@ -275,9 +264,7 @@
   }
 }
 
-/* =========================
-   CONFIGURACIÓN DE SERIES (SETS)
-========================= */
+
 .setsConfig {
   @include card-glass;
   background: rgba(255, 165, 0, 0.02);
@@ -288,7 +275,6 @@
   box-sizing: border-box;
   animation: slideDown 0.3s ease;
 
-  // Ajuste responsive para padding interno
   @media (max-width: 600px) {
     padding: 1rem;
   }
@@ -321,7 +307,7 @@
       color: #fff;
       font-weight: 700;
       height: 40px;
-      width: 100%; // Ocupa el ancho de su celda
+      width: 100%; 
       border-radius: 8px;
       font-size: 0.9rem;
     }
@@ -362,7 +348,6 @@
   }
 }
 
-/* Animación para que aparezca suavemente */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }

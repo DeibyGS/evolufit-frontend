@@ -1,7 +1,3 @@
-/**
- * MAIN ENTRY POINT - EVOLUTFIT
- * Configuración del árbol de componentes, enrutamiento y proveedores globales.
- */
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -43,7 +39,7 @@ createRoot(document.getElementById("root")).render(
       <ScrollToTop/>
       <Routes>
         
-        {/* 1. RUTAS PÚBLICAS: Ensuciertas dentro del componente App (Header/Footer común) */}
+        {/* 1. RUTAS PÚBLICAS */}
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="auth" element={<AuthPage />} />

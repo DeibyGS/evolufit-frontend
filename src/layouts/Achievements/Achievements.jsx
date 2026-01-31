@@ -23,11 +23,10 @@ export const Achievements = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        // Fallback para diferentes estructuras de respuesta
         setTotalWeight(data.totalVolume || data.totalWeight || 0);
       }
     } catch (error) {
-      console.error('Error fetching total weight:', error);
+      console.error('Error:', error);
     }
   };
 

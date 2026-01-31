@@ -6,13 +6,11 @@
   min-height: 100vh;
   background: #0a0a0a;
   
-  // Responsive basado en tus medidas (Tablet y Mobile < 1024px)
   @media (max-width: 1023px) {
     grid-template-columns: 1fr;
   }
 }
 
-/* BOTÓN HAMBURGUESA DINÁMICO */
 .mobileToggle {
   display: none;
 
@@ -152,7 +150,6 @@
   margin: 1.5rem 1rem;
 }
 
-/* BOTÓN CERRAR SESIÓN (ESTILO SHIMMER/AUTH) */
 .logoutBtn {
   @include btn-primary-gradient;
   position: relative;
@@ -195,7 +192,6 @@
   animation: pulseGlow 3s infinite;
 }
 
-/* CONTENIDO PRINCIPAL */
 .mainContent {
   padding: 2.5rem;
   background: radial-gradient(circle at top right, rgba(255, 165, 0, 0.03), transparent 50%);

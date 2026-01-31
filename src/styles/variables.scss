@@ -1,8 +1,3 @@
-/**
- * DESIGN TOKENS - EVOLUTFIT
- * Este archivo centraliza la identidad visual mediante variables de CSS (:root).
- * Facilita el mantenimiento y asegura que todos los componentes sean coherentes.
- */
 
 /* 1. TIPOGRAFÍAS: Importación de Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
@@ -13,13 +8,13 @@
   --secondary-font-family: "Poppins", sans-serif;
 
   /* COLORES DE FONDO: Esquema de "Modo Oscuro" predominante */
-  --primary-color-bg: rgba(17,17,17);      /* Gris casi negro para el fondo principal */
-  --secondary-color-bg: rgba(255, 255, 255, 1); /* Blanco para elementos de alto contraste o luz */
+  --primary-color-bg: rgba(17,17,17);      
+  --secondary-color-bg: rgba(255, 255, 255, 1); 
 
   /* COLORES DE TEXTO: Jerarquía visual mediante opacidad y escala de grises */
-  --primary-color-text: rgba(255, 255, 255, 0.87); /* Blanco suave para evitar fatiga visual */
-  --secondary-color-text: rgba(66, 66, 66, 1);     /* Gris oscuro para contrastes en fondos claros */
-  --tertiary-color-text: rgba(158, 158, 158, 1);    /* Gris medio para descripciones o labels */
+  --primary-color-text: rgba(255, 255, 255, 0.87); 
+  --secondary-color-text: rgba(66, 66, 66, 1);     
+  --tertiary-color-text: rgba(158, 158, 158, 1);    
 
   /* LAYOUT Y ESPACIADO: Definiciones consistentes para márgenes y rellenos */
   --min-padding: 1rem;
@@ -30,11 +25,11 @@
   --max-gap: 2rem;
 
   /* ESTÉTICA Y COMPORTAMIENTO: Bordes redondeados y micro-interacciones */
-  --radius: 1.2rem;       /* Redondeado orgánico moderno */
-  --transition: 0.25s ease; /* Transición estándar para todos los hovers y efectos */
-  --line-height: 1.5;     /* Interlineado óptimo para legibilidad */
+  --radius: 1.2rem;       
+  --transition: 0.25s ease; 
+  --line-height: 1.5;    
 
   /* COLORES DE ESTADO: Semántica para feedback de usuario */
-  --error-color: #ff4d4d; /* Rojo para validaciones o errores críticos */
-  --info-color: #0070f3;  /* Azul para notificaciones o informaciones neutras */
+  --error-color: #ff4d4d; 
+  --info-color: #0070f3;  
 }

@@ -1,6 +1,5 @@
 @use "../../styles/mixins" as *;
 
-/* --- CONTENEDOR PRINCIPAL --- */
 .socialContainer {
   @include section-container;
   width: 100%;            
@@ -48,7 +47,6 @@
   }
 }
 
-/* --- BARRA DE FILTROS --- */
 .filterBar {
   @include card-glass;
   display: flex;
@@ -97,7 +95,6 @@
   }
 }
 
-/* --- GRID DE RUTINAS --- */
 .postsGrid {
   display: grid;
   /* * Ajuste clave: Bajé el minmax a 260px. 
@@ -144,7 +141,7 @@
 
     .userInfo {
       flex: 1;
-      min-width: 0; // Permite al texto truncarse si es necesario
+      min-width: 0; 
       strong { display: block; color: #fff; font-size: 0.95rem; }
       span { font-size: 0.75rem; color: #777; }
     }
@@ -162,7 +159,7 @@
       color: #fff; 
       font-size: 1.2rem; 
       margin-bottom: 0.6rem; 
-      word-wrap: break-word; // Evita que palabras largas rompan el layout
+      word-wrap: break-word; 
     }
     
     .contentWrapper {
@@ -178,7 +175,7 @@
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        word-break: break-word; // Seguridad extra
+        word-break: break-word; 
       }
 
       &.showFull {

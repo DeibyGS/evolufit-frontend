@@ -10,7 +10,7 @@
   @include section-container;
   padding-bottom: 5rem;
   width: 100%;
-  overflow-x: hidden; // Garantía contra desbordamientos horizontales
+  overflow-x: hidden; 
   
   .header {
     @include section-header;
@@ -29,7 +29,7 @@
 
     .welcome {
       h2 {
-        font-size: clamp(1.8rem, 5vw, 2.5rem); // Tamaño fluido según pantalla
+        font-size: clamp(1.8rem, 5vw, 2.5rem); 
         span { color: #FFA500; }
       }
       p { margin-left: 0; }
@@ -51,17 +51,13 @@
   backdrop-filter: blur(10px);
   position: relative;
   transition: border-color 0.3s ease;
-
-  // --- FIX ANCHO ---
   box-sizing: border-box; 
   max-width: 100%;       
-  // -----------------
 
   &:focus-within {
     border-color: rgba(255, 165, 0, 0.5);
   }
 
-  // MÓVIL: Contenedor vertical
   @media (max-width: 600px) {
     flex-direction: column;
     align-items: center;
@@ -76,17 +72,13 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
-    // Fix contenedor interno
     width: 100%;
     box-sizing: border-box;
 
-    // MÓVIL: Inputs uno encima del otro
     @media (max-width: 600px) {
       flex-direction: column;
       width: 100%;
       gap: 10px;
-      // CAMBIO: 'center' en lugar de 'stretch' para que no fuercen los bordes
       align-items: center; 
     }
 
@@ -99,8 +91,6 @@
       outline: none;
       cursor: pointer;
       min-height: 40px;
-      
-      // Fix input
       box-sizing: border-box;
 
       &::-webkit-calendar-picker-indicator {
@@ -110,21 +100,13 @@
         &:hover { opacity: 1; }
       }
 
-      // MÓVIL: Estilo "Botón" para facilitar el toque
       @media (max-width: 600px) {
-        // CAMBIO: Reducido al 90% para evitar desbordamiento visual
         width: 90%; 
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
-        
-        // CAMBIO: Padding derecho extra para que el texto no toque el icono
         padding: 0 30px 0 10px; 
-        
-        // CAMBIO: Texto centrado
         text-align: center; 
-        
-        // Aseguramos que el icono se mantenga a la derecha
         position: relative;
 
         &::-webkit-calendar-picker-indicator {
@@ -140,7 +122,6 @@
       font-size: 0.8rem;
       font-weight: 600;
       
-      // Ocultamos el "a" en móvil
       @media (max-width: 600px) {
         display: none;
       }
@@ -167,9 +148,7 @@
       color: #ff4500;
     }
 
-    // MÓVIL: Convertir la "X" en un botón de "Limpiar Filtros"
     @media (max-width: 600px) {
-       // CAMBIO: También reducimos ancho al 90% para consistencia
        width: 90%;
        border-radius: 8px;
        height: 35px;
@@ -216,7 +195,6 @@
   }
 }
 
-/* KPIs (Tarjetas de métricas con auto-ajuste) */
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -272,7 +250,6 @@
   }
 }
 
-/* FILTROS MÚSCULO (Scroll lateral táctil) */
 .muscleFilters {
   display: flex;
   gap: 0.8rem;

@@ -2,7 +2,6 @@ import { React } from "react";
 import { create } from "zustand";
 
 export const useAuthStore = create((set) => ({
-  // Inicializamos mirando si existe un token en el navegador
   isAuthenticated: !!localStorage.getItem("token"),
   token: localStorage.getItem("token") || null,
   user: JSON.parse(localStorage.getItem("user")) || null,
@@ -15,7 +14,6 @@ export const useAuthStore = create((set) => ({
       age: userData.age,
       lastname: userData.lastname,
     };
-    // Guardamos en localStorage para persistencia
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userInfo));
 
@@ -27,7 +25,6 @@ export const useAuthStore = create((set) => ({
   },
 
   logout: () => {
-    // Limpiamos todo al salir
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 

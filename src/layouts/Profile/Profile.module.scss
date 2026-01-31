@@ -7,24 +7,22 @@
 @use "../../styles/mixins" as *;
 
 .profileContainer {
-  @include section-container; // Contenedor base con animación fade-in
-  .header { @include section-header; } // Títulos centrados
+  @include section-container;
+  .header { @include section-header; } 
 }
 
-/* REJILLA DE CONTENIDO (2 Columnas en Desktop) */
+
 .contentGrid {
   display: grid;
   grid-template-columns: 1fr 1fr; 
   gap: 2rem;
   align-items: start;
 
-  // Responsive: Colapsa a una columna en tablets y móviles
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
   }
 }
 
-/* TARJETAS DE INFORMACIÓN (Glassmorphism) */
 .card {
   @include card-glass;
   min-height: 450px; 
@@ -37,15 +35,14 @@
     padding-bottom: 0.8rem;
     
     h3 { 
-      @include label-standard; // Estilo base de etiqueta corporativa
-      color: #FFA500; // Naranja acento para el título de la card
+      @include label-standard; 
+      color: #FFA500; 
       font-size: 1.1rem; 
       margin: 0;
     }
   }
 }
 
-/* LISTADO DE DATOS PERSONALES */
 .infoList {
   @include flex-center(column, 1.8rem);
   align-items: flex-start;
@@ -64,33 +61,31 @@
   }
 }
 
-/* SECCIÓN DE ACCIONES Y FORMULARIO DINÁMICO */
 .changePasswordBtn {
-  @include btn-primary-gradient; // Botón llamativo para invocar el formulario
+  @include btn-primary-gradient; 
   padding: 0.9rem;
 }
 
 .passForm {
   @include flex-center(column, 1.2rem);
-  align-items: stretch; // Fuerza a los inputs a ocupar el ancho completo del contenedor
+  align-items: stretch; 
   padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.2); // Fondo oscuro contrastado para el formulario
+  background: rgba(0, 0, 0, 0.2); 
   border-radius: var(--radius);
-  animation: slideDown 0.3s ease; // Animación de despliegue suave
+  animation: slideDown 0.3s ease; 
 
   .inputGroup {
-    @include input-group-layout(0.5rem); // Grupo de label + input con gap
+    @include input-group-layout(0.5rem); 
   }
 }
 
-/* BOTONES DEL FORMULARIO */
 .formBtns {
   @include flex-center(row, 1rem);
   margin-top: 0.5rem;
   
   .saveBtn { 
     @include btn-primary-gradient; 
-    flex: 2; // El botón de acción principal es más ancho
+    flex: 2; 
   }
   .cancelBtn { 
     @include btn-secondary; 
@@ -98,14 +93,13 @@
   }
 }
 
-/* ZONA DE PELIGRO (DANGER ZONE) */
 .dangerZone {
-  margin-top: auto; // Empuja esta sección al final de la tarjeta
+  margin-top: auto; 
   padding-top: 2rem;
-  border-top: 1px solid rgba(255, 77, 77, 0.15); // Separador con tono rojizo sutil
+  border-top: 1px solid rgba(255, 77, 77, 0.15); 
   
   h4 { 
-    color: #ff4d4d; // Rojo de advertencia
+    color: #ff4d4d; 
     margin-bottom: 0.5rem; 
     font-size: 1rem; 
     font-family: var(--secondary-font-family);
@@ -121,16 +115,15 @@
   }
 }
 
-/* BOTÓN DE ELIMINACIÓN DE CUENTA */
 .deleteBtn {
   @include btn-secondary;
-  border-color: rgba(255, 77, 77, 0.3); // Borde rojo tenue
+  border-color: rgba(255, 77, 77, 0.3); 
   color: #ff4d4d;
   width: 100%;
   font-weight: 700;
 
   &:hover {
-    background: #ff4d4d; // Al hacer hover se vuelve rojo sólido
+    background: #ff4d4d; 
     color: white;
     border-color: #ff4d4d;
     box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
@@ -138,7 +131,6 @@
   }
 }
 
-/* ANIMACIONES */
 @keyframes slideDown {
   from { 
     opacity: 0; 

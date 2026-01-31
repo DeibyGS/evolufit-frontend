@@ -11,15 +11,12 @@ export const SocialRoutines = () => {
   const [loading, setLoading] = useState(false);
   const [visibleCount, setVisibleCount] = useState(10);
   
-  // Estado para expansión individual
   const [expandedPostId, setExpandedPostId] = useState(null);
 
-  // Filtros
   const [search, setSearch] = useState('');
   const [filterMuscle, setFilterMuscle] = useState('');
   const [sortBy, setSortBy] = useState('recent');
 
-  // Estado para crear post
   const [showModal, setShowModal] = useState(false);
   const [newPost, setNewPost] = useState({ title: '', content: '', tags: [] });
 

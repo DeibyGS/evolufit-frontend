@@ -1,8 +1,3 @@
-/**
- * GLOBAL RESET & BASE STYLES - EVOLUTFIT
- * Este archivo establece una base uniforme para todos los navegadores.
- * Previene errores de layout y mejora la accesibilidad.
- */
 
 /* 1. RESET BOX MODEL: Asegura que el padding y el border no sumen ancho al elemento */
 *,
@@ -21,9 +16,9 @@ html:focus-within {
 /* 3. BODY CONFIG: Optimización de renderizado de fuentes y prevención de scroll horizontal */
 body {
   min-height: 100vh;
-  text-rendering: optimizeLegibility; /* Mejora el dibujo de las letras */
-  -webkit-font-smoothing: antialiased; /* Suaviza fuentes en navegadores basados en Webkit */
-  overflow-x: hidden; /* Evita que elementos mal posicionados creen barras laterales */
+  text-rendering: optimizeLegibility; 
+  -webkit-font-smoothing: antialiased; 
+  overflow-x: hidden; 
   background-color: var(--primary-color-bg);
   color: var(--primary-color-text);
 }

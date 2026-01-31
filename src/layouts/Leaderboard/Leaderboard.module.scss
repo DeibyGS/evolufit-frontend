@@ -7,8 +7,8 @@
 @use "../../styles/mixins" as *;
 
 .leaderboardContainer {
-  @include section-container; // Estructura base de sección con animación de entrada
-  .header { @include section-header; } // Centrado y espaciado de títulos
+  @include section-container; 
+  .header { @include section-header; } 
 }
 
 /* CONTENEDOR TIPO TARJETA CRISTAL */
@@ -18,35 +18,31 @@
   overflow: hidden; // Asegura que los bordes redondeados corten el fondo de la cabecera
 }
 
-/* CABECERA DE LA TABLA (DESKTOP) */
 .tableHeader {
   display: grid;
-  grid-template-columns: 1.5fr 1.5fr 1fr; // Sincronizado con el ancho de las filas
+  grid-template-columns: 1.5fr 1.5fr 1fr; 
   padding: 1.2rem 3rem;
-  background: rgba(255, 165, 0, 0.08); // Tinte naranja muy sutil
-  color: #FFA500; // Naranja corporativo
-  @include label-standard; // Tipografía técnica de etiquetas
+  background: rgba(255, 165, 0, 0.08); 
+  color: #FFA500; 
+  @include label-standard; 
   font-weight: 700;
   letter-spacing: 1.5px;
 }
 
-/* FILAS DE USUARIO / RÉCORD */
 .row {
-  @include table-row-base(1.5fr 1.5fr 1fr); // Layout de rejilla para alinear columnas
+  @include table-row-base(1.5fr 1.5fr 1fr); 
   padding: 1.8rem 3rem;
 
   &:last-child { border-bottom: none; }
 
-  // ESTADO ESPECIAL: Resaltado cuando el registro pertenece al usuario logueado
   &.isMe {
     background: rgba(255, 165, 0, 0.04);
-    border-left: 5px solid #FFA500; // Indicador lateral naranja
+    border-left: 5px solid #FFA500; 
   }
 }
 
-/* COLUMNA 1: INFO DEL EJERCICIO */
 .exerciseInfo {
-  @include flex-center(column, 0.3rem); // Apilado vertical con gap pequeño
+  @include flex-center(column, 0.3rem); 
   align-items: flex-start; 
   
   strong { 
@@ -59,9 +55,8 @@
   }
 }
 
-/* COLUMNA 2: IDENTIDAD DEL ATLETA */
 .userInfo {
-  @include flex-center(row, 1.2rem); // Alineación horizontal con avatar
+  @include flex-center(row, 1.2rem); 
   justify-content: flex-start;
 
   span { 
@@ -71,10 +66,9 @@
     text-transform: capitalize;
   }
 
-  .avatar { @include avatar-base; } // Círculo con iniciales basado en mixin
+  .avatar { @include avatar-base; } 
 }
 
-/* COLUMNA 3: VALOR DEL RÉCORD */
 .weightInfo {
   text-align: right;
   
@@ -96,17 +90,15 @@
   }
 }
 
-/* ADAPTACIÓN RESPONSIVA (Móvil y Tablet) */
 @media (max-width: 900px) {
-  .tableHeader { display: none; } // Ocultamos la cabecera horizontal por falta de espacio
+  .tableHeader { display: none; } 
   
   .row {
-    grid-template-columns: 1fr; // Convertimos la fila en un stack vertical (estilo tarjeta)
+    grid-template-columns: 1fr; 
     text-align: center;
     gap: 1.5rem;
     padding: 2rem;
     
-    // Centramos todos los elementos para un diseño vertical armónico
     .exerciseInfo { align-items: center; }
     .userInfo { justify-content: center; }
     .weightInfo { text-align: center; }

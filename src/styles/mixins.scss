@@ -1,12 +1,3 @@
-/**
- * EVOLUTFIT - SISTEMA DE DISEÑO (MIXINS)
- * Este archivo centraliza los estilos reutilizables para garantizar consistencia 
- * visual y agilidad en el desarrollo de la interfaz.
- */
-
-// =============================================================================
-// BOTONES Y ELEMENTOS DE ACCIÓN
-// =============================================================================
 
 /**
  * Botón principal con gradiente naranja.
@@ -76,11 +67,6 @@
     background: rgba(255, 165, 0, 0.05);
   }
 }
-
-// =============================================================================
-// CONTENEDORES Y TARJETAS (CARDS)
-// =============================================================================
-
 /**
  * Efecto Glassmorphism base.
  * Fondo traslúcido sutil con borde delicado para interfaces modernas oscuras.
@@ -130,10 +116,6 @@
     small { font-size: 1rem; color: #888; margin-left: 4px; }
   }
 }
-
-// =============================================================================
-// ESTRUCTURA Y LAYOUT
-// =============================================================================
 
 /**
  * Contenedor principal de vistas.
@@ -185,10 +167,6 @@
   @media (max-width: 1000px) { grid-template-columns: 1fr; }
 }
 
-// =============================================================================
-// FORMULARIOS (INPUTS & LABELS)
-// =============================================================================
-
 /**
  * Estilo base para campos de entrada y selectores.
  * Fondo oscuro con focus resaltado en naranja.
@@ -235,10 +213,6 @@
   label { @include label-standard; }
   input, select { @include input-standard; width: 100%; }
 }
-
-// =============================================================================
-// COMPONENTES DE DATOS E HISTORIAL
-// =============================================================================
 
 /**
  * Fila de historial responsiva.
@@ -319,10 +293,6 @@
   }
 }
 
-// =============================================================================
-// UTILIDADES VISUALES (BADGES, AVATARES, TEXTO)
-// =============================================================================
-
 /**
  * Degradado de texto naranja/dorado.
  */
@@ -372,10 +342,6 @@
   border: 1px solid rgba(255, 165, 0, 0.3);
   text-transform: uppercase;
 }
-
-// =============================================================================
-// NAVEGACIÓN (SIDEBAR / DASHBOARD)
-// =============================================================================
 
 /**
  * Enlaces de navegación con estado activo.

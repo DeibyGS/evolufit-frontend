@@ -15,7 +15,6 @@ export const Profile = () => {
   const { user, logout, token } = useAuthStore();
   const navigate = useNavigate();
 
-  // Estados locales para el control del formulario de seguridad
   const [showPassForm, setShowPassForm] = useState(false);
   const [passData, setPassData] = useState({ 
     oldPass: '', 
@@ -30,7 +29,6 @@ export const Profile = () => {
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
-    // Regla de negocio: Las contraseñas deben ser idénticas
     if (passData.newPass !== passData.confirmPass) {
       return toast.error("Las contraseñas no coinciden.");
     }
@@ -45,7 +43,7 @@ export const Profile = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Token de sesión obligatorio
+          'Authorization': `Bearer ${token}` 
         },
         body: JSON.stringify({
           oldPassword: passData.oldPass,
@@ -76,7 +74,7 @@ export const Profile = () => {
       text: "Esta acción es irreversible y perderás todo tu progreso.",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#ff4d4d', // Color de error/peligro
+      confirmButtonColor: '#ff4d4d', 
       confirmButtonText: 'Sí, eliminar permanentemente',
       background: '#111',
       color: '#fff'
@@ -91,8 +89,8 @@ export const Profile = () => {
 
         if (response.ok) {
           toast.info("Cuenta eliminada correctamente.");
-          logout(); // Limpiamos el estado global
-          navigate('/'); // Redirección al Home
+          logout(); 
+          navigate('/'); 
         }
       } catch (error) {
         toast.error("Error al conectar con el servidor." + error.message);
@@ -102,14 +100,12 @@ export const Profile = () => {
 
   return (
     <div className={styles.profileContainer}>
-      {/* Header centrado con el estilo corporativo */}
       <header className={styles.header}>
         <h2>Mi <span>Perfil</span></h2>
         <p>Gestiona tu información personal y la seguridad de tu cuenta.</p>
       </header>
 
       <div className={styles.contentGrid}>
-        {/* SECCIÓN 1: DATOS DEL USUARIO */}
         <section className={styles.card}>
           <div className={styles.cardHeader}>
             <h3>📋 Datos Personales</h3>
@@ -130,7 +126,6 @@ export const Profile = () => {
           </div>
         </section>
 
-        {/* SECCIÓN 2: SEGURIDAD Y ZONA DE PELIGRO */}
         <section className={styles.card}>
           <div className={styles.cardHeader}>
             <h3>🔐 Seguridad</h3>
@@ -172,7 +167,6 @@ export const Profile = () => {
               </form>
             )}
 
-            {/* Zona crítica separada visualmente */}
             <div className={styles.dangerZone}>
               <h4>Zona de Peligro</h4>
               <p>Eliminar tu cuenta borrará todos tus récords y rutinas guardadas.</p>
