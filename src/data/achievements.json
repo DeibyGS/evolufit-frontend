@@ -6,7 +6,7 @@
     "equivalence": "Peso de un avión de combate cargado",
     "description": "Has despegado con una fuerza increíble. ¡Tus entrenamientos tienen potencia de fuego!",
     "category": "Bronce",
-    "imagePath": "/achievements/ach_001.png"
+    "imagePath": "/ach_001_wzonxf.png"
   },
   {
     "id": "ach_002",
@@ -15,7 +15,7 @@
     "equivalence": "Una manada de 15 Mamuts lanudos",
     "description": "Has movido una cantidad de peso digna de la edad de hielo. ¡Eres una bestia!",
     "category": "Bronce",
-    "imagePath": "/achievements/ach_002.png"
+    "imagePath": "/ach_002_fltmer.png"
   },
   {
     "id": "ach_003",
@@ -24,7 +24,7 @@
     "equivalence": "Una Locomotora de vapor completa",
     "description": "Tu motor no se detiene. Has desplazado el peso de un tren legendario.",
     "category": "Bronce",
-    "imagePath": "/achievements/ach_003.png"
+    "imagePath": "/ach_003_mjilzf.png"
   },
   {
     "id": "ach_004",
@@ -33,7 +33,7 @@
     "equivalence": "150 vigas estructurales de rascacielos",
     "description": "Estás construyendo un cuerpo de acero. Cada repetición es un cimiento de tu rascacielos.",
     "category": "Plata",
-    "imagePath": "/achievements/ach_004.png"
+    "imagePath": "/ach_004_idv2gn.png"
   },
   {
     "id": "ach_005",
@@ -42,7 +42,7 @@
     "equivalence": "El peso del acero del casco del Titanic",
     "description": "Has movido una masa legendaria. Ni el océano podría hundir tu determinación.",
     "category": "Plata",
-    "imagePath": "/achievements/ach_005.png"
+    "imagePath": "/ach_005_j5dxhx.png"
   },
   {
     "id": "ach_006",
@@ -51,7 +51,7 @@
     "equivalence": "El hormigón de la base del edificio más alto",
     "description": "Sostienes la base del éxito. Tu volumen de entrenamiento ha llegado a las nubes.",
     "category": "Plata",
-    "imagePath": "/achievements/ach_006.png"
+    "imagePath": "/ach_006_qcgvgd.png"
   },
   {
     "id": "ach_007",
@@ -60,7 +60,7 @@
     "equivalence": "Una sección principal del puente de San Francisco",
     "description": "Has tendido un puente entre el esfuerzo y la gloria. Tu fuerza es de ingeniería pura.",
     "category": "Oro",
-    "imagePath": "/achievements/ach_007.png"
+    "imagePath": "/ach_007_tl7g9x.png"
   },
   {
     "id": "ach_008",
@@ -69,7 +69,7 @@
     "equivalence": "La masa de un asteroide de tamaño medio",
     "description": "Tu fuerza ya no es de este mundo. Has movido cuerpos celestes en el gimnasio.",
     "category": "Oro",
-    "imagePath": "/achievements/ach_008.png"
+    "imagePath": "/ach_008_uuftbx.png"
   },
   {
     "id": "ach_009",
@@ -78,7 +78,7 @@
     "equivalence": "El peso de una montaña lunar",
     "description": "Estás desafiando las leyes de la física. Tu constancia ha creado su propio campo gravitatorio.",
     "category": "Oro",
-    "imagePath": "/achievements/ach_009.png"
+    "imagePath": "/ach_009_sabtua.png"
   },
   {
     "id": "ach_010",
@@ -87,6 +87,6 @@
     "equivalence": "Un millón de toneladas métricas",
     "description": "Alcanzaste el nivel deidad. El mundo entero descansa sobre tus hombros.",
     "category": "Épico",
-    "imagePath": "/achievements/ach_010.png"
+    "imagePath": "/ach_010_incar0.png"
   }
 ]

@@ -13,6 +13,8 @@ export const Achievements = () => {
   const [totalWeight, setTotalWeight] = useState(0);
   const { token } = useAuthStore();
 
+  const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dgscloudinary/image/upload/v1769694977/achievements-EvolutFit"
+
   const fetchTotalWeight = async () => {
     try {
       const response = await fetch(`${BASE_URL}/workouts/total-volume`, {
@@ -88,7 +90,7 @@ export const Achievements = () => {
             >
               <div className={styles.imageWrapper}>
                 <img 
-                   src={ach.imagePath} 
+                   src={`${CLOUDINARY_BASE_URL}${ach.imagePath}`} 
                    alt={`Medalla ${ach.title}`} 
                    className={styles.medalImg} 
                    loading="lazy" 
