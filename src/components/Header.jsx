@@ -67,7 +67,7 @@ export const Header = () => {
           }}
         >
           <h1 className={styles.title}>Evolut<span>Fit</span></h1>
-          <img className={styles.logoImg} src="diagrama.png" alt='Logo EvolutFit' />
+          <img className={styles.logoImg} src="evolutFitLogo.png" alt='Logo EvolutFit' />
         </div>
 
         {/* OVERLAY: Fondo oscurecido para enfoque táctil en móvil */}
