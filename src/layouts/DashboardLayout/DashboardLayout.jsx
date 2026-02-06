@@ -20,15 +20,26 @@ export const DashboardLayout = () => {
 
   return (
     <div className={styles.dashboardContainer}>
+      {/* Botón hamburguesa con animación de X */}
       <button className={styles.mobileToggle} onClick={toggleMenu} aria-label="Abrir menú">
         <span className={isMenuOpen ? styles.iconOpen : ''}></span>
       </button>
 
+      {/* Overlay para cerrar el menú al tocar fuera */}
       {isMenuOpen && <div className={styles.overlay} onClick={closeMenu}></div>}
 
       <aside className={`${styles.sidebar} ${isMenuOpen ? styles.sidebarOpen : ''}`}>
         <div className={styles.logoSection}>
-          <h2>Evolut<span>Fit</span></h2>
+          <div className={styles.brand}>
+            <h2>Evolut<span>Fit</span></h2>
+            <img 
+              className={styles.logoImg} 
+              src="/evolutFitLogo.png" 
+              alt='Logo EvolutFit' 
+            />
+            
+          </div>
+          
           <div className={styles.welcomeWrapper}>
             <p>Bienvenido,</p>
             <span className={styles.userName}>{user?.name} {user?.lastname}</span>
@@ -74,7 +85,6 @@ export const DashboardLayout = () => {
           </div>
         </nav>
 
-        {/* BOTÓN CERRAR SESIÓN CON ESTILO DE INICIO */}
         <button onClick={handleLogout} className={styles.logoutBtn}>
           Cerrar Sesión 🚪
         </button>
