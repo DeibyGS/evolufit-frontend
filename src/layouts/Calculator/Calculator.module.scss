@@ -183,6 +183,38 @@
 
 .noHistory { @include card-dashed(200px); }
 
+/* Estilo base para el texto de error */
+.errorText {
+  /* Color: Un rojo semántico estándar (Red 600), legible sobre blanco y gris claro */
+  color: #dc2626; 
+  
+  /* Tipografía: Pequeña pero no minúscula. 12px-13px suele ser el estándar */
+  font-size: 0.8rem; 
+  font-weight: 500; /* Un poco de peso para que no se pierda */
+  
+  /* Espaciado: Sepáralo del input para que respire */
+  margin-top: 0.35rem;
+  margin-left: 0.1rem; /* Pequeña indentación óptica */
+  
+  /* Layout: Block para asegurar que caiga debajo del input */
+  display: block; 
+  
+  /* Animación: Suaviza el golpe visual (opcional pero recomendado) */
+  animation: slideDown 0.2s ease-out forwards;
+}
+
+/* Animación sutil para que el error no "aparezca de golpe" */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }

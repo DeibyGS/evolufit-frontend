@@ -12,6 +12,9 @@ import { BASE_URL } from '../../api/API';
  */
 export const Calculator = () => {
   const { token } = useAuthStore();
+
+  const [errors, setErrors] = useState({});
+
   
   const [formData, setFormData] = useState({
     weight: '', height: '', age: '', gender: 'hombre', activity: '1.2'
@@ -76,28 +79,72 @@ export const Calculator = () => {
   };
 
   const saveResults = async () => {
-    try {
-      const res = await fetch(`${BASE_URL}/health`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          ...results, age: Number(formData.age), height: Number(formData.height),
-          gender: formData.gender, activity: Number(formData.activity)
-        })
-      });
-      if (res.ok) {
-        toast.success('¡Progreso guardado! 🔥');
-        setIsCalculated(false);
-        setResults(null);
-        fetchFullHistory();
+  // Limpiamos errores previos antes de empezar
+  setErrors({});
+
+  try {
+    // 1. Construcción del payload
+    // Mantenemos la lógica de tipos, pero aseguramos que si es vacío no rompa
+    const payload = {
+      ...results,
+      age: formData.age ? Number(formData.age) : undefined,
+      height: formData.height ? Number(formData.height) : undefined,
+      weight: formData.weight ? Number(formData.weight) : undefined,
+      gender: formData.gender,
+      activity: formData.activity ? Number(formData.activity) : undefined,
+    };
+    console.log("⚖️ PESO QUE SE ENVÍA:", Number(formData.weight));
+
+    const res = await fetch(`${BASE_URL}/health`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    // 2. Manejo de Errores de Validación (Status 400)
+    if (!res.ok) {
+      if (data.errors && Array.isArray(data.errors)) {
+        const apiErrors = {};
+        
+        data.errors.forEach(err => {
+          // Usamos el path que viene del backend (ej: "age")
+          if (err.path) {
+            apiErrors[err.path] = err.message;
+          }
+        });
+
+        setErrors(apiErrors);
+        toast.error('Corrige los campos marcados en rojo');
+      } else {
+        // Errores de servidor o mensajes genéricos (Status 500 o similar)
+        throw new Error(data.message || 'Error inesperado en el servidor');
       }
-    } catch (error) {
-      toast.error('Error al guardar: ' + error.message);
+      return; // Detenemos la ejecución aquí
     }
-  };
+
+    // 3. Éxito total
+    toast.success('¡Progreso guardado! 🔥');
+    
+    
+    // Reset de estados tras éxito
+    setIsCalculated(false);
+    setResults(null);
+    
+    // Actualizamos el historial
+    if (typeof fetchFullHistory === 'function') {
+      await fetchFullHistory();
+    }
+
+  } catch (error) {
+    console.error("❌ Error en saveResults:", error);
+    toast.error('Error al conectar con el servidor: ' + error.message);
+  }
+};
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -148,11 +195,28 @@ export const Calculator = () => {
               ))}
             </div>
             <div className={styles.row}>
-              <div className={styles.inputGroup}><label>Edad</label><input type="number" value={formData.age} onChange={(e) => setFormData({ ...formData, age: e.target.value })} /></div>
-              <div className={styles.inputGroup}><label>Peso (kg)</label><input type="number" value={formData.weight} onChange={(e) => setFormData({ ...formData, weight: e.target.value })} /></div>
-            </div>
-            <div className={styles.inputGroup}><label>Altura (cm)</label><input type="number" value={formData.height} onChange={(e) => setFormData({ ...formData, height: e.target.value })} /></div>
-            <div className={styles.inputGroup}>
+              <div className={styles.inputGroup}><label>Edad</label><input type="number" value={formData.age} onChange={(e) => setFormData({ ...formData, age: e.target.value })} />{errors.age && <span className={styles.errorText}>{errors.age}</span>}</div>
+<div className={styles.inputGroup}>
+  <label>Peso (kg)</label>
+  <input 
+    type="number" 
+    value={formData.weight} 
+    onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+    // Opcional: añade una clase de error si quieres poner el borde rojo
+    className={errors.weight ? styles.inputError : ''} 
+  />
+  {errors.weight && <span className={styles.errorText}>{errors.weight}</span>}
+</div>            </div>
+<div className={styles.inputGroup}>
+  <label>Altura (cm)</label>
+  <input 
+    type="number" 
+    value={formData.height} 
+    onChange={(e) => setFormData({ ...formData, height: e.target.value })}
+    className={errors.height ? styles.inputError : ''}
+  />
+  {errors.height && <span className={styles.errorText}>{errors.height}</span>}
+</div>            <div className={styles.inputGroup}>
               <label>Actividad</label>
               <select className={styles.fullWidthSelect} value={formData.activity} onChange={(e) => setFormData({ ...formData, activity: e.target.value })}>
                 <option value="1.2">Sedentario</option>
