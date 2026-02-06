@@ -11,14 +11,8 @@ import { useAuthStore } from '../../store/authStore';
 import styles from './Dashboard.module.scss';
 import { BASE_URL } from '../../api/API';
 
-// Paleta de colores sincronizada con el branding (Naranjas y Dorados)
 const COLORS = ['#FFA500', '#FF8C00', '#FF4500', '#FFD700', '#DAA520', '#B8860B'];
 
-/**
- * DASHBOARD COMPONENT
- * Centraliza la analítica de entrenamientos, permitiendo filtrar por fechas
- * y visualizar la progresión de volumen y carga por grupo muscular.
- */
 export const Dashboard = () => {
   const { token, user } = useAuthStore();
   const [workouts, setWorkouts] = useState([]);
@@ -26,7 +20,6 @@ export const Dashboard = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  // Efecto de carga inicial: Sincronizado con el estado de autenticación
   useEffect(() => { 
     if (token) fetchWorkouts(); 
   }, [token]);
@@ -38,40 +31,20 @@ export const Dashboard = () => {
       });
       const data = await res.json();
       if (res.ok && Array.isArray(data)) setWorkouts(data);
-    } catch (error) { 
-      console.error("Error al obtener entrenamientos", error); 
-    }
+    } catch (error) { console.error("Error Dashboard", error); }
   };
 
-  /**
-   * MEMO: Filtrado de Workouts
-   * Optimizamos el filtrado por fechas para evitar procesar el array completo 
-   * si los filtros no han cambiado.
-   */
   const filteredWorkouts = useMemo(() => {
     return workouts.filter(w => {
       if (!startDate && !endDate) return true;
       const workoutDate = new Date(w.createdAt);
       workoutDate.setHours(0, 0, 0, 0);
-
-      if (startDate) {
-        const start = new Date(startDate);
-        start.setHours(0, 0, 0, 0);
-        if (workoutDate < start) return false;
-      }
-      if (endDate) {
-        const end = new Date(endDate);
-        end.setHours(0, 0, 0, 0);
-        if (workoutDate > end) return false;
-      }
+      if (startDate && workoutDate < new Date(startDate)) return false;
+      if (endDate && workoutDate > new Date(endDate)) return false;
       return true;
-    }).reverse(); // Mostramos cronológicamente de izquierda a derecha
+    }).reverse();
   }, [workouts, startDate, endDate]);
 
-  /**
-   * MEMO: Estadísticas KPI (Volumen, Reps, Series)
-   * Realiza el cálculo del volumen de carga (peso * reps) para el grupo seleccionado.
-   */
   const groupStats = useMemo(() => {
     return filteredWorkouts.reduce((acc, w) => {
       w.exercises.forEach(ex => {
@@ -87,10 +60,6 @@ export const Dashboard = () => {
     }, { series: 0, reps: 0, volumen: 0 });
   }, [filteredWorkouts, selectedGroup]);
 
-  /**
-   * MEMO: Datos para PieChart
-   * Distribución porcentual del volumen de entrenamiento por grupo muscular.
-   */
   const pieData = useMemo(() => {
     const counts = {};
     filteredWorkouts.forEach(w => {
@@ -101,32 +70,22 @@ export const Dashboard = () => {
     return Object.keys(counts).map(key => ({ name: key, value: counts[key] }));
   }, [filteredWorkouts]);
 
-  /**
-   * MEMO: Datos de Evolución Temporal
-   * Prepara los datos para los gráficos lineales y de área.
-   */
   const evolutionData = useMemo(() => {
     return filteredWorkouts.map(w => {
       let v = 0, r = 0, s = 0;
       w.exercises.forEach(ex => {
         if (ex.muscleGroup === selectedGroup) {
           s += ex.sets.length;
-          ex.sets.forEach(set => {
-            r += set.reps;
-            v += (set.reps * set.weight);
-          });
+          ex.sets.forEach(set => { r += set.reps; v += (set.reps * set.weight); });
         }
       });
       return {
         fecha: new Date(w.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }),
-        volumen: v,
-        repeticiones: r,
-        series: s
+        volumen: v, repeticiones: r, series: s
       };
     }).filter(d => d.volumen > 0 || d.series > 0);
   }, [filteredWorkouts, selectedGroup]);
 
-  // Lógica de exportación: Genera PDF con tabla de progreso detallada
   const downloadSessionsPDF = () => {
     const doc = new jsPDF();
     doc.text(`Reporte de Evolución: ${user?.name || 'Usuario'}`, 14, 20);
@@ -134,125 +93,88 @@ export const Dashboard = () => {
     filteredWorkouts.forEach(w => {
       w.exercises.forEach(ex => {
         ex.sets.forEach((s, i) => {
-          tableRows.push([
-            new Date(w.createdAt).toLocaleDateString(), 
-            ex.muscleGroup, 
-            ex.exerciseName, 
-            i+1, 
-            s.weight, 
-            s.reps, 
-            s.weight * s.reps
-          ]);
+          tableRows.push([new Date(w.createdAt).toLocaleDateString(), ex.muscleGroup, ex.exerciseName, i+1, s.weight, s.reps, s.weight * s.reps]);
         });
       });
     });
-    autoTable(doc, { 
-        head: [['Fecha', 'Músculo', 'Ejercicio', 'Set', 'Kg', 'Reps', 'Volumen']], 
-        body: tableRows, 
-        startY: 30,
-        headStyles: { fillColor: [255, 165, 0] } 
-    });
+    autoTable(doc, { head: [['Fecha', 'Músculo', 'Ejercicio', 'Set', 'Kg', 'Reps', 'Volumen']], body: tableRows, startY: 30, headStyles: { fillColor: [255, 165, 0] } });
     doc.save(`EvolutFit_Report_${selectedGroup}.pdf`);
   };
 
-  /**
-   * CONFIGURACIÓN COMÚN DE TOOLTIPS
-   * Define el estilo visual para solucionar el problema de contraste.
-   */
   const tooltipStyle = {
-    contentStyle: { 
-      backgroundColor: 'rgba(20, 20, 20, 0.95)', 
-      border: '1px solid rgba(255, 165, 0, 0.2)', 
-      borderRadius: '8px',
-      padding: '10px',
-      boxShadow: '0 4px 10px rgba(0,0,0,0.5)'
-    },
-    itemStyle: { color: '#fff', fontSize: '0.9rem' }, // Texto de valores en blanco
-    labelStyle: { color: '#ccc', marginBottom: '5px' } // Texto de etiquetas (fechas) en gris claro
+    contentStyle: { backgroundColor: 'rgba(20, 20, 20, 0.95)', border: '1px solid rgba(255, 165, 0, 0.2)', borderRadius: '8px', padding: '10px' },
+    itemStyle: { color: '#fff', fontSize: '0.9rem' },
+    labelStyle: { color: '#ccc', marginBottom: '5px' }
   };
 
   return (
     <div className={styles.dashboardContainer}>
-      {/* HEADER DE CONTROL */}
       <header className={styles.header}>
-        <div className={styles.welcome}>
+        <div className={styles.titleSection}>
           <h2>Dashboard <span>Evolutivo</span></h2>
-          <p>Filtrando desde <strong>{startDate || 'el inicio'}</strong> hasta <strong>{endDate || 'hoy'}</strong></p>
+          <p>Visualiza tu rendimiento y descarga reportes detallados.</p>
         </div>
-
         <div className={styles.reportActions}>
-          <div className={styles.dateFilterContainer}>
-            <div className={styles.dateInputs}>
-              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-              <span className={styles.separator}>a</span>
-              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-            </div>
-            {(startDate || endDate) && (
-              <button className={styles.clearBtn} onClick={() => {setStartDate(''); setEndDate('');}}>✕</button>
-            )}
-          </div>
-          <button onClick={downloadSessionsPDF} className={styles.btnDownload}>📄 PDF</button>
+           <button onClick={downloadSessionsPDF} className={styles.btnDownload}>📄 Descargar PDF</button>
         </div>
       </header>
 
-      {/* MÉTRICAS KPI (Tarjetas superiores) */}
+      <section className={styles.filterSection}>
+        <div className={styles.dateFilterContainer}>
+          <div className={styles.dateInputs}>
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            <span className={styles.separator}>a</span>
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </div>
+          {(startDate || endDate) && <button className={styles.clearBtn} onClick={() => {setStartDate(''); setEndDate('');}}>✕</button>}
+        </div>
+      </section>
+
       <div className={styles.kpiGrid}>
         <div className={`${styles.kpiCard} ${styles.highlight}`}>
           <span className={styles.label}>Volumen {selectedGroup}</span>
           <h4>{groupStats.volumen.toLocaleString()} <small>kg</small></h4>
         </div>
         <div className={styles.kpiCard}>
-          <span className={styles.label}>Total Series</span>
+          <span className={styles.label}>Series Totales</span>
           <h4>{groupStats.series}</h4>
         </div>
         <div className={styles.kpiCard}>
-          <span className={styles.label}>Total Repeticiones</span>
+          <span className={styles.label}>Repeticiones</span>
           <h4>{groupStats.reps.toLocaleString()}</h4>
         </div>
       </div>
 
-      {/* SELECTOR DE GRUPO MUSCULAR */}
       <nav className={styles.muscleFilters}>
-        {MUSCLE_GROUPS.map(group => (
-          <button 
-            key={group} 
-            className={selectedGroup === group ? styles.active : ''} 
-            onClick={() => setSelectedGroup(group)}
-          >
-            {group}
-          </button>
-        ))}
+        <div className={styles.tagChips}>
+          {MUSCLE_GROUPS.map(group => (
+            <button 
+              key={group} 
+              className={selectedGroup === group ? styles.tagActive : ''} 
+              onClick={() => setSelectedGroup(group)}
+            >
+              {group}
+            </button>
+          ))}
+        </div>
       </nav>
 
-      {/* GRID DE GRÁFICOS */}
       <div className={styles.chartsGrid}>
         <div className={styles.chartCard}>
-          <h3>Esfuerzo por Grupo</h3>
+          <h3>Distribución de Esfuerzo</h3>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
-              <Pie 
-                data={pieData} 
-                innerRadius={60} 
-                outerRadius={80} 
-                paddingAngle={5} 
-                dataKey="value" 
-                stroke="none"
-              >
+              <Pie data={pieData} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value" stroke="none">
                 {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Pie>
-              {/* Tooltip con estilos corregidos */}
               <Tooltip {...tooltipStyle} cursor={{ fill: 'transparent' }} />
-              <Legend 
-                verticalAlign="bottom" 
-                height={36} 
-                wrapperStyle={{ color: '#ccc', fontSize: '0.85rem' }} 
-              />
+              <Legend verticalAlign="bottom" height={36} wrapperStyle={{ color: '#ccc', fontSize: '0.85rem' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
         <div className={styles.chartCard}>
-          <h3>Tendencia de Volumen</h3>
+          <h3>Progresión de Carga</h3>
           <ResponsiveContainer width="100%" height={250}>
             <AreaChart data={evolutionData}>
               <defs>
@@ -262,30 +184,22 @@ export const Dashboard = () => {
                 </linearGradient>
               </defs>
               <XAxis dataKey="fecha" stroke="#666" fontSize={11} axisLine={false} tickMargin={10} />
-              {/* Tooltip con estilos corregidos */}
               <Tooltip {...tooltipStyle} />
               <Area type="monotone" dataKey="volumen" stroke="#FFA500" fill="url(#colorVol)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
-        {/* GRÁFICO COMBINADO: Progresión detallada */}
         <div className={`${styles.chartCard} ${styles.fullWidth}`}>
-          <div className={styles.chartHeader}>
-            <h3>Métricas Combinadas: <span>{selectedGroup}</span></h3>
-          </div>
+          <h3>Análisis de Métricas Combinadas: <span>{selectedGroup}</span></h3>
           <ResponsiveContainer width="100%" height={320}>
             <LineChart data={evolutionData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
               <XAxis dataKey="fecha" stroke="#666" fontSize={11} axisLine={false} tickMargin={10} />
               <YAxis yId="left" stroke="#666" fontSize={11} axisLine={false} />
               <YAxis yId="right" orientation="right" stroke="#666" fontSize={11} axisLine={false} />
-              
-              {/* Tooltip con estilos corregidos */}
               <Tooltip {...tooltipStyle} />
-              
               <Legend wrapperStyle={{ paddingTop: '10px', color: '#ccc' }} />
-              
               <Line yId="left" type="monotone" dataKey="volumen" stroke="#FFA500" strokeWidth={3} dot={{r: 4}} name="Volumen (kg)" />
               <Line yId="right" type="monotone" dataKey="repeticiones" stroke="#00C49F" strokeWidth={2} name="Reps" />
               <Line yId="right" type="monotone" dataKey="series" stroke="#FFBB28" strokeWidth={2} name="Series" />

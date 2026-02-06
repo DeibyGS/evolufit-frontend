@@ -1,106 +1,121 @@
-/**
- * LEADERBOARD STYLES - HALL OF FAME
- * Sistema de visualización de rankings basado en una tabla responsiva con efectos Glassmorphism.
- * Utiliza variables y mixins corporativos para mantener la consistencia de EvolutFit.
- */
-
 @use "../../styles/mixins" as *;
 
 .leaderboardContainer {
-  @include section-container; 
-  .header { @include section-header; } 
+  @include section-container;
+  width: 100%;            
+  max-width: 100vw;       
+  overflow-x: hidden;     
+  box-sizing: border-box;
+  padding: 1rem;          
+  padding-bottom: 5rem;
+
+  .header {
+    @include flex-center(row, 1rem);
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    flex-wrap: wrap; 
+    width: 100%;          
+    box-sizing: border-box;
+
+    .titleSection {
+      h2 { 
+        font-size: clamp(1.5rem, 4vw, 1.8rem); 
+        color: #fff; 
+        span { color: #FFA500; } 
+      }
+      p { color: var(--tertiary-color-text); font-size: 0.9rem; }
+    }
+  }
 }
 
-/* CONTENEDOR TIPO TARJETA CRISTAL */
 .tableCard {
   @include card-glass;
-  padding: 0; // Sobrescribimos el padding del mixin para que el color de la cabecera toque los bordes
-  overflow: hidden; // Asegura que los bordes redondeados corten el fondo de la cabecera
-}
+  padding: 0; // Para que el header de la tabla llegue a los bordes
+  overflow: hidden;
+  border-bottom: 3px solid #333;
 
-.tableHeader {
-  display: grid;
-  grid-template-columns: 1.5fr 1.5fr 1fr; 
-  padding: 1.2rem 3rem;
-  background: rgba(255, 165, 0, 0.08); 
-  color: #FFA500; 
-  @include label-standard; 
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  .tableHeader {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 1fr; 
+    padding: 1.2rem 2rem;
+    background: rgba(255, 165, 0, 0.08); 
+    color: #FFA500; 
+    @include label-standard; 
+    font-weight: 800;
+  }
 }
 
 .row {
   @include table-row-base(1.5fr 1.5fr 1fr); 
-  padding: 1.8rem 3rem;
-
-  &:last-child { border-bottom: none; }
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 
   &.isMe {
     background: rgba(255, 165, 0, 0.04);
-    border-left: 5px solid #FFA500; 
+    border-left: 4px solid #FFA500; 
+    
+    .meTag { color: #FFA500; font-weight: 800; }
+  }
+
+  .exerciseInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    
+    strong { color: #fff; font-size: 1.1rem; text-transform: uppercase; }
+    small { @include label-standard; font-size: 0.7rem; opacity: 0.7; }
+  }
+
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .avatar { @include avatar-base(38px, 8px); }
+    span { color: #e0e0e0; font-size: 1rem; font-weight: 500; }
+  }
+
+  .weightInfo {
+    text-align: right;
+    
+    .weightValue { 
+      font-size: 1.5rem; 
+      font-weight: 900; 
+      color: #fff; 
+      font-family: var(--secondary-font-family);
+      b { font-size: 0.8rem; color: #666; }
+    }
+    
+    .statusText { 
+      font-size: 0.7rem; 
+      text-transform: uppercase; 
+      font-weight: 700; 
+      color: #FFA500;
+      margin-top: 0.2rem;
+    }
   }
 }
 
-.exerciseInfo {
-  @include flex-center(column, 0.3rem); 
-  align-items: flex-start; 
-  
-  strong { 
-    font-size: 1.3rem; 
-    color: #fff; 
-  }
-  small { 
-    @include label-standard; 
-    font-size: 0.75rem; 
-  }
-}
-
-.userInfo {
-  @include flex-center(row, 1.2rem); 
-  justify-content: flex-start;
-
-  span { 
-    font-size: 1.1rem; 
-    font-weight: 500;
-    color: #e0e0e0;
-    text-transform: capitalize;
-  }
-
-  .avatar { @include avatar-base; } 
-}
-
-.weightInfo {
-  text-align: right;
-  
-  span { 
-    font-size: 1.8rem; 
-    font-weight: 900; 
-    color: #fff; 
-    b { 
-      font-size: 0.9rem; 
-      color: #888; 
-      margin-left: 5px; 
-    } 
-  }
-  
-  p { 
-    @include label-standard;
-    color: #FFA500; 
-    margin-top: 0.3rem;
-  }
-}
-
+/* RESPONSIVE: Transformación a Cards en móvil */
 @media (max-width: 900px) {
-  .tableHeader { display: none; } 
+  .tableCard .tableHeader { display: none; }
   
   .row {
     grid-template-columns: 1fr; 
+    gap: 1.2rem;
+    padding: 1.5rem;
     text-align: center;
-    gap: 1.5rem;
-    padding: 2rem;
+
+    .exerciseInfo, .userInfo { 
+      align-items: center; 
+      justify-content: center;
+    }
     
-    .exerciseInfo { align-items: center; }
-    .userInfo { justify-content: center; }
-    .weightInfo { text-align: center; }
+    .weightInfo { 
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 0.8rem;
+      border-radius: 10px;
+    }
   }
 }

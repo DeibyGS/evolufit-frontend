@@ -4,16 +4,12 @@ import styles from './Achievements.module.scss';
 import { useAuthStore } from '../../store/authStore';
 import { BASE_URL } from '../../api/API';
 
-/**
- * COMPONENTE DE LOGROS (ACHIEVEMENTS)
- * Visualiza el progreso del usuario basándose en el volumen total (kg) levantado.
- */
 export const Achievements = () => {
   const [filter, setFilter] = useState('Todos');
   const [totalWeight, setTotalWeight] = useState(0);
   const { token } = useAuthStore();
 
-  const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dgscloudinary/image/upload/v1769694977/achievements-EvolutFit"
+  const CLOUDINARY_BASE_URL = "https://res.cloudinary.com/dgscloudinary/image/upload/v1769694977/achievements-EvolutFit";
 
   const fetchTotalWeight = async () => {
     try {
@@ -36,10 +32,8 @@ export const Achievements = () => {
     if (token) fetchTotalWeight();
   }, [token]);
 
-  // Constantes de UI
   const categories = useMemo(() => ['Todos', 'Bronce', 'Plata', 'Oro', 'Épico'], []);
 
-  // Filtrado optimizado con useMemo para evitar cálculos en cada re-render innecesario
   const filteredAchievements = useMemo(() => {
     return filter === 'Todos' 
       ? achievementsData 
@@ -49,20 +43,18 @@ export const Achievements = () => {
   return (
     <div className={styles.achievementsContainer}>
       <header className={styles.header}>
-        <div className={styles.titleGroup}>
+        <div className={styles.titleSection}>
           <h2>Mis <span>Logros</span></h2>
-          <p>Supera tus límites y desbloquea medallas por volumen de entrenamiento.</p>
+          <p>Supera tus límites y desbloquea medallas por volumen.</p>
         </div>
         
-        {/* KPI de Volumen Total */}
         <div className={styles.totalWeightBadge}>
           <small>VOLUMEN TOTAL</small>
           <strong>{totalWeight.toLocaleString()} <span>kg</span></strong>
         </div>
       </header>
 
-      {/* Barra de Filtros */}
-      <nav className={styles.filterBar} aria-label="Filtro de categorías">
+      <nav className={styles.filterBar}>
         <div className={styles.radioOptions}>
           {categories.map(cat => (
             <button 
@@ -76,56 +68,45 @@ export const Achievements = () => {
         </div>
       </nav>
 
-      {/* Grid de Medallas */}
-      <section className={styles.grid}>
+      <section className={styles.postsGrid}>
         {filteredAchievements.map((ach) => {
           const isUnlocked = totalWeight >= ach.targetWeight;
-          // Cálculo de progreso normalizado entre 0 y 100
           const progress = Math.min((totalWeight / ach.targetWeight) * 100, 100);
 
           return (
             <article 
               key={ach.id} 
-              className={`${styles.card} ${isUnlocked ? styles.unlocked : styles.locked}`}
+              className={`${styles.achievementCard} ${isUnlocked ? styles.unlocked : styles.locked}`}
             >
               <div className={styles.imageWrapper}>
                 <img 
                    src={`${CLOUDINARY_BASE_URL}${ach.imagePath}`} 
-                   alt={`Medalla ${ach.title}`} 
+                   alt={ach.title} 
                    className={styles.medalImg} 
-                   loading="lazy" 
                 />
                 {!isUnlocked && (
-                  <div className={styles.lockOverlay} aria-hidden="true">
+                  <div className={styles.lockOverlay}>
                     <span>🔒</span>
                   </div>
                 )}
               </div>
 
-              <div className={styles.info}>
+              <div className={styles.cardBody}>
                 <div className={styles.cardHeader}>
                   <span className={`${styles.categoryBadge} ${styles[ach.category.toLowerCase()]}`}>
                     {ach.category}
                   </span>
-                  {isUnlocked && <span className={styles.checkIcon} aria-label="Completado">✓</span>}
+                  {isUnlocked && <span className={styles.checkIcon}>✓</span>}
                 </div>
                 
-                <h3>{ach.title}</h3>
+                <h4>{ach.title}</h4>
                 <p className={styles.equivalence}>⚡ {ach.equivalence}</p>
                 <p className={styles.description}>{ach.description}</p>
                 
-                {/* Solo mostramos la barra si el logro está bloqueado */}
                 {!isUnlocked && (
                   <div className={styles.progressSection}>
                     <div className={styles.progressBar}>
-                      <div 
-                        className={styles.fill} 
-                        style={{ width: `${progress}%` }}
-                        role="progressbar"
-                        aria-valuenow={progress}
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
+                      <div className={styles.fill} style={{ width: `${progress}%` }}></div>
                     </div>
                     <div className={styles.progressText}>
                       <span>{progress.toFixed(0)}%</span>

@@ -1,33 +1,50 @@
-/**
- * PROFILE STYLES - EVOLUTFIT
- * Arquitectura de gestión de cuenta con enfoque en seguridad y UX.
- * Implementa Grid para separar información de seguridad y Mixins para consistencia.
- */
-
 @use "../../styles/mixins" as *;
 
 .profileContainer {
   @include section-container;
-  .header { @include section-header; } 
-}
+  width: 100%;            
+  max-width: 100vw;       
+  overflow-x: hidden;     
+  box-sizing: border-box;
+  padding: 1rem;          
+  padding-bottom: 5rem;
 
+  .header {
+    @include flex-center(row, 1rem);
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    flex-wrap: wrap; 
+    width: 100%;          
+    box-sizing: border-box;
+
+    h2 { 
+      font-size: clamp(1.5rem, 4vw, 1.8rem); 
+      color: #fff; 
+      span { color: #FFA500; } 
+    }
+    p { 
+      color: var(--tertiary-color-text); 
+      font-size: 0.9rem; 
+      width: 100%;
+    }
+  }
+}
 
 .contentGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  align-items: start;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-  }
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .card {
   @include card-glass;
-  min-height: 450px; 
   display: flex;
   flex-direction: column;
+  min-height: 400px;
+  width: 100%;
+  box-sizing: border-box;
 
   .cardHeader {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -43,44 +60,71 @@
   }
 }
 
+/* FIX: Estructura de lista para que los datos caigan uno debajo de otro */
 .infoList {
-  @include flex-center(column, 1.8rem);
-  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
 }
 
 .infoItem {
+  display: flex;
+  flex-direction: column; // Fuerza al label y al p a estar en líneas distintas
+  align-items: flex-start;
+  width: 100%;
+
   label { 
     @include label-standard; 
-    margin-bottom: 0.4rem; 
+    margin-bottom: 0.5rem; 
     display: block; 
+    width: 100%;
   }
+
   p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #fff;
-    font-weight: 500;
+    font-weight: 600;
+    margin: 0;
+    text-transform: capitalize; // Mejora visual para nombres
   }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
 }
 
 .changePasswordBtn {
-  @include btn-primary-gradient; 
+  @include btn-primary-gradient;
   padding: 0.9rem;
+  width: 100%;
 }
 
 .passForm {
-  @include flex-center(column, 1.2rem);
-  align-items: stretch; 
-  padding: 1.5rem;
   background: rgba(0, 0, 0, 0.2); 
   border-radius: var(--radius);
-  animation: slideDown 0.3s ease; 
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  animation: slideDown 0.3s ease forwards;
 
   .inputGroup {
-    @include input-group-layout(0.5rem); 
+    @include input-group-layout(0.5rem);
+    
+    input {
+      @include input-standard;
+      width: 100%;
+    }
   }
 }
 
 .formBtns {
-  @include flex-center(row, 1rem);
+  display: flex;
+  gap: 1rem;
   margin-top: 0.5rem;
   
   .saveBtn { 
@@ -103,7 +147,7 @@
     margin-bottom: 0.5rem; 
     font-size: 1rem; 
     font-family: var(--secondary-font-family);
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
   }
   
@@ -113,31 +157,30 @@
     margin-bottom: 1.5rem; 
     line-height: 1.4;
   }
-}
 
-.deleteBtn {
-  @include btn-secondary;
-  border-color: rgba(255, 77, 77, 0.3); 
-  color: #ff4d4d;
-  width: 100%;
-  font-weight: 700;
+  .deleteBtn {
+    @include btn-secondary;
+    border-color: rgba(255, 77, 77, 0.3); 
+    color: #ff4d4d;
+    width: 100%;
+    font-weight: 700;
 
-  &:hover {
-    background: #ff4d4d; 
-    color: white;
-    border-color: #ff4d4d;
-    box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
-    transform: translateY(-2px);
+    &:hover {
+      background: #ff4d4d; 
+      color: white;
+      border-color: #ff4d4d;
+    }
   }
 }
 
 @keyframes slideDown {
-  from { 
-    opacity: 0; 
-    transform: translateY(-10px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .formBtns {
+    flex-direction: column;
   }
 }

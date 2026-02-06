@@ -6,16 +6,9 @@ import { useAuthStore } from '../../store/authStore';
 import Swal from 'sweetalert2';
 import { BASE_URL } from '../../api/API';
 
-/**
- * CALCULATOR COMPONENT - EVOLUTFIT
- * Incluye Formulario, Gráfico de Tendencia e Historial Gamificado.
- */
 export const Calculator = () => {
   const { token } = useAuthStore();
-
   const [errors, setErrors] = useState({});
-
-  
   const [formData, setFormData] = useState({
     weight: '', height: '', age: '', gender: 'hombre', activity: '1.2'
   });
@@ -43,7 +36,6 @@ export const Calculator = () => {
     }
   };
 
-  // 1. Datos para el gráfico (Ordenados por fecha para que la línea avance correctamente)
   const chartData = useMemo(() => {
     return [...history]
       .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
@@ -54,7 +46,6 @@ export const Calculator = () => {
       }));
   }, [history]);
 
-  // 2. Historial para las medallas (Ordenado por mejor IMC)
   const sortedHistory = useMemo(() => {
     return [...history].sort((a, b) => a.imc - b.imc);
   }, [history]);
@@ -79,78 +70,51 @@ export const Calculator = () => {
   };
 
   const saveResults = async () => {
-  // Limpiamos errores previos antes de empezar
-  setErrors({});
+    setErrors({});
+    try {
+      const payload = {
+        ...results,
+        age: formData.age ? Number(formData.age) : undefined,
+        height: formData.height ? Number(formData.height) : undefined,
+        weight: formData.weight ? Number(formData.weight) : undefined,
+        gender: formData.gender,
+        activity: formData.activity ? Number(formData.activity) : undefined,
+      };
 
-  try {
-    // 1. Construcción del payload
-    // Mantenemos la lógica de tipos, pero aseguramos que si es vacío no rompa
-    const payload = {
-      ...results,
-      age: formData.age ? Number(formData.age) : undefined,
-      height: formData.height ? Number(formData.height) : undefined,
-      weight: formData.weight ? Number(formData.weight) : undefined,
-      gender: formData.gender,
-      activity: formData.activity ? Number(formData.activity) : undefined,
-    };
-    console.log("⚖️ PESO QUE SE ENVÍA:", Number(formData.weight));
+      const res = await fetch(`${BASE_URL}/health`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(payload)
+      });
 
-    const res = await fetch(`${BASE_URL}/health`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(payload)
-    });
+      const data = await res.json();
 
-    const data = await res.json();
-
-    // 2. Manejo de Errores de Validación (Status 400)
-    if (!res.ok) {
-      if (data.errors && Array.isArray(data.errors)) {
-        const apiErrors = {};
-        
-        data.errors.forEach(err => {
-          // Usamos el path que viene del backend (ej: "age")
-          if (err.path) {
-            apiErrors[err.path] = err.message;
-          }
-        });
-
-        setErrors(apiErrors);
-        toast.error('Corrige los campos marcados en rojo');
-      } else {
-        // Errores de servidor o mensajes genéricos (Status 500 o similar)
-        throw new Error(data.message || 'Error inesperado en el servidor');
+      if (!res.ok) {
+        if (data.errors && Array.isArray(data.errors)) {
+          const apiErrors = {};
+          data.errors.forEach(err => { if (err.path) apiErrors[err.path] = err.message; });
+          setErrors(apiErrors);
+          toast.error('Corrige los campos marcados en rojo');
+        } else {
+          throw new Error(data.message || 'Error inesperado');
+        }
+        return;
       }
-      return; // Detenemos la ejecución aquí
-    }
 
-    // 3. Éxito total
-    toast.success('¡Progreso guardado! 🔥');
-    
-    
-    // Reset de estados tras éxito
-    setIsCalculated(false);
-    setResults(null);
-    
-    // Actualizamos el historial
-    if (typeof fetchFullHistory === 'function') {
-      await fetchFullHistory();
+      toast.success('¡Progreso guardado! 🔥');
+      setIsCalculated(false);
+      setResults(null);
+      fetchFullHistory();
+    } catch (error) {
+      toast.error('Error al conectar con el servidor');
     }
-
-  } catch (error) {
-    console.error("❌ Error en saveResults:", error);
-    toast.error('Error al conectar con el servidor: ' + error.message);
-  }
-};
+  };
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: '¿Eliminar?', icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#FFA500', cancelButtonColor: '#333',
-      confirmButtonText: 'Sí, borrar', background: '#111', color: '#fff'
+      confirmButtonColor: '#FFA500', confirmButtonText: 'Sí, borrar',
+      background: '#111', color: '#fff'
     });
     if (result.isConfirmed) {
       try {
@@ -162,9 +126,7 @@ export const Calculator = () => {
           toast.success("Registro eliminado");
           fetchFullHistory();
         }
-      } catch (error) {
-        toast.error("Error al eliminar" + error.message);
-      }
+      } catch (error) { toast.error("Error al eliminar"); }
     }
   };
 
@@ -179,8 +141,10 @@ export const Calculator = () => {
   return (
     <div className={styles.calculatorContainer}>
       <header className={styles.header}>
-        <h2>Calculadora <span>Salud & Fitness</span></h2>
-        <p>Gestiona tus métricas y compite por tus mejores marcas.</p>
+        <div className={styles.titleSection}>
+          <h2>Calculadora <span>Salud & Fitness</span></h2>
+          <p>Gestiona tus métricas y compite por tus mejores marcas.</p>
+        </div>
       </header>
 
       <main className={styles.mainGrid}>
@@ -194,29 +158,27 @@ export const Calculator = () => {
                 </label>
               ))}
             </div>
+
             <div className={styles.row}>
-              <div className={styles.inputGroup}><label>Edad</label><input type="number" value={formData.age} onChange={(e) => setFormData({ ...formData, age: e.target.value })} />{errors.age && <span className={styles.errorText}>{errors.age}</span>}</div>
-<div className={styles.inputGroup}>
-  <label>Peso (kg)</label>
-  <input 
-    type="number" 
-    value={formData.weight} 
-    onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-    // Opcional: añade una clase de error si quieres poner el borde rojo
-    className={errors.weight ? styles.inputError : ''} 
-  />
-  {errors.weight && <span className={styles.errorText}>{errors.weight}</span>}
-</div>            </div>
-<div className={styles.inputGroup}>
-  <label>Altura (cm)</label>
-  <input 
-    type="number" 
-    value={formData.height} 
-    onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-    className={errors.height ? styles.inputError : ''}
-  />
-  {errors.height && <span className={styles.errorText}>{errors.height}</span>}
-</div>            <div className={styles.inputGroup}>
+              <div className={styles.inputGroup}>
+                <label>Edad</label>
+                <input type="number" value={formData.age} onChange={(e) => setFormData({ ...formData, age: e.target.value })} className={errors.age ? styles.inputError : ''} />
+                {errors.age && <span className={styles.errorText}>{errors.age}</span>}
+              </div>
+              <div className={styles.inputGroup}>
+                <label>Peso (kg)</label>
+                <input type="number" value={formData.weight} onChange={(e) => setFormData({ ...formData, weight: e.target.value })} className={errors.weight ? styles.inputError : ''} />
+                {errors.weight && <span className={styles.errorText}>{errors.weight}</span>}
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label>Altura (cm)</label>
+              <input type="number" value={formData.height} onChange={(e) => setFormData({ ...formData, height: e.target.value })} className={errors.height ? styles.inputError : ''} />
+              {errors.height && <span className={styles.errorText}>{errors.height}</span>}
+            </div>
+
+            <div className={styles.inputGroup}>
               <label>Actividad</label>
               <select className={styles.fullWidthSelect} value={formData.activity} onChange={(e) => setFormData({ ...formData, activity: e.target.value })}>
                 <option value="1.2">Sedentario</option>
@@ -226,10 +188,13 @@ export const Calculator = () => {
                 <option value="1.9">Élite</option>
               </select>
             </div>
-            <button type="submit" className={isCalculated ? styles.saveBtnActive : styles.calcBtn}>
-              {isCalculated ? '💾 GUARDAR RESULTADOS' : 'CALCULAR MÉTRICAS'}
-            </button>
-            {isCalculated && <button type="button" className={styles.cancelBtn} onClick={() => setIsCalculated(false)}>CANCELAR</button>}
+
+            <div className={styles.actionGroup}>
+              <button type="submit" className={isCalculated ? styles.saveBtnActive : styles.calcBtn}>
+                {isCalculated ? '💾 GUARDAR RESULTADOS' : 'CALCULAR MÉTRICAS'}
+              </button>
+              {isCalculated && <button type="button" className={styles.cancelBtn} onClick={() => setIsCalculated(false)}>CANCELAR</button>}
+            </div>
           </form>
         </section>
 
@@ -246,10 +211,11 @@ export const Calculator = () => {
         </section>
       </main>
 
-      {/* --- NUEVA SECCIÓN: GRÁFICO DE TENDENCIA --- */}
       {history.length > 1 && (
         <section className={styles.chartSection}>
-          <h3>Tendencia de <span>Peso (kg)</span></h3>
+          <div className={styles.sectionHeader}>
+            <h3>Tendencia de <span>Peso (kg)</span></h3>
+          </div>
           <div className={styles.chartWrapper}>
             <ResponsiveContainer width="100%" height={250}>
               <AreaChart data={chartData}>
@@ -274,7 +240,9 @@ export const Calculator = () => {
       )}
 
       <section className={styles.historySection}>
-        <h3>Historial de <span>Evolución</span></h3>
+        <div className={styles.sectionHeader}>
+          <h3>Historial de <span>Evolución</span></h3>
+        </div>
         <div className={styles.historyList}>
           {sortedHistory.map((record, index) => {
             const medal = getMedalByIndex(index);
@@ -282,7 +250,9 @@ export const Calculator = () => {
               <article key={record._id || record.id} className={`${styles.historyCard} ${medal ? medal.type : ''}`}>
                 {medal && <div className={styles.medalBadge}>{medal.icon} TOP {medal.label}</div>}
                 <button className={styles.deleteBtn} onClick={() => handleDelete(record._id || record.id)}>✕</button>
-                <div className={styles.dateBadge}>{new Date(record.createdAt).toLocaleDateString()}</div>
+                <div className={styles.cardHeader}>
+                  <div className={styles.dateBadge}>{new Date(record.createdAt).toLocaleDateString()}</div>
+                </div>
                 <div className={styles.dataGroup}>
                   <div className={styles.dataItem}><small>Peso</small><strong>{record.weight}kg</strong></div>
                   <div className={styles.dataItem}><small>IMC</small><strong>{record.imc}</strong></div>

@@ -6,11 +6,6 @@ import styles from './Profile.module.scss';
 import Swal from 'sweetalert2';
 import { BASE_URL } from '../../api/API';
 
-/**
- * COMPONENTE PROFILE - EVOLUTFIT
- * Permite al usuario visualizar sus datos, actualizar su credencial de acceso
- * y realizar la baja lógica/física de su cuenta.
- */
 export const Profile = () => {
   const { user, logout, token } = useAuthStore();
   const navigate = useNavigate();
@@ -22,18 +17,11 @@ export const Profile = () => {
     confirmPass: '' 
   });
 
-  /**
-   * Manejador para el cambio de contraseña.
-   * Realiza validaciones previas de coincidencia y longitud.
-   */
   const handleChangePassword = async (e) => {
     e.preventDefault();
-
     if (passData.newPass !== passData.confirmPass) {
       return toast.error("Las contraseñas no coinciden.");
     }
-
-    // Regla de seguridad: Longitud mínima
     if (passData.newPass.length < 6) {
       return toast.error("La contraseña debe tener al menos 6 caracteres.");
     }
@@ -64,10 +52,6 @@ export const Profile = () => {
     }
   };
 
-  /**
-   * Proceso de eliminación de cuenta con confirmación de doble paso (UX/DX).
-   * Utiliza SweetAlert2 sincronizado con el tema oscuro de la app.
-   */
   const handleDeleteAccount = async () => {
     const result = await Swal.fire({
       title: '¿Eliminar cuenta?',
