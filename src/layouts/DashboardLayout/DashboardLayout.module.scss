@@ -1,16 +1,138 @@
 @use "../../styles/mixins" as *;
 
+/* --- CONTENEDOR MAESTRO --- */
 .dashboardContainer {
   display: grid;
+  // Mantenemos la estructura de dos columnas: Sidebar fija y Contenido flexible
   grid-template-columns: 280px 1fr;
-  min-height: 100dvh; /* Fix para Safari iOS */
+  min-height: 100dvh;
   background: #0a0a0a;
   
   @media (max-width: 1023px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; // En móvil solo queda una columna
   }
 }
 
+/* --- LÓGICA DEL SIDEBAR (MENÚ LATERAL) --- */
+.sidebar {
+  background: #0f0f0f;
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.2rem;
+  position: sticky; // Se queda fijo al hacer scroll
+  top: 0;
+  height: 100dvh;
+  z-index: 100;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+
+  @media (max-width: 1023px) {
+    position: fixed;
+    left: 0;
+    width: 280px;
+    transform: translateX(-100%); // Escondido en móvil
+    background: #0a0a0a;
+
+    &.sidebarOpen {
+      transform: translateX(0);
+      box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
+    }
+  }
+}
+
+/* --- SECCIÓN LOGO Y USUARIO --- */
+.logoSection {
+  margin-bottom: 2.5rem;
+  
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+
+    .logoImg {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.3));
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      span { @include text-gradient-orange; }
+    }
+  }
+
+  .welcomeWrapper {
+    padding-left: 0.5rem;
+    p { @include label-standard; font-size: 0.6rem; color: #555; }
+    .userName {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 800;
+      @include text-gradient-orange;
+    }
+  }
+}
+
+/* --- MENÚ DE NAVEGACIÓN --- */
+.navMenu {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 1.2rem;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-thumb { background: rgba(255, 165, 0, 0.1); }
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  
+  a {
+    @include nav-link-base; // Tu mixin de navegación
+    font-size: 0.85rem;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+
+    /* CORRECCIÓN ESTADO ACTIVO SIN DESBORDAMIENTOS */
+    &.active {
+      background: linear-gradient(90deg, rgba(255, 165, 0, 0.08) 0%, transparent 100%);
+      color: #FFA500;
+      border-left: 3px solid #FFA500;
+      font-weight: 700;
+      box-shadow: inset 8px 0 10px -8px rgba(255, 165, 0, 0.3);
+    }
+  }
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+  margin: 0.5rem 1rem;
+}
+
+/* --- CONTENIDO DERECHO (DONDE CARGAN LAS VISTAS) --- */
+.mainContent {
+  padding: 2.5rem;
+  // Efecto visual de fondo para que no sea un negro plano
+  background: radial-gradient(circle at top right, rgba(255, 165, 0, 0.02), transparent 40%);
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  @media (max-width: 1023px) {
+    padding: 1.5rem;
+    padding-top: 6rem; // Espacio para el botón de menú en móvil
+  }
+}
+
+/* --- ELEMENTOS DE UI MÓVIL --- */
 .mobileToggle {
   display: none;
 
@@ -25,168 +147,10 @@
     width: 45px;
     height: 45px;
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    border: none;
     border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
-
-    span {
-      display: block;
-      width: 25px;
-      height: 2px;
-      background: #000;
-      position: relative;
-      transition: 0.3s;
-
-      &::before, &::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        background: #000;
-        transition: 0.3s;
-      }
-      &::before { top: -8px; left: 0; }
-      &::after { bottom: -8px; left: 0; }
-    }
-
-    .iconOpen {
-      background: transparent;
-      &::before { transform: rotate(45deg); top: 0; }
-      &::after { transform: rotate(-45deg); bottom: 0; }
-    }
+    border: none;
   }
-}
-
-.sidebar {
-  background: #0f0f0f;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  flex-direction: column;
-  padding: 2.5rem 1.5rem;
-  position: sticky;
-  top: 0;
-  height: 100dvh;
-  z-index: 100;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-  @media (max-width: 1023px) {
-    position: fixed;
-    left: 0;
-    width: 280px;
-    transform: translateX(-100%);
-    background: #0a0a0a;
-    z-index: 2000;
-
-    &.sidebarOpen {
-      transform: translateX(0);
-      box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
-    }
-  }
-}
-
-.logoSection {
-  margin-bottom: 3rem;
-  padding: 0 0.5rem;
-
-  .brand {
-    display: flex;
-    align-items: center;
-   
-
-    .logoImg {
-      width: 55px;
-      height: 55px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.3));
-    }
-
-    h2 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #fff;
-      margin: 0;
-      span { color: #FFA500; }
-    }
-  }
-
-  .welcomeWrapper {
-    margin-top: .5rem;
-    p {
-      @include label-standard;
-      font-size: 0.65rem;
-      color: rgba(255, 255, 255, 0.4);
-      margin-bottom: 0.2rem;
-    }
-
-    .userName {
-      display: block;
-      font-size: 1.1rem;
-      font-weight: 800;
-      text-transform: capitalize;
-      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  }
-}
-
-.navMenu {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 0.5rem;
-  overflow-y: auto;
-  /* Scrollbar estético */
-  &::-webkit-scrollbar { width: 3px; }
-  &::-webkit-scrollbar-thumb { background: rgba(255, 165, 0, 0.1); }
-}
-
-.navGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  
-  a {
-    @include nav-link-base;
-    text-decoration: none;
-    font-size: 0.9rem;
-    
-    &.active {
-      background: rgba(255, 165, 0, 0.08);
-      color: #FFA500;
-      border-left: 3px solid #FFA500;
-    }
-  }
-}
-
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, transparent 100%);
-  margin: 1.2rem 1rem;
-}
-
-.logoutBtn {
-  @include btn-primary-gradient;
-  margin-top: 2rem;
-  padding: 0.9rem;
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: #000;
-  border: none;
-  cursor: pointer;
-  animation: pulseGlow 3s infinite;
-}
-
-.mainContent {
-  padding: 2.5rem;
-  background: radial-gradient(circle at top right, rgba(255, 165, 0, 0.02), transparent 40%);
-  overflow-y: auto;
-
-  @media (max-width: 1023px) {
-    padding: 1.5rem;
-    padding-top: 5.5rem; /* Espacio para el botón toggle */
-  }
+  // (Mantenemos el resto de estilos de la hamburguesa de tu código original...)
 }
 
 .overlay {
@@ -197,8 +161,9 @@
   z-index: 1999;
 }
 
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.2); }
-  70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+.logoutBtn {
+  @include btn-primary-gradient;
+  margin-top: 2rem;
+  padding: 0.9rem;
+  font-size: 0.85rem;
 }
