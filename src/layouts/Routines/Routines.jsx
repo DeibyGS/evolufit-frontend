@@ -8,36 +8,62 @@ import { BASE_URL } from '../../api/API';
 
 export const Routines = () => {
   const { token } = useAuthStore();
+  
+  // --- ESTADOS DE CONTROL ---
   const [isStarted, setIsStarted] = useState(false);
   const [routineName, setRoutineName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState('');
   const [selectedExercise, setSelectedExercise] = useState('');
+  
+  // --- ESTADOS DE PAGINACIÓN ---
+  const [history, setHistory] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+
+  // --- ESTADOS DE CONFIGURACIÓN DE SERIES ---
   const [numSeries, setNumSeries] = useState(1);
   const [series, setSeries] = useState([{ id: "first-set", reps: '', weight: '' }]);
   const [workoutList, setWorkoutList] = useState([]);
-  const [showPreview, setShowPreview] = useState(false);
-  const [history, setHistory] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(5);
 
   const filteredExercises = EXERCISES_DB.filter(ex => ex.group === selectedGroup);
 
+  // Carga inicial del historial
   useEffect(() => {
-    if (token) fetchHistory();
+    if (token) fetchHistory(1);
   }, [token]);
 
-  const fetchHistory = async () => {
+  /**
+   * Obtiene el historial paginado del backend
+   * @param {number} pageToFetch - La página que queremos solicitar
+   */
+  const fetchHistory = async (pageToFetch = 1) => {
+    setIsLoadingHistory(true);
     try {
-      const response = await fetch(`${BASE_URL}/workouts/my-workouts`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const limit = 5;
+      const response = await fetch(
+        `${BASE_URL}/workouts/my-workouts?page=${pageToFetch}&limit=${limit}`, 
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+      
       if (response.ok) {
         const data = await response.json();
-        if(Array.isArray(data)) {
-          const sortedData = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-          setHistory(sortedData);
-        }
+        
+        // Si es la página 1, reemplazamos el array. Si es > 1, concatenamos los nuevos.
+        setHistory(prev => pageToFetch === 1 ? data.workouts : [...prev, ...data.workouts]);
+        setHasMore(data.hasMore);
+        setPage(data.currentPage);
       } 
-    } catch (error) { console.error("Error historial:", error); }
+    } catch (error) { 
+      console.error("Error historial:", error); 
+      toast.error("No se pudo cargar el historial");
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
+
+  const handleLoadMore = () => {
+    fetchHistory(page + 1);
   };
 
   const handleNumSeriesChange = (e) => {
@@ -70,8 +96,15 @@ export const Routines = () => {
     toast.info("¡Ejercicio añadido!");
   };
 
+  const removeExerciseFromList = (index) => {
+    const newList = [...workoutList];
+    newList.splice(index, 1);
+    setWorkoutList(newList);
+  };
+
   const finishSession = async () => {
     if (workoutList.length === 0) return toast.error("No hay ejercicios");
+    
     const result = await Swal.fire({
       title: '¿Terminar entrenamiento?',
       icon: 'question',
@@ -90,7 +123,10 @@ export const Routines = () => {
         });
         if (res.ok) {
           toast.success("¡Guardado! 🔥");
-          setIsStarted(false); setRoutineName(''); setWorkoutList([]); fetchHistory();
+          setIsStarted(false); 
+          setRoutineName(''); 
+          setWorkoutList([]); 
+          fetchHistory(1); // Recargamos desde la página 1 para ver el nuevo
         }
       } catch (error) { toast.error("Error al guardar"); }
     }
@@ -117,10 +153,8 @@ export const Routines = () => {
           </div>
           
           <div className={styles.historyList}>
-            {history.slice(0, visibleCount).map((workout) => (
+            {history.map((workout) => (
               <article key={workout._id} className={styles.historyCard}>
-                <button className={styles.deleteBtn} onClick={() => {/* delete logic */}}>✕</button>
-                
                 <div className={styles.cardHeader}>
                   <div className={styles.dateBadge}>{new Date(workout.createdAt).toLocaleDateString()}</div>
                   <strong className={styles.routineTitle}>{workout.routineName}</strong>
@@ -147,17 +181,32 @@ export const Routines = () => {
               </article>
             ))}
           </div>
+
+          {/* BOTÓN CARGAR MÁS */}
+          {hasMore && (
+            <div className={styles.loadMoreContainer}>
+              <button 
+                className={styles.loadMoreBtn} 
+                onClick={handleLoadMore}
+                disabled={isLoadingHistory}
+              >
+                {isLoadingHistory ? 'Cargando...' : 'Cargar entrenamientos anteriores'}
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className={styles.activeRoutine}>
-          <div className={styles.inputGroup}>
-            <input 
-              className={styles.routineNameInput}
-              placeholder="Nombre del entrenamiento..."
-              value={routineName}
-              onChange={(e) => setRoutineName(e.target.value)}
-            />
-          </div>
+          <div className={styles.routineNameGroup}>
+  <input 
+    className={styles.routineNameInput}
+    placeholder="Ej: Empuje - Enfoque Pecho y Tríceps 🔥"
+    value={routineName}
+    onChange={(e) => setRoutineName(e.target.value)}
+    autoFocus
+  />
+  <span className={styles.inputFocusLine}></span>
+</div>
 
           <div className={styles.filterBar}>
             <div className={styles.tagChips}>
@@ -208,9 +257,27 @@ export const Routines = () => {
             </div>
           )}
 
+          {/* VISTA PREVIA BORRADOR */}
           {workoutList.length > 0 && (
-            <div className={styles.footerActions}>
-              <button className={styles.finishBtn} onClick={finishSession}>Finalizar Sesión 🔥</button>
+            <div className={styles.workoutPreview}>
+              <h3>Resumen de sesión actual</h3>
+              <div className={styles.previewContainer}>
+                {workoutList.map((item, index) => (
+                  <div key={index} className={styles.previewItem}>
+                    <div className={styles.previewInfo}>
+                      <strong>{item.exerciseName}</strong>
+                      <p>{item.sets.length} series registradas</p>
+                    </div>
+                    <button onClick={() => removeExerciseFromList(index)} className={styles.removeBtn}>
+                      Remover
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.footerActions}>
+                <button className={styles.finishBtn} onClick={finishSession}>Finalizar Entrenamiento 🔥</button>
+                <button className={styles.cancelBtn} onClick={() => setIsStarted(false)}>Descartar Sesión</button>
+              </div>
             </div>
           )}
         </div>

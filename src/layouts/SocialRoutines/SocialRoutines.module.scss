@@ -1,5 +1,6 @@
 @use "../../styles/mixins" as *;
 
+/* --- CONTENEDOR PRINCIPAL --- */
 .socialContainer {
   @include section-container;
   width: 100%;            
@@ -47,6 +48,7 @@
   }
 }
 
+/* --- BARRA DE FILTROS --- */
 .filterBar {
   @include card-glass;
   display: flex;

@@ -8,6 +8,7 @@ import { BASE_URL } from '../../api/API';
 
 export const Profile = () => {
   const { user, logout, token } = useAuthStore();
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const [showPassForm, setShowPassForm] = useState(false);
@@ -18,66 +19,93 @@ export const Profile = () => {
   });
 
   const handleChangePassword = async (e) => {
-    e.preventDefault();
-    if (passData.newPass !== passData.confirmPass) {
-      return toast.error("Las contraseñas no coinciden.");
-    }
-    if (passData.newPass.length < 6) {
-      return toast.error("La contraseña debe tener al menos 6 caracteres.");
-    }
+  e.preventDefault();
+  setErrors({});
 
-    try {
-      const response = await fetch(`${BASE_URL}/users/${user.id}/change-password`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({
-          oldPassword: passData.oldPass,
-          newPassword: passData.newPass 
-        })
-      });
+  // 1. Validaciones previas en el Cliente (UX inmediata)
+  if (passData.newPass !== passData.confirmPass) {
+    return toast.error("La nueva contraseña y su confirmación no coinciden.");
+  }
 
-      if (response.ok) {
-        setShowPassForm(false);
-        setPassData({ oldPass: '', newPass: '', confirmPass: '' });
-        toast.success("¡Contraseña actualizada!");
-      } else {
-        const data = await response.json();
-        toast.error(data.message || "Error al actualizar.");
+  
+
+  if (passData.oldPass && passData.newPass === passData.oldPass) {
+    return toast.error("La nueva contraseña no puede ser igual a la actual.");
+  }
+
+  try {
+    // 2. Petición al endpoint "ID-less"
+    const res = await fetch(`${BASE_URL}/users/change-password`, {
+      method: 'PATCH', 
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
+      body: JSON.stringify({
+        oldPassword: passData.oldPass,
+        password: passData.newPass 
+      })
+    });
+
+    const data = await res.json();
+
+    // 3. Manejo de Errores del Servidor (Validación y Lógica)
+    if (!res.ok) {
+      // Caso A: Errores de validación de Zod (Middleware)
+      if (data.errors && Array.isArray(data.errors)) {
+        const apiErrors = {};
+        data.errors.forEach(err => { 
+          if (err.path) apiErrors[err.path] = err.message; 
+        });
+        setErrors(apiErrors);
+        return toast.error('La contraseña no cumple con los requisitos.');
       }
-    } catch (error) {
-      toast.error("Error de conexión: " + error.message);
+      
+      // Caso B: Errores de lógica del controlador (ej. 401, 404)
+      // Usamos el mensaje que viene del back o uno genérico
+      throw new Error(data.message || 'Error al actualizar la contraseña');
     }
-  };
+
+    // 4. ÉXITO
+    setShowPassForm(false);
+    setPassData({ oldPass: '', newPass: '', confirmPass: '' });
+    toast.success("¡Seguridad actualizada! Contraseña cambiada.");
+
+  } catch (error) {
+    // 5. Manejo de Errores de Red o Lanzados manualmente (throw)
+    console.error("Change Password Error:", error);
+    toast.error(error.message || "Error de conexión con el servidor.");
+  }
+};
 
   const handleDeleteAccount = async () => {
     const result = await Swal.fire({
-      title: '¿Eliminar cuenta?',
-      text: "Esta acción es irreversible y perderás todo tu progreso.",
+      title: '¿Estás completamente seguro?',
+      text: "Se borrarán todos tus RMs y progreso. Esta acción no se puede deshacer.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#ff4d4d', 
-      confirmButtonText: 'Sí, eliminar permanentemente',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, borrar mi rastro',
       background: '#111',
       color: '#fff'
     });
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/users/${user.id}`, {
+        // 3. Eliminación usando la ruta /delete-me
+        const res = await fetch(`${BASE_URL}/users/delete-me`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (response.ok) {
-          toast.info("Cuenta eliminada correctamente.");
+        if (res.ok) {
+          toast.info("Cuenta eliminada. Esperamos verte pronto.");
           logout(); 
           navigate('/'); 
         }
       } catch (error) {
-        toast.error("Error al conectar con el servidor." + error.message);
+        toast.error("No se pudo procesar la solicitud de eliminación.");
       }
     }
   };
@@ -86,7 +114,7 @@ export const Profile = () => {
     <div className={styles.profileContainer}>
       <header className={styles.header}>
         <h2>Mi <span>Perfil</span></h2>
-        <p>Gestiona tu información personal y la seguridad de tu cuenta.</p>
+        <p>Configuración de cuenta y seguridad de EvolutFit.</p>
       </header>
 
       <div className={styles.contentGrid}>
@@ -96,15 +124,15 @@ export const Profile = () => {
           </div>
           <div className={styles.infoList}>
             <div className={styles.infoItem}>
-              <label>Nombre Completo</label>
+              <label>Atleta</label>
               <p>{user?.name} {user?.lastname}</p>
             </div>
             <div className={styles.infoItem}>
-              <label>Correo Electrónico</label>
+              <label>Email</label>
               <p>{user?.email}</p>
             </div>
             <div className={styles.infoItem}>
-              <label>Edad Registrada</label>
+              <label>Edad</label>
               <p>{user?.age} años</p>
             </div>
           </div>
@@ -126,24 +154,39 @@ export const Profile = () => {
                   <label>Contraseña Actual</label>
                   <input 
                     type="password" 
+                    placeholder="Tu clave actual..."
                     value={passData.oldPass}
                     onChange={(e) => setPassData({...passData, oldPass: e.target.value})}
                     required 
-                  />
+                  />                  
                 </div>
                 
                 <div className={styles.inputGroup}>
                   <label>Nueva Contraseña</label>
                   <input 
                     type="password" 
+                    placeholder="Mínimo 6 caracteres..."
                     value={passData.newPass}
                     onChange={(e) => setPassData({...passData, newPass: e.target.value})}
                     required 
                   />
+                  {errors.password && <span className={styles.errorText}>{errors.password}</span>}
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Confirmar Nueva Contraseña</label>
+                  <input 
+                    type="password" 
+                    placeholder="Repite la nueva clave..."
+                    value={passData.confirmPass}
+                    onChange={(e) => setPassData({...passData, confirmPass: e.target.value})}
+                    required 
+                  />
+                  {errors.password && <span className={styles.errorText}>{errors.password}</span>}
                 </div>
 
                 <div className={styles.formBtns}>
-                  <button type="submit" className={styles.saveBtn}>Actualizar</button>
+                  <button type="submit" className={styles.saveBtn}>Guardar Cambios</button>
                   <button type="button" className={styles.cancelBtn} onClick={() => setShowPassForm(false)}>
                     Cancelar
                   </button>
@@ -152,10 +195,10 @@ export const Profile = () => {
             )}
 
             <div className={styles.dangerZone}>
-              <h4>Zona de Peligro</h4>
-              <p>Eliminar tu cuenta borrará todos tus récords y rutinas guardadas.</p>
+              <h4>Zona Crítica</h4>
+              <p>Una vez eliminada la cuenta, no hay marcha atrás.</p>
               <button className={styles.deleteBtn} onClick={handleDeleteAccount}>
-                Eliminar Cuenta
+                Borrar Cuenta
               </button>
             </div>
           </div>

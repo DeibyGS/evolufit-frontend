@@ -188,42 +188,78 @@
   }
 }
 
+.historyList{
+  display: flex;
+  flex-direction: column;
+  gap:1rem;
+}
+
+/* --- HISTORIAL CARDS CON MEDALLAS MEJORADAS --- */
 .historyCard {
-  @include history-card-base; 
-  flex-direction: column; 
-  align-items: stretch; 
-  padding: 1.5rem;
+  @include history-card-base;
   position: relative;
+  overflow: hidden; // Para que el icono gigante de fondo no se salga
+  transition: transform 0.3s ease, border-color 0.3s ease;
 
-  &.gold { border-left-color: #ffd700; background: rgba(255, 215, 0, 0.03); }
-  &.silver { border-left-color: #c0c0c0; background: rgba(192, 192, 192, 0.03); }
-  &.bronze { border-left-color: #cd7f32; background: rgba(205, 127, 50, 0.03); }
-  
-  .medalBadge { @include badge-style; position: absolute; top: -10px; right: 40px; }
-  .deleteBtn { 
-    position: absolute; 
-    top: 1rem; 
-    right: 1rem; 
-    background: none; 
-    border: none; 
-    color: #666; 
-    cursor: pointer;
-    &:hover { color: var(--error-color); } 
+  // Icono gigante decorativo al fondo
+  &::after {
+    content: '';
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-size: 8rem;
+    opacity: 0.05; // Muy sutil
+    font-weight: 900;
+    pointer-events: none;
+    z-index: 0;
   }
-  .dateBadge { @include badge-style; margin-bottom: 1rem; display: inline-block; }
 
-  .dataGroup {
-    display: grid; 
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 1rem;
-    @media (min-width: 768px) { grid-template-columns: repeat(4, 1fr); }
-    .dataItem { 
-      display: flex; 
-      flex-direction: column; 
-      small { font-size: 0.7rem; color: #777; } 
-      strong { font-size: 1rem; color: #fff; } 
-      .orange { color: #FFA500 !important; } 
-    }
+  // Estilos específicos por medalla
+  &.gold {
+    border-left: 4px solid #ffd700;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(17, 17, 17, 1) 40%);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.05);
+    &::after { content: '🥇'; opacity: 0.1; }
+  }
+
+  &.silver {
+    border-left: 4px solid #c0c0c0;
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.08) 0%, rgba(17, 17, 17, 1) 40%);
+    &::after { content: '🥈'; opacity: 0.1; }
+  }
+
+  &.bronze {
+    border-left: 4px solid #cd7f32;
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.08) 0%, rgba(17, 17, 17, 1) 40%);
+    &::after { content: '🥉'; opacity: 0.1; }
+  }
+
+  // El badge superior ahora es flotante y elegante
+  .medalBadge {
+    position: absolute;
+    top: 10px;
+    right: 45px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 2;
+    
+    // Colores de texto según medalla
+    .gold & { color: #ffd700; border-color: rgba(255, 215, 0, 0.3); }
+    .silver & { color: #e0e0e0; border-color: rgba(192, 192, 192, 0.3); }
+    .bronze & { color: #ff9d6e; border-color: rgba(205, 127, 50, 0.3); }
+  }
+
+  // Aseguramos que el contenido esté por encima del icono gigante
+  .cardHeader, .dataGroup {
+    position: relative;
+    z-index: 1;
   }
 }
 

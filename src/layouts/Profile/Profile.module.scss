@@ -173,6 +173,9 @@
   }
 }
 
+.errorText { color: var(--error-color); font-size: 0.75rem; margin-top: 0.4rem; display: block; }
+
+
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
