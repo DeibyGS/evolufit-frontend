@@ -1,298 +1,235 @@
 @use "../../styles/mixins" as *;
 
-/* --- CONTENEDOR PRINCIPAL --- */
 .routinesContainer {
   @include section-container;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;            
+  max-width: 100vw;       
+  overflow-x: hidden;     
   box-sizing: border-box;
-  padding: var(--min-padding);
-  padding-bottom: 5rem;
-  overflow-x: hidden; // Evita el scroll horizontal global
+  padding: 1rem;          
+  padding-bottom: 5rem; 
 
   .header {
-    display: flex;
+    @include flex-center(row, 1rem);
     justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
-    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    flex-wrap: wrap; 
+    width: 100%;          
+    box-sizing: border-box;
 
     .titleSection {
-      h2 {
-        font-size: clamp(1.8rem, 5vw, 2.2rem);
-        font-weight: 800;
-        color: #fff;
-        font-family: var(--secondary-font-family);
-        margin: 0;
-        span { @include text-gradient-orange; }
+      h2 { 
+        font-size: clamp(1.5rem, 4vw, 1.8rem); 
+        color: #fff; 
+        span { color: #FFA500; } 
       }
-      p {
-        color: var(--tertiary-color-text);
-        font-size: 0.95rem;
-        margin-top: 0.4rem;
-      }
+      p { color: var(--tertiary-color-text); font-size: 0.85rem; }
     }
 
-    .shareBtn {
-      @include btn-primary-gradient(auto);
-      padding: 0.8rem 2rem;
-      border-radius: 50px;
+    .shareBtn { 
+      @include btn-primary-gradient; 
+      width: 100%; 
+      padding: 0.8rem 1.5rem; 
+      border-radius: 50px; 
       font-size: 0.9rem;
-      @media (max-width: 600px) { width: 100%; }
+      margin-top: 1rem;
+      @media (min-width: 768px) { width: auto; margin-top: 0; }
     }
   }
 }
 
-/* --- SECCIÓN HISTORIAL --- */
-.historySection {
-  .sectionHeader {
-    margin-bottom: 2rem;
-    h3 {
-      font-size: 1.5rem;
-      color: #fff;
-      span { color: #FFA500; }
-    }
-  }
-}
-
+/* --- HISTORIAL (MANTENIDO ORIGINAL) --- */
 .historyList {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.2rem;
 }
 
 .historyCard {
-  @include history-card-base; // Usamos tu mixin base
-  padding: 1.5rem;
-  
+  @include card-glass;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.2rem;
+  width: 100%;
+  box-sizing: border-box;
+
   .cardHeader {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.2rem;
-    flex-wrap: wrap;
-
-    .dateBadge { @include badge-style; }
-    .routineTitle {
-      font-size: 1.1rem;
-      color: #fff;
-      font-weight: 700;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    .dateBadge {
+      background: #FFA500;
+      color: #000;
+      font-weight: 800;
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
     }
+    .routineTitle { font-size: 1rem; color: #fff; font-weight: 700; }
   }
 }
 
-.exerciseDetailList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
 .exerciseDetailItem {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 1rem;
-
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 0.8rem;
+  margin-bottom: 0.6rem;
   .exInfo {
-    margin-bottom: 0.8rem;
-    small { @include label-standard; color: #FFA500; font-size: 0.65rem; }
-    strong { display: block; color: #fff; font-size: 1rem; margin-top: 2px; }
+    margin-bottom: 0.5rem;
+    small { color: #FFA500; font-weight: 700; font-size: 0.6rem; text-transform: uppercase; }
+    strong { display: block; color: #fff; font-size: 0.9rem; }
   }
 }
 
 .seriesGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-
+  gap: 0.4rem;
   .setTag {
     background: rgba(255, 255, 255, 0.05);
-    padding: 0.4rem 0.8rem;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    
-    small { color: #FFA500; font-weight: 800; margin-right: 0.4rem; }
-    span { color: #fff; b { font-weight: 700; } }
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    small { color: #FFA500; font-weight: 800; margin-right: 0.2rem; }
+    b { color: #fff; }
   }
 }
 
-/* --- SESIÓN ACTIVA (EL FORMULARIO) --- */
+/* --- SESIÓN ACTIVA --- */
 .activeRoutine {
   @include card-glass;
-  padding: clamp(1rem, 5vw, 2.5rem);
+  padding: 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   width: 100%;
   box-sizing: border-box;
 
-  .routineNameGroup {
-    position: relative;
+  .routineNameInput {
+    @include input-standard;
     width: 100%;
-
-    .routineNameInput {
-      width: 100%;
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-      padding: 0.8rem 0;
-      font-size: clamp(1.2rem, 4vw, 1.6rem);
-      font-weight: 800;
-      color: #fff;
-      font-family: var(--secondary-font-family);
-      transition: border-color 0.3s ease;
-      box-sizing: border-box;
-
-      &:focus {
-        outline: none;
-        border-bottom-color: #FFA500;
-      }
-    }
+    font-size: clamp(1.1rem, 5vw, 1.4rem);
+    font-weight: 800;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    background: transparent;
+    padding: 0.5rem 0;
+    color: #fff;
+    &:focus { border-bottom-color: #FFA500; background: transparent; }
   }
 }
 
 .tagChips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  
-  button {
-    @include chip-button;
+  gap: 0.5rem;
+  button { 
+    @include chip-button; 
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
     &.tagActive { @include chip-button(true); }
   }
 }
 
-/* GRID DE SELECCIÓN REPARADO */
+/* --- CORRECCIÓN SELECTORES (SOLO FLECHA Y DISTANCIA) --- */
 .selectionGrid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
-  box-sizing: border-box;
 
-  /* DENTRO DE .selectionGrid */
-.inputLayout {
-  @include input-group-layout;
-  width: 100%;
-  min-width: 0; 
-  
-  select { 
-    @include input-standard; 
-    width: 100%; 
-    height: 3.5rem;
-    cursor: pointer;
-    
-    // --- NUEVO ESTILO DE FLECHA ---
-    appearance: none; // Quitamos la flecha nativa del navegador
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFA500' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    
-    /* Movemos la flecha más a la derecha (95%) y la centramos verticalmente */
-    background-position: calc(100% - 15px) center; 
-    background-size: 1.1rem;
-    
-    /* Añadimos padding a la derecha para que el texto no toque la flecha */
-    padding-right: 3rem; 
-
-    &:focus {
-      border-color: #FFA500;
-    }
-  }
-}
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr; // Colapsa en móvil
-  }
-}
-
-/* CONFIGURACIÓN DE SERIES REPARADO */
-.setsConfig {
-  @include card-glass;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1.5rem;
-  border: 1px dashed rgba(255, 165, 0, 0.3);
-  width: 100%;
-  box-sizing: border-box;
-
-  .configTable {
+  .inputLayout {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.4rem;
+    width: 100%;
+    
+    label { color: #888; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; }
+    
+    select { 
+      @include input-standard; 
+      width: 100%; 
+      cursor: pointer;
+      font-size: 0.9rem;
+      height: 3.2rem;
+      text-overflow: ellipsis;
+      
+      /* Reset y nueva flecha */
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFA500' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: calc(100% - 1.2rem) center; // Posición fija desde la derecha
+      background-size: 1.1rem;
+      padding-right: 3rem;
+
+      &:focus {
+        background-color: rgba(255, 255, 255, 0.08); // Solo aclaramos el fondo un poco
+        // No repetimos el background-image aquí para evitar el error de las flechas múltiples
+      }
+    }
   }
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* --- RESTO DE ESTILOS MANTENIDOS --- */
+.setsConfig {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px dashed rgba(255, 165, 0, 0.2);
+  width: 100%;
+  box-sizing: border-box;
 
   .setRow {
     display: grid;
-    grid-template-columns: 30px 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: 25px 1fr 1fr; 
+    gap: 0.5rem; 
     align-items: center;
+    margin-bottom: 0.8rem;
     width: 100%;
-
-    .setIndex {
-      color: #FFA500;
-      font-weight: 900;
-      font-family: var(--secondary-font-family);
-    }
-
-    input {
-      @include input-standard;
-      width: 100%;
-      min-width: 0; // Evita que el input empuje el grid
-      text-align: center;
-    }
+    .setIndex { color: #FFA500; font-weight: 800; font-size: 0.85rem; }
+    input { @include input-standard; text-align: center; width: 100%; padding: 0.6rem 0.3rem; }
   }
 }
 
 .actionGroup {
+  margin-top: 1rem;
   .addBtn {
     @include btn-secondary;
     width: 100%;
-    border: 2px dashed rgba(255, 165, 0, 0.4);
+    border: 1.5px dashed #FFA500;
     color: #FFA500;
-    font-weight: 700;
-    margin-top: 1rem;
-    
-    &:hover {
-      background: rgba(255, 165, 0, 0.05);
-      border-color: #FFA500;
-    }
+    height: 3.2rem;
   }
 }
 
-/* VISTA PREVIA Y FOOTER */
 .workoutPreview {
-  margin-top: 1rem;
-  h3 { @include label-standard; color: #FFA500; margin-bottom: 1.2rem; }
+  border-top: 1px solid #222;
+  padding-top: 1.5rem;
+  h3 { font-size: 0.75rem; color: #FFA500; text-transform: uppercase; margin-bottom: 1rem; }
   
-  .previewContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
   .previewItem {
-    @include card-glass;
-    padding: 1rem;
-    display: flex;
+    @include flex-center(row, 0.8rem);
     justify-content: space-between;
-    align-items: center;
-    border-left: 4px solid #FFA500;
-
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid #FFA500;
     .previewInfo {
-      strong { color: #fff; font-size: 0.95rem; }
-      p { color: var(--tertiary-color-text); font-size: 0.8rem; margin: 0; }
+      strong { color: #fff; font-size: 0.85rem; }
+      p { color: #666; font-size: 0.7rem; }
     }
-
     .removeBtn {
       @include btn-secondary;
-      width: auto;
-      padding: 0.4rem 1rem;
-      font-size: 0.75rem;
-      border-color: var(--error-color);
-      color: var(--error-color);
-      &:hover { background: var(--error-color); color: #fff; }
+      border-color: #ff4444; color: #ff4444;
+      padding: 0.3rem 0.6rem; font-size: 0.65rem; width: auto;
     }
   }
 }
@@ -300,26 +237,20 @@
 .footerActions {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 2rem;
-
-  .finishBtn { @include btn-primary-gradient; height: 3.8rem; }
-  .cancelBtn {
-    background: transparent;
-    border: none;
-    color: var(--tertiary-color-text);
-    cursor: pointer;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    &:hover { color: #fff; }
-  }
+  gap: 0.8rem;
+  margin-top: 1rem;
+  .finishBtn { @include btn-primary-gradient; height: 3.5rem; font-size: 1.1rem; }
+  .cancelBtn { background: transparent; border: none; color: #555; text-decoration: underline; font-size: 0.8rem; }
 }
 
 .loadMoreContainer {
-  @include flex-center;
-  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
   .loadMoreBtn {
     @include btn-secondary;
-    padding: 0.8rem 2.5rem;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.8rem;
+    border-color: rgba(255, 165, 0, 0.2);
   }
 }

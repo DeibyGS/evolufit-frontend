@@ -161,23 +161,23 @@ export const Routines = () => {
                 </div>
 
                 <div className={styles.exerciseDetailList}>
-                  {workout.exercises.map((ex, idx) => (
-                    <div key={idx} className={styles.exerciseDetailItem}>
-                      <div className={styles.exInfo}>
-                        <small>{ex.muscleGroup}</small>
-                        <strong>{ex.exerciseName}</strong>
-                      </div>
-                      <div className={styles.seriesGrid}>
-                        {ex.sets.map((set, sIdx) => (
-                          <div key={sIdx} className={styles.setTag}>
-                            <small>S{sIdx + 1}</small>
-                            <span>{set.reps} x <b>{set.weight}kg</b></span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+  {workout.exercises.map((ex, idx) => (
+    <div key={idx} className={styles.exerciseDetailItem}>
+      <div className={styles.exInfo}>
+        <small>{ex.muscleGroup}</small>
+        <strong>{ex.exerciseName}</strong>
+      </div>
+      <div className={styles.seriesGrid}>
+        {ex.sets.map((set, sIdx) => (
+          <div key={sIdx} className={styles.setTag} title={`Serie ${sIdx + 1}`}>
+            <small>S{sIdx + 1}</small>
+            <span>{set.reps} x <b>{set.weight}kg</b></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
               </article>
             ))}
           </div>
