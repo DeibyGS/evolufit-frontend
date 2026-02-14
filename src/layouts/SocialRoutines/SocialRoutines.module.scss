@@ -97,12 +97,9 @@
   }
 }
 
+/* --- GRID DE POSTS --- */
 .postsGrid {
   display: grid;
-  /* * Ajuste clave: Bajé el minmax a 260px. 
-   * En un iPhone Pro (aprox 390px ancho) - 2rem padding = ~358px disponibles.
-   * 280px estaba bien, pero si el padding cambia, peligra. 260px es más seguro.
-   */
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
   width: 100%;
@@ -111,6 +108,64 @@
   @media (max-width: 480px) {
     grid-template-columns: 1fr; 
     gap: 1rem;
+  }
+
+  /* --- NUEVO: ESTADO DE CARGA --- */
+  .loadingContainer {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #FFA500;
+    font-weight: bold;
+    letter-spacing: 1px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  /* --- NUEVO: ESTADO VACÍO (EMPTY STATE) --- */
+  .emptyStateContainer {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 165, 0, 0.3);
+    border-radius: 15px;
+    margin-top: 1rem;
+    animation: fadeIn 0.5s ease;
+
+    .emptyIcon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    h3 {
+      color: #fff;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: var(--tertiary-color-text);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .resetBtn {
+      background: transparent;
+      border: 1px solid #FFA500;
+      color: #FFA500;
+      padding: 0.7rem 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #FFA500;
+        color: #000;
+        transform: scale(1.05);
+      }
+    }
   }
 }
 
@@ -131,27 +186,82 @@
     border-bottom-color: #FFA500;
   }
 
-  .cardHeader {
-    @include flex-center(row, 0.8rem);
+ .cardHeader {
+    display: flex;
+    align-items: center; // Alinea verticalmente avatar, texto y botones
+    gap: 0.8rem;
     width: 100%;
+    position: relative; // Para control total del flujo
     
     .userBadge {
       @include avatar-base(40px, 10px); 
       font-size: 0.8rem;
-      flex-shrink: 0; 
+      flex-shrink: 0; // Evita que el avatar se aplaste
     }
 
     .userInfo {
       flex: 1;
-      min-width: 0; 
-      strong { display: block; color: #fff; font-size: 0.95rem; }
-      span { font-size: 0.75rem; color: #777; }
+      min-width: 0; // CRUCIAL: Permite que el contenedor se encoja y el texto se trunque
+      
+      strong { 
+        display: block; 
+        color: #fff; 
+        font-size: 0.95rem;
+        white-space: nowrap; // Evita que el nombre salte de línea
+        overflow: hidden;    // Esconde lo que sobra
+        text-overflow: ellipsis; // Añade los "..."
+      }
+      
+      span { 
+        font-size: 0.75rem; 
+        color: #777; 
+      }
+    }
+
+    .ownerActions {
+      display: flex;
+      gap: 0.4rem;
+      flex-shrink: 0; // Evita que los botones se encojan
+      margin-left: auto; // Empuja los botones a la derecha pero respetando el flujo
+
+      button {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        width: 32px;  // Botones cuadrados para mejor hit-target en móvil
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.85rem;
+
+        &:hover {
+          background: rgba(255, 165, 0, 0.1);
+          border-color: #FFA500;
+          transform: translateY(-2px);
+        }
+      }
     }
 
     .likesCount { 
       @include badge-style(rgba(255, 165, 0, 0.1), #FFA500); 
-      font-size: 0.8rem;
-      white-space: nowrap;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* Ajuste para móviles muy estrechos */
+    @media (max-width: 400px) {
+      gap: 0.5rem;
+      .ownerActions {
+        gap: 0.3rem;
+        button {
+          width: 28px;
+          height: 28px;
+        }
+      }
     }
   }
 
@@ -210,7 +320,7 @@
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 
-    .likeBtn, .copyBtn {
+    .likeBtn, .detailsBtn {
       flex: 1;
       font-size: 0.8rem;
       padding: 0.6rem;
@@ -225,7 +335,7 @@
         background: rgba(255, 165, 0, 0.05);
       }
     }
-    .copyBtn { @include btn-primary-gradient; }
+    .detailsBtn { @include btn-primary-gradient; }
   }
 }
 
@@ -261,6 +371,8 @@
     font-size: 1.5rem; 
     color: #fff; 
     text-align: center; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
     span { color: #FFA500; } 
   }
 
@@ -277,6 +389,13 @@
   }
 
   .tagSelector {
+    label {
+      display: block;
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 0.8rem;
+    }
+
     .tagChips {
       display: flex;
       flex-wrap: wrap;
@@ -306,4 +425,16 @@
       .cancelBtn { flex: 1; order: 2; }
     }
   }
+}
+
+/* --- ANIMACIONES --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
 }

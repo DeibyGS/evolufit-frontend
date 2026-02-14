@@ -22,6 +22,16 @@ export const Profile = () => {
   e.preventDefault();
   setErrors({});
 
+  const newErrors = {};
+  if (!passData.oldPass) newErrors.oldPassword = "La contraseña actual es obligatoria";
+  if (!passData.newPass) newErrors.password = "La nueva contraseña es obligatoria";
+  if (!passData.confirmPass) newErrors.password = "La confirmación de la contraseña es obligatoria";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return toast.error('Por favor, completa todos los campos');
+  }
+
   // 1. Validaciones previas en el Cliente (UX inmediata)
   if (passData.newPass !== passData.confirmPass) {
     return toast.error("La nueva contraseña y su confirmación no coinciden.");
@@ -53,13 +63,20 @@ export const Profile = () => {
     if (!res.ok) {
       // Caso A: Errores de validación de Zod (Middleware)
       if (data.errors && Array.isArray(data.errors)) {
-        const apiErrors = {};
-        data.errors.forEach(err => { 
-          if (err.path) apiErrors[err.path] = err.message; 
-        });
-        setErrors(apiErrors);
-        return toast.error('La contraseña no cumple con los requisitos.');
-      }
+  const apiErrors = {};
+  data.errors.forEach(err => { 
+    // Si el path es "body.password", extrae "password"
+    // Si el path es solo "body", asumimos que es el campo principal (password)
+    let cleanPath = err.path.includes('.') ? err.path.split('.').pop() : err.path;
+    
+    if (cleanPath === 'body') cleanPath = 'password'; 
+    
+    apiErrors[cleanPath] = err.message;
+  });
+  
+  setErrors(apiErrors);
+  return; 
+}
       
       // Caso B: Errores de lógica del controlador (ej. 401, 404)
       // Usamos el mensaje que viene del back o uno genérico
@@ -157,18 +174,19 @@ export const Profile = () => {
                     placeholder="Tu clave actual..."
                     value={passData.oldPass}
                     onChange={(e) => setPassData({...passData, oldPass: e.target.value})}
-                    required 
-                  />                  
+                     
+                  />    
+                  {errors.oldPassword && <span className={styles.errorText}>{errors.oldPassword}</span>}              
                 </div>
                 
                 <div className={styles.inputGroup}>
                   <label>Nueva Contraseña</label>
                   <input 
                     type="password" 
-                    placeholder="Mínimo 6 caracteres..."
+                    placeholder="Mínimo 8 caracteres..."
                     value={passData.newPass}
                     onChange={(e) => setPassData({...passData, newPass: e.target.value})}
-                    required 
+                     
                   />
                   {errors.password && <span className={styles.errorText}>{errors.password}</span>}
                 </div>
@@ -180,7 +198,7 @@ export const Profile = () => {
                     placeholder="Repite la nueva clave..."
                     value={passData.confirmPass}
                     onChange={(e) => setPassData({...passData, confirmPass: e.target.value})}
-                    required 
+                     
                   />
                   {errors.password && <span className={styles.errorText}>{errors.password}</span>}
                 </div>

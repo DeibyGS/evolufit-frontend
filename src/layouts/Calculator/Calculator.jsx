@@ -69,44 +69,91 @@ export const Calculator = () => {
     toast.success('¡Análisis completado!');
   };
 
-  const saveResults = async () => {
+ const saveResults = async () => {
     setErrors({});
+
+    const newErrors = {};
+  if (!formData.weight) newErrors.weight = "El peso es obligatorio";
+  if (!formData.height) newErrors.height = "La altura es obligatoria";
+  if (!formData.age) newErrors.age = "La edad es obligatoria";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return toast.error('Por favor, rellena todos los campos');
+  }
+
     try {
+      
+      const weightNum = Number(formData.weight);
+      const heightNum = Number(formData.height);
+      const ageNum = Number(formData.age);
+      const hMeters = heightNum / 100;
+
+      const currentIMC = (weightNum / (hMeters ** 2)).toFixed(1);
+      const currentTMB = formData.gender === 'hombre'
+        ? (10 * weightNum) + (6.25 * heightNum) - (5 * ageNum) + 5
+        : (10 * weightNum) + (6.25 * heightNum) - (5 * ageNum) - 161;
+      const currentTDEE = Math.round(currentTMB * Number(formData.activity));
+
+    
       const payload = {
-        ...results,
-        age: formData.age ? Number(formData.age) : undefined,
-        height: formData.height ? Number(formData.height) : undefined,
-        weight: formData.weight ? Number(formData.weight) : undefined,
-        gender: formData.gender,
-        activity: formData.activity ? Number(formData.activity) : undefined,
-      };
+  // 1. Datos de entrada (Inputs)
+  weight: formData.weight === '' ? undefined : Number(formData.weight),
+  height: formData.height === '' ? undefined : Number(formData.height),
+  age:    formData.age === ''    ? undefined : Number(formData.age),
+  gender: formData.gender,
+  activity: Number(formData.activity),
+
+  // 2. Datos calculados (Fix de NaN)
+  // Usamos Number.isNaN() para verificar si el cálculo matemático falló
+  imc:  Number.isNaN(Number(currentIMC))  ? undefined : Number(currentIMC),
+  tmb:  Number.isNaN(Number(currentTMB))  ? undefined : Math.round(currentTMB),
+  tdee: Number.isNaN(Number(currentTDEE)) ? undefined : Math.round(currentTDEE)
+};
 
       const res = await fetch(`${BASE_URL}/health`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}` 
+        },
         body: JSON.stringify(payload)
       });
 
       const data = await res.json();
 
-      if (!res.ok) {
-        if (data.errors && Array.isArray(data.errors)) {
-          const apiErrors = {};
-          data.errors.forEach(err => { if (err.path) apiErrors[err.path] = err.message; });
-          setErrors(apiErrors);
-          toast.error('Corrige los campos marcados en rojo');
-        } else {
-          throw new Error(data.message || 'Error inesperado');
-        }
-        return;
-      }
+     // DENTRO DE saveResults en tu componente Calculator.jsx
+if (!res.ok) {
+  if (data.errors && Array.isArray(data.errors)) {
+    const apiErrors = {};
+    
+    // Aquí es donde ocurre la magia: llenamos el objeto con todos los fallos
+    data.errors.forEach(err => {
+      // Usamos el path que viene del back (weight, height, age)
+      apiErrors[err.path] = err.message;
+    });
 
+    setErrors(apiErrors); // Esto activa los estilos rojos en todos los inputs
+    isCalculated && setIsCalculated(false); // Si ya se había calculado, lo reseteamos para que el usuario vea los errores
+    return toast.error('Corrige los campos marcados');
+  }
+  throw new Error(data.message || 'Error inesperado');
+}
+    setErrors({});
+
+      // 3. ÉXITO
       toast.success('¡Progreso guardado! 🔥');
       setIsCalculated(false);
       setResults(null);
       fetchFullHistory();
+      formData.weight = '';
+      formData.height = '';
+      formData.age = '';
+      formData.activity = '1.2';
+      
     } catch (error) {
-      toast.error('Error al conectar con el servidor');
+      console.error("Fallo en saveResults:", error);
+      toast.error(error.message || 'Error de conexión');
     }
   };
 

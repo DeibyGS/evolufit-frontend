@@ -72,17 +72,13 @@ export const RegisterForm = () => {
 
     setIsLoading(true); 
 
+    const registrationPayload = {name: formData.name.trim(), lastname: formData.lastname.trim(), age: Number(formData.age), email: formData.email.trim().toLowerCase(), password: formData.password };  
+
     try {
       const response = await fetch(`${BASE_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          lastname: formData.lastname,
-          age: formData.age,
-          email: formData.email,
-          password: formData.password
-        })
+        body: JSON.stringify(registrationPayload)
       });
       
       const data = await response.json();

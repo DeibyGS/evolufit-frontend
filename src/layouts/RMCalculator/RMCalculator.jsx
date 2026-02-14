@@ -109,6 +109,9 @@ export const RMCalculator = () => {
       setResults(null);
       setWeight('');
       setReps('');
+      setSelectedExercise('');
+      setSelectedGroup('');
+
 
     } catch (error) { 
       toast.error(error.message || "Error al guardar"); 
@@ -189,6 +192,8 @@ export const RMCalculator = () => {
                   onChange={(e) => {setWeight(e.target.value); setIsCalculated(false);}} 
                   placeholder="0" 
                 />
+                {errors.weightUsed && <span className={styles.errorText}>{errors.weightUsed}</span>}
+                
               </div>
               <div className={styles.inputGroup}>
                 <label>Reps</label>
@@ -198,6 +203,7 @@ export const RMCalculator = () => {
                   onChange={(e) => {setReps(e.target.value); setIsCalculated(false);}} 
                   placeholder="0" 
                 />
+                {errors.repsDone && <span className={styles.errorText}>{errors.repsDone}</span>}
               </div>
             </div>
 
