@@ -125,6 +125,71 @@ Para explorar todas las funcionalidades de la aplicación sin necesidad de crear
 
 > **Nota:** Este usuario cuenta con un historial de entrenamientos precargado para que puedas visualizar las gráficas de progreso y estadísticas en el Dashboard de forma inmediata.
 
+## 🔌 Integración con la API (Endpoints detallados)
+
+La comunicación entre el Frontend y el Backend se realiza mediante una arquitectura RESTful. Todos los endpoints (excepto Auth) requieren el header `Authorization: Bearer <token>`.
+
+### 🔐 Módulo de Autenticación (`/auth`)
+*Gestión de acceso y creación de identidad.*
+
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| `POST` | `/auth/register` | Registro de nuevos atletas con validación de Zod. |
+| `POST` | `/auth/login` | Autenticación y entrega de Token JWT. |
+
+### 👤 Módulo de Usuarios & Perfil (`/users`)
+*Gestión de la cuenta y visibilidad de la comunidad.*
+
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| `GET` | `/users` | Obtención de todos los usuarios (para Rankings). |
+| `GET` | `/users/:id` | Ver perfil público de un atleta específico. |
+| `PUT` | `/users/profile` | Actualización de datos generales (Nombre, edad, etc.). |
+| `PATCH`| `/users/change-password` | Cambio seguro de contraseña (valida pass actual). |
+| `DELETE`| `/users/delete-me` | Eliminación definitiva de la cuenta del atleta. |
+
+### 🏋️ Módulo de Entrenamientos (`/workouts`)
+*Registro de actividad física y analíticas de rendimiento.*
+
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| `POST` | `/workouts` | Registro de una nueva sesión de entrenamiento. |
+| `GET` | `/workouts/my-workouts` | Historial completo de sesiones del usuario. |
+| `GET` | `/workouts/stats` | Datos analíticos (Distribución muscular/Volumen). |
+| `GET` | `/workouts/total-volume` | Sumatoria de carga total para sistema de logros. |
+| `GET` | `/workouts/:id` | Desglose detallado de ejercicios de una sesión. |
+| `DELETE`| `/workouts/:id` | Eliminación de un registro del historial. |
+
+### 🏆 Módulo de Marcas & Ranking (`/rm`)
+*Control de fuerza máxima y competitividad global.*
+
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| `POST` | `/rm` | Registro de 1 Repetición Máxima (1RM). |
+| `GET` | `/rm` | Historial de récords personales del usuario. |
+| `GET` | `/rm/leaderboard` | Hall of Fame global (Ranking de mejores marcas). |
+| `DELETE`| `/rm/:id` | Eliminación de una marca personal. |
+
+### 📊 Módulo de Salud & Biometría (`/health`)
+*Seguimiento de métricas corporales y gasto calórico.*
+
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| `POST` | `/health` | Registro de IMC, TMB (Mifflin-St Jeor) y TDEE. |
+| `GET` | `/health` | Historial biométrico completo del atleta. |
+| `DELETE`| `/health/:id` | Eliminación de un registro de salud. |
+
+### 🤝 Módulo Social & Comunidad (`/social`)
+*Interacción y compartición de conocimientos.*
+
+| Método | Ruta | Descripción |
+| :--- | :--- | :--- |
+| `GET` | `/social` | Feed comunitario con filtros (músculo/búsqueda). |
+| `POST` | `/social` | Publicación de rutinas en la comunidad. |
+| `PUT` | `/social/:id` | Edición de posts propios. |
+| `PATCH`| `/social/:id/like` | Sistema de interacción "Like" (Toggle). |
+| `DELETE`| `/social/:id` | Eliminación de publicaciones propias. |
+
 ## 🚀 Despliegue del Backend
 
 El backend de **EvolutFit** se encuentra desplegado en la plataforma **Render**.
