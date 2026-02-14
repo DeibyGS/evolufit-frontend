@@ -29,6 +29,7 @@ import { SocialRoutines } from "./layouts/SocialRoutines/SocialRoutines.jsx";
 
 // Componente para scroll al top en navegación
 import { ScrollToTop } from "./components/ScrollToTop.jsx";
+import { ResetPassword } from "./components/ResetPassword.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -45,6 +46,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="auth" element={<AuthPage />} />
           <Route path="register" element={<RegisterForm />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password/:token" element={<ResetPassword />} />
         </Route>
 
         {/* 2. RUTAS PROTEGIDAS: Requieren autenticación y usan un Layout con Sidebar */}

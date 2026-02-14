@@ -1,42 +1,48 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import { BASE_URL } from '../api/API'; // Asegúrate de que la ruta a tu API sea correcta
 import styles from './ForgotPassword.module.scss';
 
-/**
- * FORGOT PASSWORD COMPONENT
- * Maneja la lógica de recuperación de credenciales.
- * NOTA TÉCNICA: Esta funcionalidad se encuentra actualmente en fase de construcción 
- * (Frontend-Ready / Backend-Pending).
- */
 export const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [isSent, setIsSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    // NOTA DE DESARROLLO: Función en construcción. 
-    // Actualmente solo simula el flujo de éxito en el cliente.
     try {
-      console.log('Simulando recuperación para:', email);
-      
-      // Aviso informativo sobre el estado del desarrollo
-      toast.info('Función en desarrollo: El sistema de recuperación se habilitará próximamente.');
-      
-      // Simulamos la transición de estado para pruebas de UI/UX
-      setIsSent(true);
+      // Petición real al backend
+      const response = await fetch(`${BASE_URL}/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase().trim() })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Éxito: El backend generó el token y envió el mail
+        toast.success('¡Enlace enviado! Revisa tu bandeja de entrada.');
+        setIsSent(true);
+      } else {
+        // Error controlado (ej: el usuario no existe o fallo de red)
+        toast.error(data.message || 'No se pudo procesar la solicitud.');
+      }
     } catch (error) {
-      toast.error('Hubo un problema. Inténtalo más tarde.');
+      console.error('Error en ForgotPassword:', error);
+      toast.error('Error de conexión. Inténtalo más tarde.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.formCard}>
-        {/* Badge informativo de funcionalidad en desarrollo */}
-        <div className={styles.wipBadge}>Funcionalidad en Construcción</div>
-
+        {/* Eliminamos el badge de WIP para una experiencia profesional */}
         <h2>Recuperar Contraseña</h2>
         
         {!isSent ? (
@@ -54,17 +60,29 @@ export const ForgotPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="ejemplo@correo.com"
                   required
+                  disabled={isLoading}
                 />
               </div>
-              <button type="submit" className={styles.submitButton}>
-                Enviar Enlace
+              <button 
+                type="submit" 
+                className={styles.submitButton}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Enviando...' : 'Enviar Enlace'}
               </button>
             </form>
           </>
         ) : (
           <div className={styles.successState}>
-            <p>✅ Flujo de prueba completado para: <strong>{email}</strong></p>
-            <p>El envío real de correos electrónicos estará disponible en la próxima actualización.</p>
+            <div className={styles.iconCheck}>✉️</div>
+            <p>Hemos enviado un enlace de recuperación a: <strong>{email}</strong></p>
+            <p className={styles.smallText}>Si no lo recibes en unos minutos, revisa tu carpeta de spam.</p>
+            <button 
+              className={styles.backBtn} 
+              onClick={() => setIsSent(false)}
+            >
+              Intentar con otro correo
+            </button>
           </div>
         )}
 
