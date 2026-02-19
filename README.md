@@ -121,7 +121,7 @@ Como arquitecto de este proyecto, se deben seguir estas pautas estrictas para ma
 Para explorar todas las funcionalidades de la aplicación sin necesidad de crear una cuenta nueva, puedes utilizar las siguientes credenciales de acceso:
 
 - **Email:** `user@user.com`
-- **Contraseña:** `111111`
+- **Contraseña:** `11111111`
 
 > **Nota:** Este usuario cuenta con un historial de entrenamientos precargado para que puedas visualizar las gráficas de progreso y estadísticas en el Dashboard de forma inmediata.
 

@@ -1,12 +1,18 @@
 /**
  * CONFIGURACIÓN CENTRAL DE LA API - EVOLUTFIT
+ * Detecta automáticamente el entorno (Local vs Producción)
  */
 
-// --- DESARROLLO (Local) ---
-// Usa 'localhost' si pruebas en navegador, o tu IP (ej. 192.168.1.XX) si pruebas en móvil físico
-/* export const BASE_URL = "http://localhost:8080/api";
-export const WAKEUP_URL = "http://localhost:8080/api/rm"; */
+// Detectamos si estamos en modo desarrollo
+const isDevelopment = import.meta.env.MODE === "development";
 
-// --- PRODUCCIÓN (Render) ---
-export const BASE_URL = "https://evolufit-backend.onrender.com/api";
-export const WAKEUP_URL = "https://evolufit-backend.onrender.com/api/rm";
+// Definimos la base dependiendo del entorno
+const API_BASE = isDevelopment
+  ? "http://localhost:8080/api"
+  : "https://evolufit-backend.onrender.com/api";
+
+export const BASE_URL = API_BASE;
+export const WAKEUP_URL = `${API_BASE}/rm`;
+
+// Log para que veas en consola a dónde estás apuntando al arrancar
+console.log(`🌐 API conectada a: ${BASE_URL}`);
