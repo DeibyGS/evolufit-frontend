@@ -4,61 +4,69 @@
   @include section-container;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem; // Padding reducido para móviles
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden; // Garantía anti-desborde
 
-  // HEADER MODELO RM
   .header {
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    flex-direction: column; // Apilado en móvil
+    gap: 1.5rem;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
 
     .titleSection {
       h2 {
-        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        font-size: clamp(1.6rem, 5vw, 2.5rem);
         color: #fff;
         font-weight: 900;
         text-transform: uppercase;
+        margin: 0;
         span { @include text-gradient-orange; }
       }
-      p { color: #666; margin-top: 0.5rem; }
+      p { color: #666; margin-top: 0.5rem; font-size: 0.9rem; }
     }
 
     .shareBtn {
       @include btn-primary-gradient;
       height: 3.5rem;
-      padding: 0 2rem;
+      padding: 0 1.5rem;
       border-radius: 15px;
       font-weight: 800;
       border: none;
       cursor: pointer;
-      transition: all 0.3s ease;
-      &:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 165, 0, 0.2); }
+      width: 100%; // Ancho completo en móvil
+      font-size: 0.9rem;
+      
+      @media (min-width: 768px) {
+        width: auto;
+      }
     }
   }
 }
 
-// BARRA DE FILTROS (ESTILO INPUTS RM)
+// BARRA DE FILTROS RESPONSIVE
 .filterBar {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   margin-bottom: 2.5rem;
-  align-items: flex-end;
+  width: 100%;
 
-  @media (max-width: 768px) { grid-template-columns: 1fr; }
-
-  .selectors {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: flex-end;
   }
 
   .inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    
+    width: 100%;
     input {
       @include input-standard;
       background: #000;
@@ -66,66 +74,91 @@
       padding: 0 1.2rem;
       border-radius: 15px;
       height: 3.5rem;
+      width: 100%;
       color: #fff;
+      box-sizing: border-box;
       &:focus { border-color: #FFA500; background: rgba(255, 165, 0, 0.02); }
     }
   }
 
-  .fullWidthSelect {
-    @include input-standard;
-    background: #000;
-    border: 1px solid #1a1a1a;
-    padding: 0 2.5rem 0 1.2rem;
-    border-radius: 15px;
-    height: 3.5rem;
-    color: #fff;
-    appearance: none;
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFA500' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1.1rem;
-    option { background: #141414; }
-  }
-
-  .sortToggle {
+  .selectors {
     display: flex;
-    background: #141414;
-    padding: 0.3rem;
-    border-radius: 12px;
-    border: 1px solid #1a1a1a;
-    height: 3.5rem;
-    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
 
-    button {
-      border: none;
-      background: transparent;
-      color: #444;
-      padding: 0 1.2rem;
-      height: 100%;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 0.8rem;
-      &.activeSort { background: #FFA500; color: #000; }
+    @media (min-width: 480px) {
+      flex-direction: row;
+    }
+
+    .fullWidthSelect {
+      @include input-standard;
+      background: #000;
+      border: 1px solid #1a1a1a;
+      padding: 0 2.5rem 0 1.2rem;
+      border-radius: 15px;
+      height: 3.5rem;
+      width: 100%;
+      color: #fff;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFA500' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.1rem;
+      box-sizing: border-box;
+      
+      @media (min-width: 768px) { width: 200px; }
+    }
+
+    .sortToggle {
+      display: flex;
+      background: #141414;
+      padding: 0.3rem;
+      border-radius: 12px;
+      border: 1px solid #1a1a1a;
+      height: 3.5rem;
+      box-sizing: border-box;
+      width: 100%;
+
+      @media (min-width: 768px) { width: auto; }
+
+      button {
+        flex: 1;
+        border: none;
+        background: transparent;
+        color: #444;
+        padding: 0 1rem;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        &.activeSort { background: #FFA500; color: #000; }
+      }
     }
   }
 }
 
-// GRID DE RUTINAS (ESTILO HISTORY CARD)
+// POSTS GRID
 .postsGrid {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  width: 100%;
 }
 
 .routineCard {
   background: #141414;
   border: 1px solid #1a1a1a;
-  padding: 1.8rem 2.2rem;
+  padding: 1.2rem; // Padding reducido para móviles
   border-radius: 20px;
   position: relative;
-  transition: all 0.3s ease;
+  box-sizing: border-box;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    padding: 1.8rem 2.2rem;
+  }
 
   &.isMeCard {
     border-left: 4px solid #FFA500;
@@ -133,39 +166,40 @@
   }
 
   .meBadge {
-    position: absolute; top: 0; right: 2rem; background: #FFA500; color: #000;
-    font-size: 0.6rem; font-weight: 900; padding: 4px 12px; border-radius: 0 0 8px 8px;
+    position: absolute; top: 0; right: 1.2rem; background: #FFA500; color: #000;
+    font-size: 0.6rem; font-weight: 900; padding: 4px 10px; border-radius: 0 0 8px 8px;
   }
 
   .cardHeader {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.8rem;
     margin-bottom: 1.2rem;
 
     .userAvatar {
-      width: 42px; height: 42px; background: #222; border-radius: 10px;
+      width: 38px; height: 38px; background: #222; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 0.9rem; color: #fff;
+      font-weight: 800; font-size: 0.8rem; color: #fff; flex-shrink: 0;
     }
     .avatarMe { background: #FFA500; color: #000; }
 
     .userInfo {
       flex: 1;
-      strong { color: #fff; font-size: 1rem; display: block; }
+      min-width: 0; // Permite que el texto se trunque
+      strong { color: #fff; font-size: 0.95rem; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .dateBadge { font-size: 0.7rem; color: #444; }
     }
-    .likesCount { color: #FFA500; font-weight: 900; font-size: 0.9rem; }
+    .likesCount { color: #FFA500; font-weight: 900; font-size: 0.85rem; flex-shrink: 0; }
   }
 
   .cardBody {
-    h4 { color: #fff; font-size: 1.2rem; margin-bottom: 0.6rem; letter-spacing: 0.5px; }
-    p { color: #888; line-height: 1.6; font-size: 0.95rem; }
-    .truncated { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    h4 { color: #fff; font-size: 1.1rem; margin-bottom: 0.6rem; word-break: break-word; }
+    p { color: #888; line-height: 1.6; font-size: 0.9rem; word-break: break-word; }
+    .truncated { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     
     .tagCloud {
-      display: flex; gap: 0.6rem; margin-top: 1rem;
-      .tag { font-size: 0.7rem; color: #FFA500; font-weight: 700; text-transform: uppercase; }
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;
+      .tag { font-size: 0.65rem; color: #FFA500; font-weight: 700; text-transform: uppercase; }
     }
   }
 
@@ -173,119 +207,105 @@
     margin-top: 1.5rem;
     padding-top: 1.2rem;
     border-top: 1px solid rgba(255,255,255,0.03);
-    display: flex; gap: 1rem; align-items: center;
+    display: flex;
+    flex-direction: column; // Botones apilados en móvil
+    gap: 0.8rem;
+
+    @media (min-width: 480px) {
+      flex-direction: row;
+      align-items: center;
+    }
 
     .likeBtn, .detailsBtn {
+      width: 100%; // Ancho completo en móvil
       background: #1a1a1a; border: 1px solid #222; color: #fff;
-      padding: 0 1.2rem; height: 2.8rem; border-radius: 10px;
+      padding: 0 1rem; height: 3rem; border-radius: 12px;
       font-size: 0.75rem; font-weight: 800; cursor: pointer;
-      transition: all 0.2s ease;
-      &:hover { border-color: #444; }
+      
+      @media (min-width: 480px) { width: auto; }
     }
 
     .activeLike { color: #FFA500; border-color: #FFA500; background: rgba(255, 165, 0, 0.05); }
 
     .meActions {
-      margin-left: auto;
-      display: flex; gap: 0.8rem;
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      margin-top: 0.5rem;
+      @media (min-width: 480px) { margin-left: auto; margin-top: 0; }
+
       button { 
-        background: none; border: none; font-size: 1.1rem; cursor: pointer; 
-        opacity: 0.3; transition: 0.2s;
-        &:hover { opacity: 1; transform: scale(1.1); }
+        background: none; border: none; font-size: 1.2rem; cursor: pointer; 
+        padding: 5px;
       }
     }
   }
 }
 
-// MODAL (ESTILO FORM SIDE RM)
-.modalOverlay { @include modal-overlay; }
+// MODAL RESPONSIVE
+.modalOverlay { @include modal-overlay; z-index: 1000; }
 
 .modalContent {
   @include card-glass;
   background: #141414;
-  padding: 2.5rem;
+  padding: 1.5rem;
   border-radius: 25px;
   border: 1px solid #222;
-  width: 95%; max-width: 550px;
+  width: 92%;
+  max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) { padding: 2.5rem; }
 
   h3 {
-    font-size: 1.8rem; color: #fff; margin-bottom: 2rem;
+    font-size: 1.5rem; color: #fff; margin-bottom: 1.5rem;
     span { @include text-gradient-orange; }
   }
 
-  .form { display: flex; flex-direction: column; gap: 1.5rem; }
+  .form { display: flex; flex-direction: column; gap: 1.2rem; }
 
   .inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-
-    label {
-      color: #FFA500;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
     input, textarea {
       @include input-standard;
       background: #000;
       border: 1px solid #1a1a1a;
-      padding: 0 1.2rem;
-      border-radius: 15px;
+      padding: 0 1rem;
+      border-radius: 12px;
       width: 100%;
       color: #fff;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      &:focus { border-color: #FFA500; background: rgba(255, 165, 0, 0.02); outline: none; }
-      &.inputError { border-color: #ff4d4d !important; background: rgba(255, 77, 77, 0.05); }
+      box-sizing: border-box;
+      font-size: 16px; // Evita zoom automático en iPhone
     }
-
-    input { height: 3.5rem; }
-    textarea { height: 10rem; padding: 1.2rem; resize: none; line-height: 1.5; }
-
-    .errorText { color: #ff4d4d; font-size: 0.65rem; font-weight: 600; margin-top: 2px; }
+    textarea { height: 8rem; padding: 1rem; }
   }
 }
 
 .tagSelector {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  label { color: #FFA500; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
   .tagChips {
-    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
     button {
-      background: #000; border: 1px solid #1a1a1a; color: #444;
-      padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.75rem;
-      font-weight: 700; cursor: pointer;
-      &.tagActive { border-color: #FFA500; color: #FFA500; background: rgba(255,165,0,0.05); }
+      background: #000; border: 1px solid #1a1a1a; color: #555;
+      padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.7rem;
+      &.tagActive { border-color: #FFA500; color: #FFA500; }
     }
   }
 }
 
 .modalActions {
-  display: flex; gap: 1rem; margin-top: 1rem;
-  .calcBtn {
-    @include btn-primary-gradient;
-    flex: 2; height: 3.5rem; border-radius: 15px; font-weight: 800; cursor: pointer; border: none;
-  }
-  .cancelBtn {
-    flex: 1; background: transparent; border: 1px solid #1a1a1a; color: #444;
-    border-radius: 15px; font-weight: 700; cursor: pointer;
-    &:hover { color: #fff; border-color: #444; }
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  
+  @media (min-width: 480px) { flex-direction: row; }
+
+  .calcBtn { @include btn-primary-gradient; height: 3.5rem; border-radius: 12px; flex: 2; border: none; font-weight: 800; }
+  .cancelBtn { height: 3.5rem; border-radius: 12px; flex: 1; background: transparent; border: 1px solid #222; color: #666; font-weight: 700; }
 }
 
 .loadMoreBtn {
-  margin: 3rem auto; display: block; background: none; border: 1px solid #1a1a1a;
-  color: #FFA500; padding: 0.8rem 2.5rem; border-radius: 12px;
-  font-weight: 800; font-size: 0.8rem; cursor: pointer;
-  &:hover { background: #1a1a1a; }
-}
-
-.placeholder {
-  padding: 4rem; text-align: center; color: #444; font-weight: 600;
-  border: 2px dashed #1a1a1a; border-radius: 25px;
+  margin: 2rem auto; display: block; background: transparent; border: 1px solid #1a1a1a;
+  color: #FFA500; padding: 0.8rem 2rem; border-radius: 12px; font-weight: 800;
 }
