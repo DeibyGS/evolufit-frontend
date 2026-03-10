@@ -1,440 +1,291 @@
 @use "../../styles/mixins" as *;
 
-/* --- CONTENEDOR PRINCIPAL --- */
 .socialContainer {
   @include section-container;
-  width: 100%;            
-  max-width: 100vw;       
-  overflow-x: hidden;     
-  box-sizing: border-box;
-  padding: 1rem;          
-  padding-bottom: 5rem;   
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 
+  // HEADER MODELO RM
   .header {
-    @include flex-center(row, 1rem);
+    margin-bottom: 3rem;
+    display: flex;
     justify-content: space-between;
-    margin-bottom: 2rem;
-    flex-wrap: wrap; 
-    width: 100%;          
-    box-sizing: border-box;
+    align-items: flex-end;
 
     .titleSection {
-      h2 { 
-        font-size: clamp(1.5rem, 4vw, 1.8rem); 
-        color: #fff; 
-        span { color: #FFA500; } 
+      h2 {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        color: #fff;
+        font-weight: 900;
+        text-transform: uppercase;
+        span { @include text-gradient-orange; }
       }
-      p { 
-        color: var(--tertiary-color-text); 
-        font-size: 0.9rem; 
-        max-width: 100%; 
-      }
+      p { color: #666; margin-top: 0.5rem; }
     }
 
-    .shareBtn { 
-      @include btn-primary-gradient; 
-      width: 100%; 
-      padding: 0.8rem 1.5rem; 
-      border-radius: 50px; 
-      font-size: 0.9rem;
-      margin-top: 1rem;
-      white-space: nowrap; 
-
-      @media (min-width: 768px) {
-        width: auto; 
-        margin-top: 0;
-      }
+    .shareBtn {
+      @include btn-primary-gradient;
+      height: 3.5rem;
+      padding: 0 2rem;
+      border-radius: 15px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      &:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 165, 0, 0.2); }
     }
   }
 }
 
-/* --- BARRA DE FILTROS --- */
+// BARRA DE FILTROS (ESTILO INPUTS RM)
 .filterBar {
-  @include card-glass;
-  display: flex;
-  flex-direction: column; 
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 1.2rem;
-  padding: 1.2rem;
   margin-bottom: 2.5rem;
-  width: 100%;          
-  box-sizing: border-box;
+  align-items: flex-end;
 
-  .searchBox {
-    width: 100%;
-    input { 
-      @include input-standard; 
-      width: 100%; 
-      box-sizing: border-box;
-    }
-  }
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
 
   .selectors {
-    width: 100%;
     display: flex;
-    gap: 0.8rem;
-    
-    select { 
-      @include input-standard; 
-      flex: 1; 
-      width: 100%; 
-      min-width: 0; 
-      font-size: 0.85rem;
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFA500' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.5rem center;
-      background-size: 0.8rem;
-      text-overflow: ellipsis; 
-    }
-  }
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    padding: 1.5rem 2rem;
-    .searchBox { flex: 2; }
-    .selectors { flex: 1; }
-  }
-}
-
-/* --- GRID DE POSTS --- */
-.postsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.5rem;
-  width: 100%;
-  box-sizing: border-box;
-  
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr; 
     gap: 1rem;
+    align-items: center;
   }
 
-  /* --- NUEVO: ESTADO DE CARGA --- */
-  .loadingContainer {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 3rem;
-    color: #FFA500;
-    font-weight: bold;
-    letter-spacing: 1px;
-    animation: pulse 1.5s infinite ease-in-out;
-  }
-
-  /* --- NUEVO: ESTADO VACÍO (EMPTY STATE) --- */
-  .emptyStateContainer {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 4rem 2rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 165, 0, 0.3);
-    border-radius: 15px;
-    margin-top: 1rem;
-    animation: fadeIn 0.5s ease;
-
-    .emptyIcon {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    h3 {
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    
+    input {
+      @include input-standard;
+      background: #000;
+      border: 1px solid #1a1a1a;
+      padding: 0 1.2rem;
+      border-radius: 15px;
+      height: 3.5rem;
       color: #fff;
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+      &:focus { border-color: #FFA500; background: rgba(255, 165, 0, 0.02); }
     }
+  }
 
-    p {
-      color: var(--tertiary-color-text);
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-    }
+  .fullWidthSelect {
+    @include input-standard;
+    background: #000;
+    border: 1px solid #1a1a1a;
+    padding: 0 2.5rem 0 1.2rem;
+    border-radius: 15px;
+    height: 3.5rem;
+    color: #fff;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFA500' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.1rem;
+    option { background: #141414; }
+  }
 
-    .resetBtn {
+  .sortToggle {
+    display: flex;
+    background: #141414;
+    padding: 0.3rem;
+    border-radius: 12px;
+    border: 1px solid #1a1a1a;
+    height: 3.5rem;
+    align-items: center;
+
+    button {
+      border: none;
       background: transparent;
-      border: 1px solid #FFA500;
-      color: #FFA500;
-      padding: 0.7rem 1.5rem;
-      border-radius: 50px;
+      color: #444;
+      padding: 0 1.2rem;
+      height: 100%;
+      border-radius: 10px;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: #FFA500;
-        color: #000;
-        transform: scale(1.05);
-      }
+      font-size: 0.8rem;
+      &.activeSort { background: #FFA500; color: #000; }
     }
   }
 }
 
-.routineCard {
-  @include card-glass;
+// GRID DE RUTINAS (ESTILO HISTORY CARD)
+.postsGrid {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  transition: all 0.3s ease;
-  border-bottom: 3px solid transparent;
-  width: 100%; 
-  max-width: 100%; 
-  overflow: hidden;
-  box-sizing: border-box;
+}
 
-  &:hover { 
-    transform: translateY(-5px); 
-    border-bottom-color: #FFA500;
+.routineCard {
+  background: #141414;
+  border: 1px solid #1a1a1a;
+  padding: 1.8rem 2.2rem;
+  border-radius: 20px;
+  position: relative;
+  transition: all 0.3s ease;
+
+  &.isMeCard {
+    border-left: 4px solid #FFA500;
+    background: linear-gradient(90deg, rgba(255, 165, 0, 0.04) 0%, transparent 100%);
   }
 
- .cardHeader {
+  .meBadge {
+    position: absolute; top: 0; right: 2rem; background: #FFA500; color: #000;
+    font-size: 0.6rem; font-weight: 900; padding: 4px 12px; border-radius: 0 0 8px 8px;
+  }
+
+  .cardHeader {
     display: flex;
-    align-items: center; // Alinea verticalmente avatar, texto y botones
-    gap: 0.8rem;
-    width: 100%;
-    position: relative; // Para control total del flujo
-    
-    .userBadge {
-      @include avatar-base(40px, 10px); 
-      font-size: 0.8rem;
-      flex-shrink: 0; // Evita que el avatar se aplaste
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+
+    .userAvatar {
+      width: 42px; height: 42px; background: #222; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.9rem; color: #fff;
     }
+    .avatarMe { background: #FFA500; color: #000; }
 
     .userInfo {
       flex: 1;
-      min-width: 0; // CRUCIAL: Permite que el contenedor se encoja y el texto se trunque
-      
-      strong { 
-        display: block; 
-        color: #fff; 
-        font-size: 0.95rem;
-        white-space: nowrap; // Evita que el nombre salte de línea
-        overflow: hidden;    // Esconde lo que sobra
-        text-overflow: ellipsis; // Añade los "..."
-      }
-      
-      span { 
-        font-size: 0.75rem; 
-        color: #777; 
-      }
+      strong { color: #fff; font-size: 1rem; display: block; }
+      .dateBadge { font-size: 0.7rem; color: #444; }
     }
-
-    .ownerActions {
-      display: flex;
-      gap: 0.4rem;
-      flex-shrink: 0; // Evita que los botones se encojan
-      margin-left: auto; // Empuja los botones a la derecha pero respetando el flujo
-
-      button {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        width: 32px;  // Botones cuadrados para mejor hit-target en móvil
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-size: 0.85rem;
-
-        &:hover {
-          background: rgba(255, 165, 0, 0.1);
-          border-color: #FFA500;
-          transform: translateY(-2px);
-        }
-      }
-    }
-
-    .likesCount { 
-      @include badge-style(rgba(255, 165, 0, 0.1), #FFA500); 
-      font-size: 0.75rem;
-      padding: 0.2rem 0.5rem;
-      flex-shrink: 0;
-    }
-
-    /* Ajuste para móviles muy estrechos */
-    @media (max-width: 400px) {
-      gap: 0.5rem;
-      .ownerActions {
-        gap: 0.3rem;
-        button {
-          width: 28px;
-          height: 28px;
-        }
-      }
-    }
+    .likesCount { color: #FFA500; font-weight: 900; font-size: 0.9rem; }
   }
 
   .cardBody {
-    flex: 1;
-    h4 { 
-      color: #fff; 
-      font-size: 1.2rem; 
-      margin-bottom: 0.6rem; 
-      word-wrap: break-word; 
-    }
+    h4 { color: #fff; font-size: 1.2rem; margin-bottom: 0.6rem; letter-spacing: 0.5px; }
+    p { color: #888; line-height: 1.6; font-size: 0.95rem; }
+    .truncated { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     
-    .contentWrapper {
-      max-height: 4.5em; 
-      overflow: hidden;
-      transition: max-height 0.4s ease;
-      
-      p {
-        color: var(--tertiary-color-text); 
-        font-size: 0.9rem; 
-        line-height: 1.5;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        word-break: break-word; 
-      }
-
-      &.showFull {
-        max-height: 1000px;
-        p {
-          -webkit-line-clamp: unset;
-          display: block;
-          white-space: pre-wrap;
-        }
-      }
-    }
-    
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      
-      .tag { 
-        font-size: 0.65rem; 
-        color: #FFA500; 
-        font-weight: 700; 
-      }
+    .tagCloud {
+      display: flex; gap: 0.6rem; margin-top: 1rem;
+      .tag { font-size: 0.7rem; color: #FFA500; font-weight: 700; text-transform: uppercase; }
     }
   }
 
   .cardActions {
-    display: flex;
-    gap: 0.8rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 1.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(255,255,255,0.03);
+    display: flex; gap: 1rem; align-items: center;
 
     .likeBtn, .detailsBtn {
-      flex: 1;
-      font-size: 0.8rem;
-      padding: 0.6rem;
-      white-space: nowrap; 
+      background: #1a1a1a; border: 1px solid #222; color: #fff;
+      padding: 0 1.2rem; height: 2.8rem; border-radius: 10px;
+      font-size: 0.75rem; font-weight: 800; cursor: pointer;
+      transition: all 0.2s ease;
+      &:hover { border-color: #444; }
     }
 
-    .likeBtn { 
-      @include btn-secondary; 
-      &.activeLike {
-        color: #FFA500;
-        border-color: #FFA500;
-        background: rgba(255, 165, 0, 0.05);
+    .activeLike { color: #FFA500; border-color: #FFA500; background: rgba(255, 165, 0, 0.05); }
+
+    .meActions {
+      margin-left: auto;
+      display: flex; gap: 0.8rem;
+      button { 
+        background: none; border: none; font-size: 1.1rem; cursor: pointer; 
+        opacity: 0.3; transition: 0.2s;
+        &:hover { opacity: 1; transform: scale(1.1); }
       }
     }
-    .detailsBtn { @include btn-primary-gradient; }
   }
 }
 
-/* --- MODAL --- */
-.modalOverlay {
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100vw;   
-  height: 100vh; 
-  background: rgba(0,0,0,0.9); 
-  backdrop-filter: blur(8px);
-  @include flex-center; 
-  z-index: 2000;
-  padding: 1rem; 
-  box-sizing: border-box; 
-}
+// MODAL (ESTILO FORM SIDE RM)
+.modalOverlay { @include modal-overlay; }
 
 .modalContent {
   @include card-glass;
-  width: 100%; 
-  max-width: 600px;
-  max-height: 90vh; 
-  overflow-y: auto; 
-  background: #111;
+  background: #141414;
+  padding: 2.5rem;
+  border-radius: 25px;
+  border: 1px solid #222;
+  width: 95%; max-width: 550px;
+
+  h3 {
+    font-size: 1.8rem; color: #fff; margin-bottom: 2rem;
+    span { @include text-gradient-orange; }
+  }
+
+  .form { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    label {
+      color: #FFA500;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, textarea {
+      @include input-standard;
+      background: #000;
+      border: 1px solid #1a1a1a;
+      padding: 0 1.2rem;
+      border-radius: 15px;
+      width: 100%;
+      color: #fff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      &:focus { border-color: #FFA500; background: rgba(255, 165, 0, 0.02); outline: none; }
+      &.inputError { border-color: #ff4d4d !important; background: rgba(255, 77, 77, 0.05); }
+    }
+
+    input { height: 3.5rem; }
+    textarea { height: 10rem; padding: 1.2rem; resize: none; line-height: 1.5; }
+
+    .errorText { color: #ff4d4d; font-size: 0.65rem; font-weight: 600; margin-top: 2px; }
+  }
+}
+
+.tagSelector {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  padding: 1.5rem;
-  box-sizing: border-box;
-
-  h3 { 
-    font-size: 1.5rem; 
-    color: #fff; 
-    text-align: center; 
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    span { color: #FFA500; } 
-  }
-
-  .modalInput, .modalTextarea { 
-    @include input-standard; 
-    font-size: 0.9rem;
-    width: 100%;         
-    box-sizing: border-box; 
-  }
-  
-  textarea { 
-    min-height: 120px; 
-    resize: vertical;   
-  }
-
-  .tagSelector {
-    label {
-      display: block;
-      color: #888;
-      font-size: 0.85rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .tagChips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      
-      button { 
-        @include chip-button; 
-        font-size: 0.75rem;
-        padding: 0.4rem 0.8rem;
-        &.tagActive { @include chip-button(true); }
-      }
-    }
-  }
-
-  .modalActions {
-    display: flex;
-    flex-direction: column; 
-    gap: 1rem;
-    margin-top: 1rem;
-
-    .publishBtn { @include btn-primary-gradient; order: 1; }
-    .cancelBtn { @include btn-secondary; order: 2; }
-
-    @media (min-width: 480px) {
-      flex-direction: row; 
-      .publishBtn { flex: 2; order: 1; }
-      .cancelBtn { flex: 1; order: 2; }
+  gap: 0.8rem;
+  label { color: #FFA500; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+  .tagChips {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    button {
+      background: #000; border: 1px solid #1a1a1a; color: #444;
+      padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.75rem;
+      font-weight: 700; cursor: pointer;
+      &.tagActive { border-color: #FFA500; color: #FFA500; background: rgba(255,165,0,0.05); }
     }
   }
 }
 
-/* --- ANIMACIONES --- */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.modalActions {
+  display: flex; gap: 1rem; margin-top: 1rem;
+  .calcBtn {
+    @include btn-primary-gradient;
+    flex: 2; height: 3.5rem; border-radius: 15px; font-weight: 800; cursor: pointer; border: none;
+  }
+  .cancelBtn {
+    flex: 1; background: transparent; border: 1px solid #1a1a1a; color: #444;
+    border-radius: 15px; font-weight: 700; cursor: pointer;
+    &:hover { color: #fff; border-color: #444; }
+  }
 }
 
-@keyframes pulse {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
+.loadMoreBtn {
+  margin: 3rem auto; display: block; background: none; border: 1px solid #1a1a1a;
+  color: #FFA500; padding: 0.8rem 2.5rem; border-radius: 12px;
+  font-weight: 800; font-size: 0.8rem; cursor: pointer;
+  &:hover { background: #1a1a1a; }
+}
+
+.placeholder {
+  padding: 4rem; text-align: center; color: #444; font-weight: 600;
+  border: 2px dashed #1a1a1a; border-radius: 25px;
 }

@@ -7,94 +7,87 @@ import { BASE_URL } from '../api/API';
 import { FullPageLoader } from '../components/FullPageLoader';
 
 /**
- * COMPONENTE: LoginForm - Versión Optimizada
- * Gestión de autenticación con sanitización de inputs y manejo de errores proactivo.
+ * COMPONENTE: LoginForm - EvoluFit Optimized
+ * Gestión de autenticación con mapeo de errores Zod del backend.
  */
 export const LoginForm = () => {
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const [errors, setErrors] = useState({});
-  
   const [isLoading, setIsLoading] = useState(false);
+  
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
-  /**
-   * Manejador de cambios en los inputs
-   */
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Limpieza reactiva de error al escribir
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }));
+    }
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-  setErrors({}); // Limpiamos errores previos
+    e.preventDefault();
+    setIsLoading(true);
+    setErrors({}); 
 
-  // 1. Sanitización (Vital para evitar fallos por mayúsculas/espacios)
-  const loginPayload = {
-    email: formData.email.trim().toLowerCase(),
-    password: formData.password
-  };
+    const loginPayload = {
+      email: formData.email.trim().toLowerCase(),
+      password: formData.password
+    };
 
-  try {
-    const res = await fetch(`${BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(loginPayload)
-    });
-    
-    const data = await res.json();
-
-    if (!res.ok) {
-      // Caso A: Errores de validación de Zod (ej. formato de email inválido)
-      if (data.errors && Array.isArray(data.errors)) {
-        const apiErrors = {};
-        data.errors.forEach(err => { 
-          if (err.path) apiErrors[err.path] = err.message; 
-        });
-        setErrors(apiErrors);
-        toast.error('Corrige los campos marcados');
-      } 
-      // Caso B: Error de credenciales (401, 404) o errores genéricos
-      else {
-        toast.error(data.message || 'Credenciales incorrectas');
-      }
+    try {
+      const res = await fetch(`${BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginPayload)
+      });
       
-      setIsLoading(false);
-      return; // Detenemos la ejecución
-    }
+      const data = await res.json();
 
-    // --- ÉXITO ---
-    toast.success(`¡Bienvenido de nuevo, ${data.user.name}!`);
-    
-    // 3. Persistencia en el store global (Zustand)
-    login(data.user, data.token); 
-    
-    // 4. Redirección
-    navigate('/dashboard'); 
-    
-    // Nota: No es estrictamente necesario hacer setIsLoading(false) aquí 
-    // porque el componente se desmontará al navegar.
-  } catch (error) {
-    // 5. Manejo de errores de red o servidor apagado
-    console.error("🔥 Login Error:", error);
-    toast.error('Error de conexión. El servidor podría estar reiniciándose.');
-    setIsLoading(false);
-  }
-};
+      if (!res.ok) {
+        // Caso A: Errores de validación de Zod (Array de errores)
+        if (data.errors && Array.isArray(data.errors)) {
+          const apiErrors = {};
+          data.errors.forEach(err => { 
+            // Zod devuelve el campo en un array 'path'
+            const fieldName = Array.isArray(err.path) ? err.path[0] : err.path;
+            if (fieldName) apiErrors[fieldName] = err.message; 
+          });
+          setErrors(apiErrors);
+          toast.error('Revisa los datos ingresados');
+        } 
+        // Caso B: Credenciales incorrectas o errores de lógica
+        else {
+          toast.error(data.message || 'Credenciales incorrectas');
+        }
+        
+        setIsLoading(false);
+        return;
+      }
+
+      // ÉXITO
+      toast.success(`¡Bienvenido de nuevo, ${data.user.name}!`);
+      login(data.user, data.token); 
+      navigate('/dashboard'); 
+
+    } catch (error) {
+      console.error("🔥 Login Error:", error);
+      toast.error('Error de conexión con el servidor de EvoluFit.');
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={styles.loginContainer}>
-      {/* Feedback visual de carga para mitigar la latencia del servidor */}
       {isLoading && <FullPageLoader />} 
       
-      <form className={styles.loginForm} onSubmit={handleSubmit}>
+      <form className={styles.loginForm} onSubmit={handleSubmit} noValidate>
         <div className={styles.formHeader}>
           <h2>Iniciar Sesión</h2>
         </div>
@@ -105,6 +98,7 @@ export const LoginForm = () => {
             type="email"
             id="email"
             name="email"
+            className={errors.email ? styles.inputError : ''}
             value={formData.email}
             onChange={handleChange}
             placeholder="ejemplo@correo.com"
@@ -120,6 +114,7 @@ export const LoginForm = () => {
             type="password"
             id="password"
             name="password"
+            className={errors.password ? styles.inputError : ''}
             value={formData.password}
             onChange={handleChange}
             placeholder="********"
@@ -127,7 +122,6 @@ export const LoginForm = () => {
             required
           />
           {errors.password && <span className={styles.errorText}>{errors.password}</span>}
-          
         </div>
 
         <div className={styles.forgotPassword}>

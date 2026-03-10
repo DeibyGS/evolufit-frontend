@@ -379,3 +379,19 @@
     }
   }
 }
+
+@mixin modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85); // Fondo oscuro semi-transparente
+  backdrop-filter: blur(8px);      // Efecto de desenfoque detrás del modal
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}

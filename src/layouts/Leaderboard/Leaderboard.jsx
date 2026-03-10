@@ -1,39 +1,78 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, } from 'react';
 import styles from './Leaderboard.module.scss';
 import { useAuthStore } from '../../store/authStore';
 import { BASE_URL } from '../../api/API';
+import { toast } from 'sonner';
 
 export const Leaderboard = () => {
   const { token, user } = useAuthStore();
+  
   const [ranking, setRanking] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const LIMIT = 10;
 
-  useEffect(() => {
-    fetchLeaderboard();
+  const fetchLeaderboard = useCallback(async (pageNumber = 1, isInitial = false) => {
+    try {
+      if (isInitial) setLoading(true);
+      else setLoadingMore(true);
+
+      const response = await fetch(`${BASE_URL}/rm/leaderboard?page=${pageNumber}&limit=${LIMIT}`, {
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      const data = await response.json();
+
+      if (response.ok) {
+        const newItems = data.records || [];
+        setRanking(prev => isInitial ? newItems : [...prev, ...newItems]);
+        setHasNextPage(data.hasNextPage || false);
+        setPage(pageNumber);
+      } else {
+        toast.error(data.message || "Error al cargar el ranking");
+      }
+    } catch (error) {
+      console.error("🔥 Error EvoluFit:", error);
+      toast.error("No se pudo conectar con el servidor");
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
   }, [token]);
 
-  const fetchLeaderboard = async () => {
-    try {
-      const res = await fetch(`${BASE_URL}/rm/leaderboard`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (res.ok) setRanking(data);
-    } catch (error) {
-      console.error("Error al conectar con la API:", error);
+  useEffect(() => {
+    if (token) fetchLeaderboard(1, true);
+  }, [token, fetchLeaderboard]);
+
+  const handleLoadMore = () => {
+    if (!loadingMore && hasNextPage) {
+      fetchLeaderboard(page + 1);
     }
   };
 
+  if (loading && page === 1) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Cargando Hall of Fame...</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.leaderboardContainer}>
-      {/* Header Unificado */}
       <header className={styles.header}>
         <div className={styles.titleSection}>
           <h2>Hall of <span>Fame</span> 🏆</h2>
-          <p>Los levantamientos más pesados de la comunidad EvolutFit.</p>
+          <p>Los récords actuales de la comunidad EvoluFit</p>
         </div>
       </header>
 
-      {/* Contenedor de Tabla con ADN EvolutFit */}
       <div className={styles.tableCard}>
         <div className={styles.tableHeader}>
           <span>Ejercicio</span>
@@ -42,11 +81,20 @@ export const Leaderboard = () => {
         </div>
         
         <div className={styles.rowsContainer}>
-          {ranking.map((item) => {
-            const isMe = item.user.name === user.name;
+          {ranking.map((item, index) => {
+            // LÓGICA CRÍTICA: Comparación de IDs según tu JSON del backend
+            const currentUserId = user?._id || user?.id;
+            const recordUserId = item.userId; // El backend envía userId directamente
+            
+            const isMe = currentUserId && recordUserId && String(currentUserId) === String(recordUserId);
+            
+            // Fallback para el nombre si el objeto user no viene poblado
+            const userName = item.user?.name || (isMe ? user?.name : 'Atleta');
+            const userLastName = item.user?.lastname || (isMe ? user?.lastname : 'EvoluFit');
+
             return (
               <article 
-                key={item._id} 
+                key={`${item._id}-${index}`} 
                 className={`${styles.row} ${isMe ? styles.isMe : ''}`}
               >
                 <div className={styles.exerciseInfo}>
@@ -55,25 +103,39 @@ export const Leaderboard = () => {
                 </div>
                 
                 <div className={styles.userInfo}>
-                  <div className={styles.avatar}>
-                    {item.user.name[0]}{item.user.lastname[0]}
+                  <div className={`${styles.avatar} ${isMe ? styles.avatarMe : ''}`}>
+                    {userName[0]}{userLastName[0]}
                   </div>
                   <span>
-                    {item.user.name} {item.user.lastname} 
+                    {userName} {userLastName} 
                     {isMe && <b className={styles.meTag}> (Tú)</b>}
                   </span>
                 </div>
 
                 <div className={styles.weightInfo}>
-                  <span className={styles.weightValue}>{item.maxWeight} <b>Kg</b></span>
-                  <p className={styles.statusText}>
-                    {isMe ? '¡Eres el líder! 👑' : 'A batir ⚡'}
+                  <span className={styles.weightValue}>
+                    {Math.round(item.maxWeight)} <b>Kg</b>
+                  </span>
+                  <p className={isMe ? styles.myStatus : styles.statusText}>
+                    {isMe ? '¡Tu mejor marca! 🔥' : 'Récord a batir ⚡'}
                   </p>
                 </div>
               </article>
             );
           })}
         </div>
+
+        {hasNextPage && (
+          <div className={styles.loadMoreWrapper}>
+            <button 
+              onClick={handleLoadMore} 
+              disabled={loadingMore}
+              className={styles.loadMoreBtn}
+            >
+              {loadingMore ? 'Cargando guerreros...' : 'Ver más récords ↓'}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

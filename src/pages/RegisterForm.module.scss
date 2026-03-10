@@ -56,6 +56,28 @@
   .inputGroup {
     @include input-group-layout; 
     margin-bottom: 1.2rem;
+    position: relative; // Para posicionar el error si fuera necesario
+
+    // Estilo para cuando el input tiene error
+    input.inputError {
+      border-color: #ff4d4d !important;
+      background: rgba(255, 77, 77, 0.05);
+      
+      &:focus {
+        box-shadow: 0 0 8px rgba(255, 77, 77, 0.3);
+      }
+    }
+
+    // Mensaje de error debajo del input
+    .errorText {
+      color: #ff4d4d;
+      font-size: 0.75rem;
+      margin-top: 0.4rem;
+      font-weight: 600;
+      font-family: var(--primary-font-family);
+      display: block;
+      animation: fadeInError 0.3s ease-out;
+    }
   }
 
   .termsGroup {
@@ -80,6 +102,12 @@
   .submitButton {
     @include btn-primary-gradient;
     margin-top: 0.5rem;
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+    }
   }
 
   .footerLinks {
@@ -104,7 +132,13 @@
   }
 }
 
+// Animaciones
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInError {
+  from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }

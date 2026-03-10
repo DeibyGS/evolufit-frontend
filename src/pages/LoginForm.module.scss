@@ -4,8 +4,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  
   padding: 8rem var(--max-padding) 4rem; 
   min-height: 100vh;
   
@@ -46,6 +44,26 @@
   .inputGroup {
     @include input-group-layout; 
     margin-bottom: 1.5rem;
+    position: relative;
+
+    // Resaltado de error en el input
+    input.inputError {
+      border-color: #ff4d4d !important;
+      background: rgba(255, 77, 77, 0.05);
+      
+      &:focus {
+        box-shadow: 0 0 8px rgba(255, 77, 77, 0.3);
+      }
+    }
+
+    .errorText { 
+      color: #ff4d4d; 
+      font-size: 0.75rem; 
+      margin-top: 0.4rem; 
+      display: block; 
+      font-weight: 600;
+      animation: fadeInError 0.3s ease-out;
+    }
   }
 
   .forgotPassword {
@@ -68,6 +86,12 @@
   .submitButton {
     @include btn-primary-gradient;
     width: 100%;
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      filter: grayscale(0.4);
+    }
   }
 
   .footerLinks {
@@ -89,8 +113,14 @@
     }
   } 
 }
-.errorText { color: var(--error-color); font-size: 0.75rem; margin-top: 0.4rem; display: block; }
+
+// Animaciones consistentes
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInError {
+  from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }

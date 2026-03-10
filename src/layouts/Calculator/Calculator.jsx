@@ -1,44 +1,68 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import styles from './Calculator.module.scss';
-import { toast } from 'sonner';
 import { useAuthStore } from '../../store/authStore';
+import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import { BASE_URL } from '../../api/API';
 
 export const Calculator = () => {
   const { token } = useAuthStore();
-  const [errors, setErrors] = useState({});
+  
+  // Estados de Formulario
   const [formData, setFormData] = useState({
     weight: '', height: '', age: '', gender: 'hombre', activity: '1.2'
   });
+  const [errors, setErrors] = useState({});
 
+  // Estados de Datos y Paginación (Modelo RM)
   const [results, setResults] = useState(null);
   const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [isCalculated, setIsCalculated] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const LIMIT = 5;
+
+  // Lógica de Paginación (Fetch Estilo RM)
+  const fetchHistory = useCallback(async (isNextPage = false) => {
+    if (!token) return;
+    isNextPage ? setLoadingMore(true) : setLoading(true);
+
+    try {
+      const currentPage = isNextPage ? page + 1 : 1;
+      const response = await fetch(`${BASE_URL}/health?page=${currentPage}&limit=${LIMIT}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Asumiendo que el backend devuelve { records: [], hasNextPage: boolean }
+        // Si devuelve el array directo, ajustamos la lógica
+        const newRecords = Array.isArray(data) ? data : (data.records || []);
+        const hasMore = data.hasNextPage || false;
+
+        setHistory(prev => isNextPage ? [...prev, ...newRecords] : newRecords);
+        setHasNextPage(hasMore);
+        setPage(currentPage);
+      }
+    } catch (error) { 
+      toast.error("Error al cargar historial");
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [token, page]);
 
   useEffect(() => {
-    if (token) fetchFullHistory();
+    fetchHistory(false);
   }, [token]);
 
-  const fetchFullHistory = async () => {
-    try {
-      const res = await fetch(`${BASE_URL}/health`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const records = Array.isArray(data) ? data : (data ? [data] : []);
-        setHistory(records);
-      }
-    } catch (error) {
-      console.error("Error al cargar historial: " + error.message);
-    }
-  };
-
+  // Memorias para el gráfico y medallas
   const chartData = useMemo(() => {
     return [...history]
-      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
       .map(record => ({
         fecha: new Date(record.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }),
         peso: record.weight,
@@ -50,66 +74,50 @@ export const Calculator = () => {
     return [...history].sort((a, b) => a.imc - b.imc);
   }, [history]);
 
+  // Lógica de Cálculo
   const handleCalculate = (e) => {
-    e.preventDefault();
-    const { weight, height, age, gender, activity } = formData;
-    if (!weight || !height || !age) {
-      toast.error('Rellena todos los campos obligatorios');
-      return;
-    }
-    const hMeters = Number(height) / 100;
-    const imc = (Number(weight) / (hMeters ** 2)).toFixed(1);
-    const tmb = gender === 'hombre'
-      ? (10 * Number(weight)) + (6.25 * Number(height)) - (5 * Number(age)) + 5
-      : (10 * Number(weight)) + (6.25 * Number(height)) - (5 * Number(age)) - 161;
-    const tdee = Math.round(tmb * Number(activity));
-
-    setResults({ weight: Number(weight), imc: Number(imc), tmb: Math.round(tmb), tdee, activity });
-    setIsCalculated(true);
-    toast.success('¡Análisis completado!');
-  };
-
- const saveResults = async () => {
+    if(e) e.preventDefault();
     setErrors({});
 
+    const { weight, height, age, gender, activity } = formData;
     const newErrors = {};
-  if (!formData.weight) newErrors.weight = "El peso es obligatorio";
-  if (!formData.height) newErrors.height = "La altura es obligatoria";
-  if (!formData.age) newErrors.age = "La edad es obligatoria";
 
-  if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    return toast.error('Por favor, rellena todos los campos');
-  }
+    if (!weight || parseFloat(weight) <= 0) newErrors.weight = "Peso requerido";
+    if (!height || parseFloat(height) <= 0) newErrors.height = "Altura requerida";
+    if (!age || parseInt(age) <= 0) newErrors.age = "Edad requerida";
 
-    try {
-      
-      const weightNum = Number(formData.weight);
-      const heightNum = Number(formData.height);
-      const ageNum = Number(formData.age);
-      const hMeters = heightNum / 100;
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return toast.error("Completa los datos correctamente 📊");
+    }
 
-      const currentIMC = (weightNum / (hMeters ** 2)).toFixed(1);
-      const currentTMB = formData.gender === 'hombre'
-        ? (10 * weightNum) + (6.25 * heightNum) - (5 * ageNum) + 5
-        : (10 * weightNum) + (6.25 * heightNum) - (5 * ageNum) - 161;
-      const currentTDEE = Math.round(currentTMB * Number(formData.activity));
-
+    const w = Number(weight);
+    const hMeters = Number(height) / 100;
+    const imc = (w / (hMeters ** 2)).toFixed(1);
+    const tmb = gender === 'hombre'
+      ? (10 * w) + (6.25 * Number(height)) - (5 * Number(age)) + 5
+      : (10 * w) + (6.25 * Number(height)) - (5 * Number(age)) - 161;
     
-      const payload = {
-  // 1. Datos de entrada (Inputs)
-  weight: formData.weight === '' ? undefined : Number(formData.weight),
-  height: formData.height === '' ? undefined : Number(formData.height),
-  age:    formData.age === ''    ? undefined : Number(formData.age),
-  gender: formData.gender,
-  activity: Number(formData.activity),
+    setResults({
+      weight: w,
+      imc: Number(imc),
+      tmb: Math.round(tmb),
+      tdee: Math.round(tmb * Number(activity))
+    });
+    setIsCalculated(true);
+    toast.success('Análisis listo para guardar');
+  };
 
-  // 2. Datos calculados (Fix de NaN)
-  // Usamos Number.isNaN() para verificar si el cálculo matemático falló
-  imc:  Number.isNaN(Number(currentIMC))  ? undefined : Number(currentIMC),
-  tmb:  Number.isNaN(Number(currentTMB))  ? undefined : Math.round(currentTMB),
-  tdee: Number.isNaN(Number(currentTDEE)) ? undefined : Math.round(currentTDEE)
-};
+  const saveResults = async () => {
+    try {
+      const payload = {
+        ...formData,
+        ...results,
+        weight: Number(formData.weight),
+        height: Number(formData.height),
+        age: Number(formData.age),
+        activity: Number(formData.activity)
+      };
 
       const res = await fetch(`${BASE_URL}/health`, {
         method: 'POST',
@@ -122,47 +130,38 @@ export const Calculator = () => {
 
       const data = await res.json();
 
-     // DENTRO DE saveResults en tu componente Calculator.jsx
-if (!res.ok) {
-  if (data.errors && Array.isArray(data.errors)) {
-    const apiErrors = {};
-    
-    // Aquí es donde ocurre la magia: llenamos el objeto con todos los fallos
-    data.errors.forEach(err => {
-      // Usamos el path que viene del back (weight, height, age)
-      apiErrors[err.path] = err.message;
-    });
+      if (!res.ok) {
+        if (data.errors && Array.isArray(data.errors)) {
+          const apiErrors = {};
+          data.errors.forEach(err => apiErrors[err.path] = err.message);
+          setErrors(apiErrors);
+        }
+        throw new Error(data.message || 'Error al guardar');
+      }
 
-    setErrors(apiErrors); // Esto activa los estilos rojos en todos los inputs
-    isCalculated && setIsCalculated(false); // Si ya se había calculado, lo reseteamos para que el usuario vea los errores
-    return toast.error('Corrige los campos marcados');
-  }
-  throw new Error(data.message || 'Error inesperado');
-}
-    setErrors({});
-
-      // 3. ÉXITO
-      toast.success('¡Progreso guardado! 🔥');
+      toast.success('¡Evolución guardada! 🔥');
       setIsCalculated(false);
       setResults(null);
-      fetchFullHistory();
-      formData.weight = '';
-      formData.height = '';
-      formData.age = '';
-      formData.activity = '1.2';
+      setFormData({ weight: '', height: '', age: '', gender: 'hombre', activity: '1.2' });
+      fetchHistory(false);
       
     } catch (error) {
-      console.error("Fallo en saveResults:", error);
-      toast.error(error.message || 'Error de conexión');
+      toast.error(error.message);
     }
   };
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
-      title: '¿Eliminar?', icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#FFA500', confirmButtonText: 'Sí, borrar',
-      background: '#111', color: '#fff'
+      title: '¿Eliminar registro?',
+      text: "Esta acción no se puede deshacer.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#FFA500',
+      cancelButtonColor: '#222',
+      confirmButtonText: 'Sí, borrar',
+      background: '#141414', color: '#fff'
     });
+
     if (result.isConfirmed) {
       try {
         const res = await fetch(`${BASE_URL}/health/${id}`, {
@@ -171,7 +170,7 @@ if (!res.ok) {
         });
         if (res.ok) {
           toast.success("Registro eliminado");
-          fetchFullHistory();
+          fetchHistory(false);
         }
       } catch (error) { toast.error("Error al eliminar"); }
     }
@@ -196,11 +195,19 @@ if (!res.ok) {
 
       <main className={styles.mainGrid}>
         <section className={styles.formSide}>
-          <form className={styles.form} onSubmit={isCalculated ? (e) => { e.preventDefault(); saveResults(); } : handleCalculate}>
+          <div className={styles.form}>
             <div className={styles.radioOptions}>
               {['hombre', 'mujer'].map(g => (
                 <label key={g} className={`${styles.radioLabel} ${formData.gender === g ? styles.active : ''}`}>
-                  <input type="radio" name="gender" value={g} checked={formData.gender === g} onChange={(e) => setFormData({ ...formData, gender: e.target.value })} />
+                  <input 
+                    type="radio" 
+                    value={g} 
+                    checked={formData.gender === g} 
+                    onChange={(e) => {
+                      setFormData({ ...formData, gender: e.target.value });
+                      setIsCalculated(false);
+                    }} 
+                  />
                   <span>{g === 'hombre' ? 'Hombre' : 'Mujer'}</span>
                 </label>
               ))}
@@ -209,25 +216,59 @@ if (!res.ok) {
             <div className={styles.row}>
               <div className={styles.inputGroup}>
                 <label>Edad</label>
-                <input type="number" value={formData.age} onChange={(e) => setFormData({ ...formData, age: e.target.value })} className={errors.age ? styles.inputError : ''} />
+                <input 
+                  type="number" 
+                  value={formData.age} 
+                  className={errors.age ? styles.inputError : ''}
+                  onChange={(e) => {
+                    setFormData({ ...formData, age: e.target.value });
+                    setErrors(prev => ({...prev, age: ''}));
+                    setIsCalculated(false);
+                  }} 
+                />
                 {errors.age && <span className={styles.errorText}>{errors.age}</span>}
               </div>
               <div className={styles.inputGroup}>
                 <label>Peso (kg)</label>
-                <input type="number" value={formData.weight} onChange={(e) => setFormData({ ...formData, weight: e.target.value })} className={errors.weight ? styles.inputError : ''} />
+                <input 
+                  type="number" 
+                  value={formData.weight} 
+                  className={errors.weight ? styles.inputError : ''}
+                  onChange={(e) => {
+                    setFormData({ ...formData, weight: e.target.value });
+                    setErrors(prev => ({...prev, weight: ''}));
+                    setIsCalculated(false);
+                  }} 
+                />
                 {errors.weight && <span className={styles.errorText}>{errors.weight}</span>}
               </div>
             </div>
 
             <div className={styles.inputGroup}>
               <label>Altura (cm)</label>
-              <input type="number" value={formData.height} onChange={(e) => setFormData({ ...formData, height: e.target.value })} className={errors.height ? styles.inputError : ''} />
+              <input 
+                type="number" 
+                value={formData.height} 
+                className={errors.height ? styles.inputError : ''}
+                onChange={(e) => {
+                  setFormData({ ...formData, height: e.target.value });
+                  setErrors(prev => ({...prev, height: ''}));
+                  setIsCalculated(false);
+                }} 
+              />
               {errors.height && <span className={styles.errorText}>{errors.height}</span>}
             </div>
 
             <div className={styles.inputGroup}>
               <label>Actividad</label>
-              <select className={styles.fullWidthSelect} value={formData.activity} onChange={(e) => setFormData({ ...formData, activity: e.target.value })}>
+              <select 
+                className={styles.fullWidthSelect} 
+                value={formData.activity} 
+                onChange={(e) => {
+                  setFormData({ ...formData, activity: e.target.value });
+                  setIsCalculated(false);
+                }}
+              >
                 <option value="1.2">Sedentario</option>
                 <option value="1.375">Ligero</option>
                 <option value="1.55">Moderado</option>
@@ -237,12 +278,20 @@ if (!res.ok) {
             </div>
 
             <div className={styles.actionGroup}>
-              <button type="submit" className={isCalculated ? styles.saveBtnActive : styles.calcBtn}>
-                {isCalculated ? '💾 GUARDAR RESULTADOS' : 'CALCULAR MÉTRICAS'}
+              <button 
+                type="button"
+                onClick={isCalculated ? saveResults : handleCalculate} 
+                className={isCalculated ? styles.saveBtnActive : styles.calcBtn}
+              >
+                {isCalculated ? '💾 GUARDAR PROGRESO' : 'CALCULAR MÉTRICAS'}
               </button>
-              {isCalculated && <button type="button" className={styles.cancelBtn} onClick={() => setIsCalculated(false)}>CANCELAR</button>}
+              {isCalculated && (
+                <button type="button" className={styles.cancelBtn} onClick={() => setIsCalculated(false)}>
+                  CANCELAR
+                </button>
+              )}
             </div>
-          </form>
+          </div>
         </section>
 
         <section className={styles.resultsSide}>
@@ -260,9 +309,7 @@ if (!res.ok) {
 
       {history.length > 1 && (
         <section className={styles.chartSection}>
-          <div className={styles.sectionHeader}>
-            <h3>Tendencia de <span>Peso (kg)</span></h3>
-          </div>
+          <div className={styles.sectionHeader}><h3>Tendencia de <span>Peso (kg)</span></h3></div>
           <div className={styles.chartWrapper}>
             <ResponsiveContainer width="100%" height={250}>
               <AreaChart data={chartData}>
@@ -287,19 +334,17 @@ if (!res.ok) {
       )}
 
       <section className={styles.historySection}>
-        <div className={styles.sectionHeader}>
-          <h3>Historial de <span>Evolución</span></h3>
-        </div>
+        <div className={styles.sectionHeader}><h3>Historial de <span>Evolución</span></h3></div>
         <div className={styles.historyList}>
-          {sortedHistory.map((record, index) => {
+          {loading && page === 1 ? (
+             <p className={styles.emptyHistory}>Cargando historial...</p>
+          ) : sortedHistory.map((record, index) => {
             const medal = getMedalByIndex(index);
             return (
-              <article key={record._id || record.id} className={`${styles.historyCard} ${medal ? medal.type : ''}`}>
+              <article key={record._id} className={`${styles.historyCard} ${medal ? medal.type : ''}`}>
                 {medal && <div className={styles.medalBadge}>{medal.icon} TOP {medal.label}</div>}
-                <button className={styles.deleteBtn} onClick={() => handleDelete(record._id || record.id)}>✕</button>
-                <div className={styles.cardHeader}>
-                  <div className={styles.dateBadge}>{new Date(record.createdAt).toLocaleDateString()}</div>
-                </div>
+                <button className={styles.deleteBtn} onClick={() => handleDelete(record._id)}>✕</button>
+                <div className={styles.dateBadge}>{new Date(record.createdAt).toLocaleDateString()}</div>
                 <div className={styles.dataGroup}>
                   <div className={styles.dataItem}><small>Peso</small><strong>{record.weight}kg</strong></div>
                   <div className={styles.dataItem}><small>IMC</small><strong>{record.imc}</strong></div>
@@ -309,6 +354,17 @@ if (!res.ok) {
               </article>
             );
           })}
+          
+          {hasNextPage && (
+            <button 
+              type="button" 
+              className={styles.loadMoreBtn} 
+              onClick={() => fetchHistory(true)} 
+              disabled={loadingMore}
+            >
+              {loadingMore ? 'Cargando...' : 'Ver más registros'}
+            </button>
+          )}
         </div>
       </section>
     </div>

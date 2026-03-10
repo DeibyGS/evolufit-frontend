@@ -6,24 +6,16 @@ import { BASE_URL } from '../api/API';
 import { FullPageLoader } from '../components/FullPageLoader';
 
 /**
- * COMPONENTE: RegisterForm
- * @description
- * Gestiona el alta de nuevos usuarios en la plataforma EvolutFit.
- * Implementa un flujo de validación en cascada (Front-end primero, API después)
- * para optimizar recursos. Utiliza un estado de carga global para manejar
- * el tiempo de respuesta del servidor.
- * * @técnico
- * - Validaciones: Coincidencia de password, longitud mínima y rango de edad.
- * - Integración: Realiza un POST con el payload filtrado (excluyendo confirmación).
- * - UX: Bloqueo de UI mediante FullPageLoader durante el proceso asíncrono.
+ * COMPONENTE: RegisterForm (EvoluFit Optimized)
+ * @description Maneja el registro con feedback visual de errores por campo.
  */
 export const RegisterForm = () => {
   const navigate = useNavigate();
-
-  /** @state {boolean} isLoading - Controla la visibilidad del overlay de carga */
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Estado para capturar errores de validación (Zod backend)
+  const [errors, setErrors] = useState({});
 
-  /** @state {Object} formData - Almacena los datos del formulario de registro */
   const [formData, setFormData] = useState({
     name: '',
     lastname: '',
@@ -34,45 +26,37 @@ export const RegisterForm = () => {
     acceptTerms: false
   });
 
-  /**
-   * Actualiza el estado local de forma reactiva según el tipo de input.
-   * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio.
-   */
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value
     });
+    // Limpiamos el error del campo al escribir para mejorar UX
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }));
+    }
   };
 
-  /**
-   * Procesa la validación y el envío de datos al backend.
-   * @async
-   * @param {React.FormEvent} e - Evento de envío.
-   */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({}); // Resetear errores previos
 
-    // 1. Validaciones previas al envío para ahorrar ancho de banda/peticiones
+    // Validaciones de UI rápidas
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Las contraseñas no coinciden.");
-      return;
-    }
-
-    if(formData.password.length < 6){
-      toast.error("La contraseña debe tener al menos 6 caracteres.");
-      return;
-    }
-
-    if(formData.age < 13 || formData.age > 100){
-      toast.error("La edad debe estar entre 14 y 100 años.");
-      return;
+      setErrors(prev => ({ ...prev, confirmPassword: "Las contraseñas no coinciden" }));
+      return toast.error("Las contraseñas no coinciden.");
     }
 
     setIsLoading(true); 
 
-    const registrationPayload = {name: formData.name.trim(), lastname: formData.lastname.trim(), age: Number(formData.age), email: formData.email.trim().toLowerCase(), password: formData.password };  
+    const registrationPayload = {
+      name: formData.name.trim(), 
+      lastname: formData.lastname.trim(), 
+      age: Number(formData.age), 
+      email: formData.email.trim().toLowerCase(), 
+      password: formData.password 
+    };  
 
     try {
       const response = await fetch(`${BASE_URL}/auth/register`, {
@@ -87,56 +71,107 @@ export const RegisterForm = () => {
         toast.success("¡Registro exitoso! Ya puedes iniciar sesión.");
         navigate('/auth');
       } else {
-        toast.error(data.message || 'Error en el registro');
+        // Mapeo de errores de Zod (viene como array de objetos {path: string[], message: string})
+        if (data.errors && Array.isArray(data.errors)) {
+          const apiErrors = {};
+          data.errors.forEach(err => {
+            // El path de Zod suele ser un array, tomamos el primer elemento
+            const fieldName = Array.isArray(err.path) ? err.path[0] : err.path;
+            if (fieldName) apiErrors[fieldName] = err.message;
+          });
+          setErrors(apiErrors);
+          toast.error('Revisa los campos marcados en rojo');
+        } else {
+          toast.error(data.message || 'Error en el registro');
+        }
         setIsLoading(false);
       }
     } catch(error) {
-      toast.error('Error de red: El servidor está procesando tu alta. Por favor, espera.');
+      toast.error('Error de red: Inténtalo de nuevo más tarde.');
       setIsLoading(false);
     } 
   };
 
   return (
     <div className={styles.registerContainer}>
-      {/* Componente de carga para gestionar el cold start del backend en Render */}
       {isLoading && <FullPageLoader />}
 
       <form className={styles.registerForm} onSubmit={handleSubmit}>
         <h2>Crear Cuenta</h2>
         
-        {/* Agrupación de Nombre y Apellidos mediante CSS Grid/Flex definido en SCSS */}
         <div className={styles.row}>
           <div className={styles.inputGroup}>
             <label>Nombre</label>
-            <input type="text" name="name" onChange={handleChange} required />
+            <input 
+              type="text" 
+              name="name" 
+              className={errors.name ? styles.inputError : ''}
+              onChange={handleChange} 
+              required 
+            />
+            {errors.name && <span className={styles.errorText}>{errors.name}</span>}
           </div>
           <div className={styles.inputGroup}>
             <label>Apellidos</label>
-            <input type="text" name="lastname" onChange={handleChange} required />
+            <input 
+              type="text" 
+              name="lastname" 
+              className={errors.lastname ? styles.inputError : ''}
+              onChange={handleChange} 
+              required 
+            />
+            {errors.lastname && <span className={styles.errorText}>{errors.lastname}</span>}
           </div>
         </div>
 
         <div className={styles.inputGroup}>
           <label>Edad</label>
-          <input type="number" name="age" onChange={handleChange} required />
+          <input 
+            type="number" 
+            name="age" 
+            className={errors.age ? styles.inputError : ''}
+            onChange={handleChange} 
+            required 
+          />
+          {errors.age && <span className={styles.errorText}>{errors.age}</span>}
         </div>
 
         <div className={styles.inputGroup}>
           <label>Email</label>
-          <input type="email" name="email" onChange={handleChange} required />
+          <input 
+            type="email" 
+            name="email" 
+            className={errors.email ? styles.inputError : ''}
+            onChange={handleChange} 
+            required 
+          />
+          {errors.email && <span className={styles.errorText}>{errors.email}</span>}
         </div>
 
         <div className={styles.inputGroup}>
           <label>Contraseña</label>
-          <input type="password" name="password" onChange={handleChange} required />
+          <input 
+            type="password" 
+            name="password" 
+            className={errors.password ? styles.inputError : ''}
+            onChange={handleChange} 
+            required 
+          />
+          {errors.password && <span className={styles.errorText}>{errors.password}</span>}
         </div>
 
         <div className={styles.inputGroup}>
           <label>Repetir Contraseña</label>
-          <input type="password" name="confirmPassword" onChange={handleChange} required />
+          <input 
+            type="password" 
+            name="confirmPassword" 
+            className={errors.confirmPassword ? styles.inputError : ''}
+            onChange={handleChange} 
+            required 
+          />
+          {errors.confirmPassword && <span className={styles.errorText}>{errors.confirmPassword}</span>}
         </div>
 
-        {/* Control de validación de términos legales para cumplimiento de RGPD */}
         <div className={styles.termsGroup}>
           <input 
             type="checkbox" 
@@ -148,7 +183,6 @@ export const RegisterForm = () => {
           <label htmlFor="terms">Acepto los términos y condiciones</label>
         </div>
 
-        {/* El botón se deshabilita durante la carga para evitar race conditions */}
         <button 
           type="submit" 
           className={styles.submitButton}
