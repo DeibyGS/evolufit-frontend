@@ -1,228 +1,217 @@
 # 🏋️‍♂️ EvolutFit - Frontend Client
 
-**EvolutFit** es una plataforma de alto rendimiento para la gestión integral de entrenamiento y salud. Desarrollada con el stack de vanguardia **React 19** y **Vite**, la aplicación ofrece una experiencia tipo _Single Page Application (SPA)_ centrada en la visualización de datos, la gamificación comunitaria y una interfaz de usuario premium basada en **Glassmorphism**.
+**EvolutFit** is a high-performance platform for comprehensive workout and health management. Built with the cutting-edge **React 19** and **Vite** stack, the app delivers a _Single Page Application (SPA)_ focused on data visualization, community gamification, and a premium user interface based on **Glassmorphism**.
 
 ---
 
 ## ⚡ Core Highlights
 
-- **Visualización de Datos:** Dashboards interactivos que renderizan el progreso del peso e IMC en tiempo real mediante `Recharts`.
-- **Arquitectura de Layouts Protegidos:** Sistema de rutas privadas gestionadas mediante un `DashboardLayout` centralizado y componentes de guarda de seguridad.
-- **Gamificación Pro:** Sistema de logros basado en volumen de carga acumulado y un "Hall of Fame" (Leaderboard) dinámico para fomentar la competitividad.
-- **Sistema de Estilos Senior:** Arquitectura **SASS (SCSS)** modular con un motor de mixins robusto para componentes escalables y coherencia visual total.
-- **Reporting & Exportación:** Capacidad de generar documentos PDF dinámicos de rutinas y métricas utilizando `jsPDF` y `html2canvas`.
-- **UX Adaptativa:** Hooks personalizados para el manejo de responsividad y animaciones de rendimiento que garantizan 60fps.
+- **Data Visualization:** Interactive dashboards that render weight and BMI progress in real time with `Recharts`.
+- **Protected Layout Architecture:** Private route system managed through a centralized `DashboardLayout` and security guard components.
+- **Pro Gamification:** Achievement system based on accumulated load volume and a dynamic "Hall of Fame" (Leaderboard) to foster competitiveness.
+- **Senior Styling System:** Modular **SASS (SCSS)** architecture with a robust mixin engine for scalable components and total visual coherence.
+- **Reporting & Export:** Ability to generate dynamic PDF documents of routines and metrics using `jsPDF` and `html2canvas`.
+- **Adaptive UX:** Custom hooks for responsiveness and performance animations that guarantee 60fps.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Tech Stack
 
 ### Core & Build
 
-- **React 19:** Última versión para una gestión eficiente del DOM y soporte de transiciones.
-- **Vite:** Build tool de alto rendimiento con Hot Module Replacement (HMR) ultra rápido.
-- **React Router Dom v7:** Gestión de navegación compleja, sub-rutas y layouts anidados.
+- **React 19:** Latest version for efficient DOM management and transition support.
+- **Vite:** High-performance build tool with ultra-fast Hot Module Replacement (HMR).
+- **React Router Dom v7:** Complex navigation management, sub-routes, and nested layouts.
 
-### Estado y Datos
+### State & Data
 
-- **Zustand:** Gestión de estado global (Auth, User Info) atómica, ligera y reactiva.
-- **Recharts:** Visualización de datos mediante gráficas dinámicas de rendimiento.
+- **Zustand:** Atomic, lightweight, reactive global state management (Auth, User Info).
+- **Recharts:** Data visualization with dynamic performance charts.
 
-### Estilos y UI
+### Styles & UI
 
-- **SASS (SCSS) Modules:** Encapsulamiento de estilos para evitar colisiones y facilitar el mantenimiento.
-- **Sistema de Mixins:** Librería propia para Flexbox, Grids responsivos, Glassmorphism y botones degradados.
-- **Sonner & SweetAlert2:** Feedback visual profesional y modales interactivos.
+- **SASS (SCSS) Modules:** Style encapsulation to avoid collisions and ease maintenance.
+- **Mixin System:** Custom library for Flexbox, responsive grids, Glassmorphism, and gradient buttons.
+- **Sonner & SweetAlert2:** Professional visual feedback and interactive modals.
 
 ---
 
-## 📂 Arquitectura de Directorios
+## 📂 Directory Architecture
 
 ```text
 src/
-├── assets/          # Imágenes, iconos y recursos estáticos
-├── components/      # Componentes UI Globales y Landing
-│   ├── Header/Footer/Hero # Estructura de la Landing Page
-│   ├── ContactSection/Service/ReviewSection # Secciones informativas
-│   ├── ProtectedRoute/ForgotPassword # Lógica de Acceso y Seguridad
-│   └── ToastConfig # Configuración global de notificaciones
-├── data/            # Contenido estático y configuración de negocio
-│   ├── achievements.json # Definición de medallas y logros
-│   ├── dataprices.json   # Configuración de planes y precios
-│   ├── exercises.js      # Base de datos de ejercicios soportados
-│   └── reviewsdata.json  # Datos de testimonios y reviews
-├── hooks/           # Lógica de React extraída para reutilización
-│   ├── useCounterPerformance # Lógica de contadores animados
-│   ├── useMediaQuerys        # Gestión de breakpoints de diseño
-│   └── useResizeWidth        # Control dinámico de dimensiones de ventana
-├── layout/          # Contenedores de estructura principal
-│   └── LayoutPrincipal/ # El corazón de la App (Dashboard Autenticado)
-│       ├── Achievements/    # Sistema de medallas y logros
-│       ├── Calculator/      # Calculadora de métricas de salud
-│       ├── Dashboard/       # Visualización de gráficas y progreso
-│       ├── Leaderboard/     # Ranking de fuerza (Hall of Fame)
-│       ├── Profile/         # Gestión de perfil y seguridad
-│       ├── RMCalculator/    # Calculadora de Repetición Máxima
-│       ├── Routines/        # Gestión y registro de entrenamientos
-│       └── SocialRoutines/  # Feed de comunidad e interacción
-├── pages/           # Vistas de acceso y error (404, AuthPage, Home, etc.)
-├── store/           # Configuración de Zustand
-│   └── authStore        # Estado global de autenticación y usuario
-└── styles/          # Arquitectura de estilos SASS
-    ├── variables.scss    # Tokens de diseño (colores, tipografías)
-    ├── mixing.scss       # Mixins reutilizables (flexbox, responsive)
-    ├── reset.scss        # Normalización de estilos base
-    └── global.scss       # Estilos compartidos y utilidades
+├── assets/          # Images, icons, and static resources
+├── components/      # Global UI and Landing components
+│   ├── Header/Footer/Hero # Landing Page structure
+│   ├── ContactSection/Service/ReviewSection # Informative sections
+│   ├── ProtectedRoute/ForgotPassword # Access and Security logic
+│   └── ToastConfig # Global notification configuration
+├── data/            # Static content and business configuration
+│   ├── achievements.json # Definition of medals and achievements
+│   ├── dataprices.json   # Plans and pricing configuration
+│   ├── exercises.js      # Supported exercises database
+│   └── reviewsdata.json  # Testimonials and reviews data
+├── hooks/           # Extracted React logic for reuse
+│   ├── useCounterPerformance # Animated counter logic
+│   ├── useMediaQuerys        # Design breakpoint management
+│   └── useResizeWidth        # Dynamic window dimension control
+├── layout/          # Main structure containers
+│   └── LayoutPrincipal/ # The heart of the App (Authenticated Dashboard)
+│       ├── Achievements/    # Medals and achievements system
+│       ├── Calculator/      # Health metrics calculator
+│       ├── Dashboard/       # Charts and progress visualization
+│       ├── Leaderboard/     # Strength ranking (Hall of Fame)
+│       ├── Profile/         # Profile and security management
+│       ├── RMCalculator/    # Repeat Max calculator
+│       ├── Routines/        # Workout management and logging
+│       └── SocialRoutines/  # Community feed and interaction
+├── pages/           # Access and error views (404, AuthPage, Home, etc.)
+├── store/           # Zustand configuration
+│   └── authStore        # Global authentication and user state
+└── styles/          # SASS styling architecture
+    ├── variables.scss    # Design tokens (colors, typography)
+    ├── mixing.scss       # Reusable mixins (flexbox, responsive)
+    ├── reset.scss        # Base style normalization
+    └── global.scss       # Shared styles and utilities
 ```
 
-## ⚙️ Instalación y Configuración
+## ⚙️ Installation & Setup
 
-### Clonar el repositorio
+### Clone the repository
 
 ```bash
 git clone https://github.com/DeibyGS/evolufit-frontend.git
 cd evolufit-frontend
 ```
 
-## ⚙️ Instalar Dependencias
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-## ⚙️ Lanzar en Desarrollo
+### Run in development
 
 ```bash
 npm run dev
 ```
 
-## 🚀 Scripts Disponibles
+## 🚀 Available Scripts
 
-| Comando         | Descripción                                                |
-| --------------- | ---------------------------------------------------------- |
-| npm run dev     | Inicia el servidor de desarrollo con HMR.                  |
-| npm run build   | Compila y optimiza el proyecto para producción en `/dist`. |
-| npm run lint    | Ejecuta ESLint para asegurar la calidad del código.        |
-| npm run preview | Previsualiza localmente la versión de producción.          |
+| Command | Description |
+| ------- | ----------- |
+| npm run dev     | Starts the development server with HMR. |
+| npm run build   | Compiles and optimizes the project for production into `/dist`. |
+| npm run lint    | Runs ESLint to ensure code quality. |
+| npm run preview | Previews the production build locally. |
 
-## 🤝 Lineamientos de Desarrollo (Senior Guidelines)
+## 🧪 Test User (Demo)
 
-Como arquitecto de este proyecto, se deben seguir estas pautas estrictas para mantener la calidad y escalabilidad del código:
-
-- **Abstracción de Estilos:** Prohibido el uso de valores "hardcoded". Emplea siempre los tokens de `src/styles/variables.scss` y los mixins de `src/styles/mixins.scss` para cualquier valor de espaciado, color, radio o transición.
-- **Modularidad de Layout:** Las funcionalidades del núcleo autenticado (Dashboard) deben residir obligatoriamente en `src/layouts/`. Esto garantiza que compartan el contexto del Sidebar y el Navbar sin duplicar código.
-- **Estado Global:** El acceso a la información del usuario, tokens de sesión o estados de carga globales debe realizarse siempre a través del `authStore` de **Zustand**. Se prohíbe el _prop-drilling_ innecesario para datos que ya residen en el store.
-- **Consistencia de Datos:** Al añadir nuevos ejercicios o rutinas, asegúrate de que el `id` y el `group` muscular coincidan exactamente con la lógica definida en `src/data/exercises.js`. Esto es crítico para no romper los filtros de búsqueda y las analíticas del **Leaderboard**.
-
----
-
-## 🧪 Usuario de Prueba (Demo)
-
-Para explorar todas las funcionalidades de la aplicación sin necesidad de crear una cuenta nueva, puedes utilizar las siguientes credenciales de acceso:
+To explore all the application features without creating a new account, you can use these demo credentials:
 
 - **Email:** `user@user.com`
-- **Contraseña:** `11111111`
+- **Password:** `11111111`
 
-> **Nota:** Este usuario cuenta con un historial de entrenamientos precargado para que puedas visualizar las gráficas de progreso y estadísticas en el Dashboard de forma inmediata.
+> **Note:** This user has preloaded workout history so you can immediately see the progress charts and statistics on the Dashboard.
 
-## 🔌 Integración con la API (Endpoints detallados)
+## 🔌 API Integration (Detailed Endpoints)
 
-La comunicación entre el Frontend y el Backend se realiza mediante una arquitectura RESTful. Todos los endpoints (excepto Auth) requieren el header `Authorization: Bearer <token>`.
+Communication between the Frontend and Backend is done through a RESTful architecture. All endpoints (except Auth) require the `Authorization: Bearer <token>` header.
 
-### 🔐 Módulo de Autenticación (`/auth`)
-*Gestión de acceso y creación de identidad.*
+### 🔐 Authentication Module (`/auth`)
+*Access and identity creation management.*
 
-| Método | Ruta | Descripción |
+| Method | Route | Description |
 | :--- | :--- | :--- |
-| `POST` | `/auth/register` | Registro de nuevos atletas con validación de Zod. |
-| `POST` | `/auth/login` | Autenticación y entrega de Token JWT. |
+| `POST` | `/auth/register` | Register new athletes with Zod validation. |
+| `POST` | `/auth/login` | Authentication and JWT delivery. |
 
-### 👤 Módulo de Usuarios & Perfil (`/users`)
-*Gestión de la cuenta y visibilidad de la comunidad.*
+### 👤 Users & Profile Module (`/users`)
+*Account management and community visibility.*
 
-| Método | Ruta | Descripción |
+| Method | Route | Description |
 | :--- | :--- | :--- |
-| `GET` | `/users` | Obtención de todos los usuarios (para Rankings). |
-| `GET` | `/users/:id` | Ver perfil público de un atleta específico. |
-| `PUT` | `/users/profile` | Actualización de datos generales (Nombre, edad, etc.). |
-| `PATCH`| `/users/change-password` | Cambio seguro de contraseña (valida pass actual). |
-| `DELETE`| `/users/delete-me` | Eliminación definitiva de la cuenta del atleta. |
+| `GET` | `/users` | Get all users (for Rankings). |
+| `GET` | `/users/:id` | View a specific athlete's public profile. |
+| `PUT` | `/users/profile` | Update general data (Name, age, etc.). |
+| `PATCH` | `/users/change-password` | Secure password change (validates current pass). |
+| `DELETE` | `/users/delete-me` | Permanently delete the athlete's account. |
 
-### 🏋️ Módulo de Entrenamientos (`/workouts`)
-*Registro de actividad física y analíticas de rendimiento.*
+### 🏋️ Workouts Module (`/workouts`)
+*Physical activity logging and performance analytics.*
 
-| Método | Ruta | Descripción |
+| Method | Route | Description |
 | :--- | :--- | :--- |
-| `POST` | `/workouts` | Registro de una nueva sesión de entrenamiento. |
-| `GET` | `/workouts/my-workouts` | Historial completo de sesiones del usuario. |
-| `GET` | `/workouts/stats` | Datos analíticos (Distribución muscular/Volumen). |
-| `GET` | `/workouts/total-volume` | Sumatoria de carga total para sistema de logros. |
-| `GET` | `/workouts/:id` | Desglose detallado de ejercicios de una sesión. |
-| `DELETE`| `/workouts/:id` | Eliminación de un registro del historial. |
+| `POST` | `/workouts` | Log a new workout session. |
+| `GET` | `/workouts/my-workouts` | Full user session history. |
+| `GET` | `/workouts/stats` | Analytics data (Muscle distribution/Volume). |
+| `GET` | `/workouts/total-volume` | Total load sum for the achievements system. |
+| `GET` | `/workouts/:id` | Detailed breakdown of a session's exercises. |
+| `DELETE` | `/workouts/:id` | Delete a record from history. |
 
-### 🏆 Módulo de Marcas & Ranking (`/rm`)
-*Control de fuerza máxima y competitividad global.*
+### 🏆 Records & Ranking Module (`/rm`)
+*Maximum strength control and global competitiveness.*
 
-| Método | Ruta | Descripción |
+| Method | Route | Description |
 | :--- | :--- | :--- |
-| `POST` | `/rm` | Registro de 1 Repetición Máxima (1RM). |
-| `GET` | `/rm` | Historial de récords personales del usuario. |
-| `GET` | `/rm/leaderboard` | Hall of Fame global (Ranking de mejores marcas). |
-| `DELETE`| `/rm/:id` | Eliminación de una marca personal. |
+| `POST` | `/rm` | Register 1 Repetition Maximum (1RM). |
+| `GET` | `/rm` | User's personal record history. |
+| `GET` | `/rm/leaderboard` | Global Hall of Fame (Best records ranking). |
+| `DELETE` | `/rm/:id` | Delete a personal record. |
 
-### 📊 Módulo de Salud & Biometría (`/health`)
-*Seguimiento de métricas corporales y gasto calórico.*
+### 📊 Health & Biometrics Module (`/health`)
+*Body metrics and calorie expenditure tracking.*
 
-| Método | Ruta | Descripción |
+| Method | Route | Description |
 | :--- | :--- | :--- |
-| `POST` | `/health` | Registro de IMC, TMB (Mifflin-St Jeor) y TDEE. |
-| `GET` | `/health` | Historial biométrico completo del atleta. |
-| `DELETE`| `/health/:id` | Eliminación de un registro de salud. |
+| `POST` | `/health` | Register BMI, BMR (Mifflin-St Jeor) and TDEE. |
+| `GET` | `/health` | Complete biometric history for the athlete. |
+| `DELETE` | `/health/:id` | Delete a health record. |
 
-### 🤝 Módulo Social & Comunidad (`/social`)
-*Interacción y compartición de conocimientos.*
+### 🤝 Social & Community Module (`/social`)
+*Interaction and knowledge sharing.*
 
-| Método | Ruta | Descripción |
+| Method | Route | Description |
 | :--- | :--- | :--- |
-| `GET` | `/social` | Feed comunitario con filtros (músculo/búsqueda). |
-| `POST` | `/social` | Publicación de rutinas en la comunidad. |
-| `PUT` | `/social/:id` | Edición de posts propios. |
-| `PATCH`| `/social/:id/like` | Sistema de interacción "Like" (Toggle). |
-| `DELETE`| `/social/:id` | Eliminación de publicaciones propias. |
+| `GET` | `/social` | Community feed with filters (muscle/search). |
+| `POST` | `/social` | Publish routines to the community. |
+| `PUT` | `/social/:id` | Edit own posts. |
+| `PATCH` | `/social/:id/like` | "Like" interaction system (Toggle). |
+| `DELETE` | `/social/:id` | Delete own posts. |
 
-## 🚀 Despliegue del Backend
+## 🚀 Backend Deployment
 
-El backend de **EvolutFit** se encuentra desplegado en la plataforma **Render**.
+The **EvolutFit** backend is deployed on **Render**.
 
-- **Base URL de la API:** `https://evolufit-backend.onrender.com/api`
-- **Repositorio Backend:** [github.com/DeibyGS/evolufit-backend](https://github.com/DeibyGS/evolufit-backend)
+- **API Base URL:** `https://evolufit-backend.onrender.com/api`
+- **Backend Repository:** [github.com/DeibyGS/evolufit-backend](https://github.com/DeibyGS/evolufit-backend)
 
-> **⚠️ Nota sobre el rendimiento (Cold Start):**
-> Al estar alojado en el plan gratuito de Render, el servidor entra en estado de suspensión tras 15 minutos de inactividad.
+> **⚠️ Performance note (Cold Start):**
+> Since it's hosted on Render's free plan, the server suspends after 15 minutes of inactivity.
 >
-> Por este motivo, la **primera petición** que realices puede tardar entre **50 y 60 segundos** en responder mientras el servicio se reactiva. Las peticiones siguientes funcionarán a velocidad normal.
+> For this reason, the **first request** may take between **50 and 60 seconds** to respond while the service wakes up. Subsequent requests will run at normal speed.
 
-## 🤝 Directrices de Contribución & Arquitectura
+## 🤝 Contributing & Architecture Guidelines
 
-Como arquitecto de **EvolutFit**, he establecido los siguientes pilares técnicos para garantizar que el código sea mantenible, escalable y de alto rendimiento. Se espera que cualquier contribución respete estas normas:
+As the **EvolutFit** architect, I've established the following technical pillars to ensure the code is maintainable, scalable, and high-performance. Any contribution is expected to respect these rules:
 
-### 🎨 Design System & Estilos (SASS)
+### 🎨 Design System & Styles (SASS)
 
-- **Zero Hardcoding Policy:** Está estrictamente prohibido el uso de valores hexadecimales, unidades `px` o `rem` arbitrarias directamente en los archivos `.module.scss`.
-- **Tokens de Diseño:** Se deben utilizar exclusivamente las variables de `src/styles/variables.scss` para colores, tipografías, espaciados y radios.
-- **Lógica de Layout:** Para estructuras repetitivas (centrado, grids de calculadoras, efectos glassmorphism), utiliza siempre los `@mixins` definidos en `src/styles/mixins.scss`.
+- **Zero Hardcoding Policy:** Using arbitrary hexadecimal values, `px` or `rem` units directly in `.module.scss` files is strictly prohibited.
+- **Design Tokens:** Only use the variables from `src/styles/variables.scss` for colors, typography, spacing, and radii.
+- **Layout Logic:** For repetitive structures (centering, calculator grids, glassmorphism effects), always use the `@mixins` defined in `src/styles/mixins.scss`.
 
-### 🏗️ Estructura y Modularidad
+### 🏗️ Structure & Modularity
 
-- **Arquitectura de Layouts:** Las vistas que componen la experiencia del usuario autenticado (Dashboard, Perfil, Historial) deben implementarse dentro de `src/layouts/DashboardLayout/`. Esto asegura la persistencia del Sidebar y la integridad de las rutas protegidas.
-- **Componentes Atómicos:** Los elementos de UI reutilizables (botones, inputs, cards) deben ser agnósticos a la lógica de negocio y residir en `src/components/`.
+- **Layout Architecture:** The views that make up the authenticated user experience (Dashboard, Profile, History) must be implemented within `src/layouts/DashboardLayout/`. This ensures the Sidebar persists and protects route integrity.
+- **Atomic Components:** Reusable UI elements (buttons, inputs, cards) must be agnostic to business logic and live in `src/components/`.
 
-### 🔐 Gestión de Estado & Datos
+### 🔐 State & Data Management
 
-- **Single Source of Truth:** La gestión de la sesión, el perfil del usuario y los tokens JWT se centraliza en el `authStore` de **Zustand**.
-- **Prop-Drilling:** Se prohíbe pasar información del usuario a través de múltiples niveles de componentes si dicha información ya está disponible en el store global.
-- **Integridad del Modelo:** Al expandir la base de datos de ejercicios (`src/data/exercises.js`), es imperativo respetar la estructura de `id` y `group` para evitar inconsistencias en el sistema de filtrado del Leaderboard.
+- **Single Source of Truth:** Session, user profile, and JWT token management is centralized in the Zustand `authStore`.
+- **Prop-Drilling:** Passing user information through multiple component levels is prohibited if that information is already available in the global store.
+- **Model Integrity:** When expanding the exercise database (`src/data/exercises.js`), it's imperative to respect the `id` and `group` structure to avoid inconsistencies in the Leaderboard filtering system.
 
-### 🧪 Calidad de Código
+### 🧪 Code Quality
 
-- Antes de realizar un commit, asegúrate de ejecutar `npm run lint` para cumplir con los estándares de estilo definidos por **ESLint**.
+- Before committing, make sure to run `npm run lint` to comply with the style standards defined by **ESLint**.
