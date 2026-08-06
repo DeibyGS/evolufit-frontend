@@ -11,13 +11,13 @@ EvoluFit is a high-performance web app for comprehensive workout and health mana
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![SCSS](https://img.shields.io/badge/SCSS-Modules-CD6799?logo=sass&logoColor=white)](https://sass-lang.com)
 
-[⚡ Core Highlights](#-core-highlights) • [🛠️ Tech Stack](#️-tech-stack) • [📂 Directory Architecture](#-directory-architecture) • [⚙️ Installation & Setup](#️-installation--setup) • [🚀 Available Scripts](#-available-scripts) • [🧪 Test User (Demo)](#-test-user-demo) • [🔌 API Integration](#-api-integration-detailed-endpoints) • [🤝 Contributing Guide](#-contributing--architecture-guidelines) • [🤖 Built with AI](#-built-with-ai)
+[Core Highlights](#core-highlights) • [Tech Stack](#tech-stack) • [Directory Architecture](#directory-architecture) • [Installation & Setup](#installation--setup) • [Available Scripts](#available-scripts) • [Test User (Demo)](#test-user-demo) • [API Integration](#api-integration-detailed-endpoints) • [Contributing Guide](#contributing--architecture-guidelines) • [Built with AI](#built-with-ai)
 
 </div>
 
 ---
 
-## ⚡ Core Highlights
+## Core Highlights
 
 - **Data Visualization:** Interactive dashboards that render weight and BMI progress in real time with `Recharts`.
 - **Protected Layout Architecture:** Private route system managed through a centralized `DashboardLayout` and security guard components.
@@ -28,7 +28,7 @@ EvoluFit is a high-performance web app for comprehensive workout and health mana
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Core & Build
 
@@ -49,7 +49,7 @@ EvoluFit is a high-performance web app for comprehensive workout and health mana
 
 ---
 
-## 📂 Directory Architecture
+## Directory Architecture
 
 ```text
 src/
@@ -88,7 +88,7 @@ src/
     └── _global.scss       # Shared styles and utilities
 ```
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 ### Clone the repository
 
@@ -109,7 +109,7 @@ npm install
 npm run dev
 ```
 
-## 🚀 Available Scripts
+## Available Scripts
 
 | Command | Description |
 | ------- | ----------- |
@@ -118,7 +118,7 @@ npm run dev
 | `npm run lint`    | Runs ESLint to ensure code quality. |
 | `npm run preview` | Previews the production build locally. |
 
-## 🧪 Test User (Demo)
+## Test User (Demo)
 
 To explore all the application features without creating a new account, you can use these demo credentials:
 
@@ -127,11 +127,11 @@ To explore all the application features without creating a new account, you can 
 
 > **Note:** This user has preloaded workout history so you can immediately see the progress charts and statistics on the Dashboard.
 
-## 🔌 API Integration (Detailed Endpoints)
+## API Integration (Detailed Endpoints)
 
 Communication between the Frontend and Backend is done through a RESTful architecture. All endpoints (except Auth) require the `Authorization: Bearer <token>` header.
 
-### 🔐 Authentication Module (`/auth`)
+### Authentication Module (`/auth`)
 *Access and identity creation management.*
 
 | Method | Route | Description |
@@ -139,7 +139,7 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `POST` | `/auth/register` | Register new athletes with Zod validation. |
 | `POST` | `/auth/login` | Authentication and JWT delivery. |
 
-### 👤 Users & Profile Module (`/users`)
+### Users & Profile Module (`/users`)
 
 *Account management and community visibility.*
 
@@ -151,7 +151,7 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `PATCH` | `/users/change-password` | Secure password change (validates current password). |
 | `DELETE` | `/users/delete-me` | Permanently delete the athlete's account. |
 
-### 🏋️ Workouts Module (`/workouts`)
+### Workouts Module (`/workouts`)
 
 *Physical activity logging and performance analytics.*
 
@@ -164,7 +164,7 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `GET` | `/workouts/:id` | Detailed breakdown of a session's exercises. |
 | `DELETE` | `/workouts/:id` | Delete a record from history. |
 
-### 🏆 Records & Ranking Module (`/rm`)
+### Records & Ranking Module (`/rm`)
 
 *Maximum strength control and global competitiveness.*
 
@@ -175,7 +175,7 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `GET` | `/rm/leaderboard` | Global Hall of Fame (best records ranking). |
 | `DELETE` | `/rm/:id` | Delete a personal record. |
 
-### 📊 Health & Biometrics Module (`/health`)
+### Health & Biometrics Module (`/health`)
 
 *Body metrics and calorie expenditure tracking.*
 
@@ -185,7 +185,7 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `GET` | `/health` | Complete biometric history for the athlete. |
 | `DELETE` | `/health/:id` | Delete a health record. |
 
-### 🤝 Social & Community Module (`/social`)
+### Social & Community Module (`/social`)
 
 *Interaction and knowledge sharing.*
 
@@ -197,45 +197,45 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `PATCH` | `/social/:id/like` | "Like" interaction system (toggle). |
 | `DELETE` | `/social/:id` | Delete own posts. |
 
-## 🚀 Backend Deployment
+## Backend Deployment
 
 The **EvolutFit** backend is deployed on **Render**.
 
 - **API Base URL:** `https://evolufit-backend.onrender.com/api`
 - **Backend Repository:** [github.com/DeibyGS/evolufit-backend](https://github.com/DeibyGS/evolufit-backend)
 
-> ⚠️ **Performance note (Cold Start):**
+> **Performance note (Cold Start):**
 > Since it's hosted on Render's free plan, the server suspends after 15 minutes of inactivity.
 > For this reason, the **first request** may take between **50 and 60 seconds** to respond while the service wakes up. Subsequent requests will run at normal speed.
 
-## 🤝 Contributing & Architecture Guidelines
+## Contributing & Architecture Guidelines
 
 As the **EvolutFit** architect, I've established the following technical pillars to ensure the code is maintainable, scalable, and high-performance. Any contribution is expected to respect these rules:
 
-### 🎨 Design System & Styles (SASS)
+### Design System & Styles (SASS)
 
 - **Zero Hardcoding Policy:** Using arbitrary hexadecimal values, `px` or `rem` units directly in `.module.scss` files is strictly prohibited.
 - **Design Tokens:** Only use the variables from `src/styles/variables.scss` for colors, typography, spacing, and radii.
 - **Layout Logic:** For repetitive structures (centering, calculator grids, glassmorphism effects), always use the `@mixins` defined in `src/styles/mixins.scss`.
 
-### 🏗️ Structure & Modularity
+### Structure & Modularity
 
 - **Layout Architecture:** The views that make up the authenticated user experience (Dashboard, Profile, History) must be implemented within `src/layouts/DashboardLayout/`. This ensures the Sidebar persists and protects route integrity.
 - **Atomic Components:** Reusable UI elements (buttons, inputs, cards) must be agnostic to business logic and live in `src/components/`.
 
-### 🔐 State & Data Management
+### State & Data Management
 
 - **Single Source of Truth:** Session, user profile, and JWT token management is centralized in the Zustand `authStore`.
 - **Prop-Drilling Control:** Passing user information through multiple component levels is prohibited if that information is already available in the global store.
 - **Model Integrity:** When expanding the exercise database (`src/data/exercises.js`), the `id` and `group` structure must be respected to avoid inconsistencies in the Leaderboard filtering system.
 
-### 🧪 Code Quality
+### Code Quality
 
 - Before committing, run `npm run lint` to comply with the styling standards defined by **ESLint**.
 
 ---
 
-## 🤖 Built with AI
+## Built with AI
 
 EvoluFit Frontend was built by a human developer working with AI as a pair-programming partner. AI accelerated the implementation — code generation, refactoring, and scaffolding — while the product vision, the design system, and all engineering decisions stayed under human ownership.
 
