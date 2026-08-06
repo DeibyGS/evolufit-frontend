@@ -1,6 +1,19 @@
-# 🏋️‍♂️ EvolutFit - Frontend Client
+<div align="center">
 
-**EvolutFit** is a high-performance platform for comprehensive workout and health management. Built with the cutting-edge **React 19** and **Vite** stack, the app delivers a _Single Page Application (SPA)_ focused on data visualization, community gamification, and a premium user interface based on **Glassmorphism**.
+# EvoluFit Frontend
+
+**Data visualization, community gamification, and a glassmorphism UI built with React 19.**
+
+EvoluFit is a high-performance web app for comprehensive workout and health management. As a Single Page Application (SPA), it combines interactive progress dashboards, a community-driven gamification engine, and a premium visual design centered on glassmorphism.
+
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-v6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![SCSS](https://img.shields.io/badge/SCSS-Modules-CD6799?logo=sass&logoColor=white)](https://sass-lang.com)
+
+[⚡ Core Highlights](#-core-highlights) • [🛠️ Tech Stack](#️-tech-stack) • [📂 Directory Architecture](#-directory-architecture) • [⚙️ Installation & Setup](#️-installation--setup) • [🚀 Available Scripts](#-available-scripts) • [🧪 Test User (Demo)](#-test-user-demo) • [🔌 API Integration](#-api-integration-detailed-endpoints) • [🤝 Contributing Guide](#-contributing--architecture-guidelines) • [🤖 Built with AI](#-built-with-ai)
+
+</div>
 
 ---
 
@@ -49,7 +62,7 @@ src/
 ├── data/            # Static content and business configuration
 │   ├── achievements.json # Definition of medals and achievements
 │   ├── dataprices.json   # Plans and pricing configuration
-│   ├── exercises.js      # Supported exercises database
+│   ├── exercises.js      # Supported exercise database
 │   └── reviewsdata.json  # Testimonials and reviews data
 ├── hooks/           # Extracted React logic for reuse
 │   ├── useCounterPerformance # Animated counter logic
@@ -69,51 +82,11 @@ src/
 ├── store/           # Zustand configuration
 │   └── authStore        # Global authentication and user state
 └── styles/          # SASS styling architecture
-    ├── variables.scss    # Design tokens (colors, typography)
-    ├── mixing.scss       # Reusable mixins (flexbox, responsive)
-    ├── reset.scss        # Base style normalization
-    └── global.scss       # Shared styles and utilities
+    ├── _variables.scss    # Design tokens (colors, typography)
+    ├── _mixins.scss       # Reusable mixins (flexbox, responsive)
+    ├── _reset.scss        # Base style normalization
+    └── _global.scss       # Shared styles and utilities
 ```
-
-## AI Development Benchmark
-
-EvolutFit Frontend was engineered by a human developer working with AI as a **pair programming partner**. The AI accelerated implementation — the React 19 architecture, design system, and engineering decisions stayed human.
-
-### How we worked together
-
-| Human-owned | AI implemented, always human-reviewed |
-|-------------|-------------------------------------|
-| Product vision & design direction | React component generation |
-| Design system (Glassmorphism) | Recharts dashboards, state management |
-| Architecture & routing | Refactoring, TypeScript improvements |
-| Code review & final acceptance | Test scaffolding, auxiliary docs |
-
-**Workflow:** `Idea → Spec → AI implementation → Human review → Test → Refine → Merge`
-
-### AI Development Principles
-
-- AI never made product decisions.
-- Every implementation started from a written specification.
-- Documentation was treated as executable context for AI.
-- All generated code required human review.
-- Architecture was preserved over implementation speed.
-
-<details>
-<summary><strong>Supporting metrics</strong></summary>
-<br>
-
-| Metric | Value |
-|--------|-------|
-| AI sessions | 4 logged (CC) |
-| Measured development time | ~25 h |
-| Primary model | Claude Sonnet 4.6 |
-| Secondary | OpenCode (DeepSeek V4 Flash) |
-
-_Measured with [ClaudeStat](https://github.com/DeibyGS/claudestat). Approximate values; part of the EvolutFit ecosystem._
-
-</details>
-
----
 
 ## ⚙️ Installation & Setup
 
@@ -140,10 +113,10 @@ npm run dev
 
 | Command | Description |
 | ------- | ----------- |
-| npm run dev     | Starts the development server with HMR. |
-| npm run build   | Compiles and optimizes the project for production into `/dist`. |
-| npm run lint    | Runs ESLint to ensure code quality. |
-| npm run preview | Previews the production build locally. |
+| `npm run dev`     | Starts the development server with HMR. |
+| `npm run build`   | Compiles and optimizes the project for production into `/dist`. |
+| `npm run lint`    | Runs ESLint to ensure code quality. |
+| `npm run preview` | Previews the production build locally. |
 
 ## 🧪 Test User (Demo)
 
@@ -167,6 +140,7 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `POST` | `/auth/login` | Authentication and JWT delivery. |
 
 ### 👤 Users & Profile Module (`/users`)
+
 *Account management and community visibility.*
 
 | Method | Route | Description |
@@ -174,10 +148,11 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `GET` | `/users` | Get all users (for Rankings). |
 | `GET` | `/users/:id` | View a specific athlete's public profile. |
 | `PUT` | `/users/profile` | Update general data (Name, age, etc.). |
-| `PATCH` | `/users/change-password` | Secure password change (validates current pass). |
+| `PATCH` | `/users/change-password` | Secure password change (validates current password). |
 | `DELETE` | `/users/delete-me` | Permanently delete the athlete's account. |
 
 ### 🏋️ Workouts Module (`/workouts`)
+
 *Physical activity logging and performance analytics.*
 
 | Method | Route | Description |
@@ -190,25 +165,28 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `DELETE` | `/workouts/:id` | Delete a record from history. |
 
 ### 🏆 Records & Ranking Module (`/rm`)
+
 *Maximum strength control and global competitiveness.*
 
 | Method | Route | Description |
 | :--- | :--- | :--- |
 | `POST` | `/rm` | Register 1 Repetition Maximum (1RM). |
 | `GET` | `/rm` | User's personal record history. |
-| `GET` | `/rm/leaderboard` | Global Hall of Fame (Best records ranking). |
+| `GET` | `/rm/leaderboard` | Global Hall of Fame (best records ranking). |
 | `DELETE` | `/rm/:id` | Delete a personal record. |
 
 ### 📊 Health & Biometrics Module (`/health`)
+
 *Body metrics and calorie expenditure tracking.*
 
 | Method | Route | Description |
 | :--- | :--- | :--- |
-| `POST` | `/health` | Register BMI, BMR (Mifflin-St Jeor) and TDEE. |
+| `POST` | `/health` | Register BMI, BMR (Mifflin-St Jeor), and TDEE. |
 | `GET` | `/health` | Complete biometric history for the athlete. |
 | `DELETE` | `/health/:id` | Delete a health record. |
 
 ### 🤝 Social & Community Module (`/social`)
+
 *Interaction and knowledge sharing.*
 
 | Method | Route | Description |
@@ -216,7 +194,7 @@ Communication between the Frontend and Backend is done through a RESTful archite
 | `GET` | `/social` | Community feed with filters (muscle/search). |
 | `POST` | `/social` | Publish routines to the community. |
 | `PUT` | `/social/:id` | Edit own posts. |
-| `PATCH` | `/social/:id/like` | "Like" interaction system (Toggle). |
+| `PATCH` | `/social/:id/like` | "Like" interaction system (toggle). |
 | `DELETE` | `/social/:id` | Delete own posts. |
 
 ## 🚀 Backend Deployment
@@ -226,9 +204,8 @@ The **EvolutFit** backend is deployed on **Render**.
 - **API Base URL:** `https://evolufit-backend.onrender.com/api`
 - **Backend Repository:** [github.com/DeibyGS/evolufit-backend](https://github.com/DeibyGS/evolufit-backend)
 
-> **⚠️ Performance note (Cold Start):**
+> ⚠️ **Performance note (Cold Start):**
 > Since it's hosted on Render's free plan, the server suspends after 15 minutes of inactivity.
->
 > For this reason, the **first request** may take between **50 and 60 seconds** to respond while the service wakes up. Subsequent requests will run at normal speed.
 
 ## 🤝 Contributing & Architecture Guidelines
@@ -249,9 +226,32 @@ As the **EvolutFit** architect, I've established the following technical pillars
 ### 🔐 State & Data Management
 
 - **Single Source of Truth:** Session, user profile, and JWT token management is centralized in the Zustand `authStore`.
-- **Prop-Drilling:** Passing user information through multiple component levels is prohibited if that information is already available in the global store.
-- **Model Integrity:** When expanding the exercise database (`src/data/exercises.js`), it's imperative to respect the `id` and `group` structure to avoid inconsistencies in the Leaderboard filtering system.
+- **Prop-Drilling Control:** Passing user information through multiple component levels is prohibited if that information is already available in the global store.
+- **Model Integrity:** When expanding the exercise database (`src/data/exercises.js`), the `id` and `group` structure must be respected to avoid inconsistencies in the Leaderboard filtering system.
 
 ### 🧪 Code Quality
 
-- Before committing, make sure to run `npm run lint` to comply with the style standards defined by **ESLint**.
+- Before committing, run `npm run lint` to comply with the styling standards defined by **ESLint**.
+
+---
+
+## 🤖 Built with AI
+
+EvoluFit Frontend was built by a human developer working with AI as a pair-programming partner. AI accelerated the implementation — code generation, refactoring, and scaffolding — while the product vision, the design system, and all engineering decisions stayed under human ownership.
+
+### How we worked together
+
+| Human-owned | AI-implemented (human-reviewed) |
+|-------------|--------------------------------|
+| Product vision & design direction | React component generation |
+| Design system (Glassmorphism) | Recharts dashboards, state management |
+| Architecture & routing | Refactoring, TypeScript improvements |
+| UX decisions & content | Test scaffolding, auxiliary docs |
+
+### Workflow
+
+`Spec (SDD) → AI implementation → Human review → Test → Merge`
+
+Every step of the process followed this pattern: each feature started from a written specification, the AI generated the implementation, and a human reviewed, tested, and accepted every change before merging. AI never made product decisions, and architecture was always preserved over implementation speed.
+
+> Measured as part of the EvoluFit ecosystem with [ClaudeStat](https://github.com/DeibyGS/claudestat).
