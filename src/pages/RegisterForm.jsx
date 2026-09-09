@@ -86,7 +86,7 @@ export const RegisterForm = () => {
         }
         setIsLoading(false);
       }
-    } catch(error) {
+    } catch {
       toast.error('Error de red: Inténtalo de nuevo más tarde.');
       setIsLoading(false);
     } 

@@ -121,7 +121,7 @@ export const Profile = () => {
           logout(); 
           navigate('/'); 
         }
-      } catch (error) {
+      } catch {
         toast.error("No se pudo procesar la solicitud de eliminación.");
       }
     }

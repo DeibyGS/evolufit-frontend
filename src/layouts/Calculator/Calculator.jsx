@@ -47,7 +47,7 @@ export const Calculator = () => {
         setHasNextPage(hasMore);
         setPage(currentPage);
       }
-    } catch (error) { 
+    } catch {
       toast.error("Error al cargar historial");
     } finally {
       setLoading(false);
@@ -172,7 +172,7 @@ export const Calculator = () => {
           toast.success("Registro eliminado");
           fetchHistory(false);
         }
-      } catch (error) { toast.error("Error al eliminar"); }
+      } catch { toast.error("Error al eliminar"); }
     }
   };
 

@@ -42,7 +42,7 @@ export const ResetPassword = () => {
       } else {
         toast.error(data.message || 'El enlace ha expirado o es inválido.');
       }
-    } catch (error) {
+    } catch {
       toast.error('Error de conexión con el servidor');
     } finally {
       setIsLoading(false);
