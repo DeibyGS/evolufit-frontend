@@ -55,7 +55,7 @@ export const SocialRoutines = () => {
         setHasNextPage(data.hasNextPage || false);
         setPage(currentPage);
       }
-    } catch (error) {
+    } catch {
       toast.error("Error al conectar con la comunidad");
     } finally {
       setLoading(false);
@@ -87,7 +87,7 @@ export const SocialRoutines = () => {
           : post
         ));
       }
-    } catch (error) { toast.error("Error al procesar apoyo"); }
+    } catch { toast.error("Error al procesar apoyo"); }
   };
 
   const handleSavePost = async () => {
@@ -121,7 +121,7 @@ export const SocialRoutines = () => {
         data.errors.forEach(err => errorsMap[err.path?.[0] || err.field] = err.message);
         setBackendErrors(errorsMap);
       }
-    } catch (error) { toast.error("Error de conexión"); }
+    } catch { toast.error("Error de conexión"); }
   };
 
   const handleDelete = async (postId) => {
@@ -148,7 +148,7 @@ export const SocialRoutines = () => {
           toast.success("Rutina eliminada correctamente");
           setPosts(prev => prev.filter(p => p._id !== postId));
         }
-      } catch (error) { toast.error("Error al eliminar"); }
+      } catch { toast.error("Error al eliminar"); }
     }
   };
 

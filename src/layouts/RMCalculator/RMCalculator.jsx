@@ -60,7 +60,7 @@ export const RMCalculator = () => {
         setHasNextPage(data.hasNextPage || false);
         setPage(currentPage);
       }
-    } catch (error) { 
+    } catch {
       toast.error("Error al cargar historial");
     } finally {
       setLoading(false);
@@ -166,7 +166,7 @@ export const RMCalculator = () => {
           toast.success("Registro eliminado");
           fetchSavedRMs(false);
         }
-      } catch (error) { toast.error("Error al eliminar"); }
+      } catch { toast.error("Error al eliminar"); }
     }
   };
 

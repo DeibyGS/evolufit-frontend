@@ -9,7 +9,9 @@ export const useServerWakeUp = (url) => {
       try {
         
         await fetch(url, { mode: 'no-cors' }); 
-      } catch (e) {}
+      } catch {
+        // Intentionally ignored: fire-and-forget wake-up ping
+      }
     };
 
     wakeUp();

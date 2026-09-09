@@ -20,10 +20,6 @@ export const Dashboard = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  useEffect(() => { 
-    if (token) fetchWorkouts(); 
-  }, [token]);
-
   const fetchWorkouts = async () => {
     try {
       // Pedimos un límite de 50 para tener datos suficientes para las gráficas
@@ -37,10 +33,15 @@ export const Dashboard = () => {
         const workoutsData = data.workouts || []; 
         setWorkouts(workoutsData);
       } 
-    } catch (error) { 
-      console.error("Error Dashboard Fetch:", error); 
+    } catch (error) {
+      console.error("Error Dashboard Fetch:", error);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetchWorkouts only sets state after an await
+    if (token) fetchWorkouts();
+  }, [token]);
 
   // FILTRADO LÓGICO DE WORKOUTS
   const filteredWorkouts = useMemo(() => {

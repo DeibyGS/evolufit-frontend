@@ -128,7 +128,7 @@ export const Routines = () => {
           setWorkoutList([]); 
           fetchHistory(1); // Recargamos desde la página 1 para ver el nuevo
         }
-      } catch (error) { toast.error("Error al guardar"); }
+      } catch { toast.error("Error al guardar"); }
     }
   };
 

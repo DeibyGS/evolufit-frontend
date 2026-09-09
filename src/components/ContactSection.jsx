@@ -17,7 +17,7 @@ export const ContactSection = () => {
   /** * Hook personalizado para detectar el ancho de la ventana.
    * Permite inyectar clases de CSS específicas según el dispositivo.
    */
-  const { isDesktop, isTablet, isMobile } = useMediasQuerys();
+  const { isDesktop, isTablet } = useMediasQuerys();
 
   /** * Lógica de asignación de clases dinámica basada en el estado del Viewport.
    */

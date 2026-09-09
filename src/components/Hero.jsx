@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './Hero.module.scss';
 import { PerformanceStats } from './PerformanceStats.jsx';
 import { useMediasQuerys } from '../hooks/useMediasQuerys';
-import { useAuthStore } from '../store/authStore';
 
 /**
  * HERO COMPONENT
@@ -11,9 +10,6 @@ import { useAuthStore } from '../store/authStore';
  */
 export const Hero = () => {
   const { isDesktop, isTablet } = useMediasQuerys();
-  
-  // Suscripción selectiva al estado de autenticación
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   /**
    * Determinación de clase por Viewport:

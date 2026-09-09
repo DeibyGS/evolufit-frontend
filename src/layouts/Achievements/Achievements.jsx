@@ -29,6 +29,7 @@ export const Achievements = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetchTotalWeight only sets state after an await
     if (token) fetchTotalWeight();
   }, [token]);
 
